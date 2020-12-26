@@ -1,0 +1,330 @@
+# Alternative risk measure
+
+## Motivation {#motivation_alter_risk_measure}
+
+One of main objective of this book is improving the 3 limits (risk measure, sensitivity to estimation errors and lacks of risk diversification) of Markowitz's model `TODO REF FORMER CHARPTER`.
+
+Variance is not a good measure of risk in practice since it penalizes both the unwanted high losses and the desired low losses (or gains)
+
+
+
+
+We will here consider more meaningful measures for risk than the variance, like the downside risk (DR), Value-at-Risk (VaR), Conditional VaR (CVaR) or Expected Shortfall (ES), and drawdown (DD).
+
+## Risk measure
+
+The mean return is not good enough and one needs to control the probability of going bankrupt. To overcome the limitations of the variance as risk measure, a number of alternative risk measures have been proposed, for example:  
+
+- Downside Risk (DR)  
+- Value-at-Risk (VaR)  
+- Conditional Value-at-Risk (CVaR)  
+- Drawdown (DD):  
+    - maximum DD  
+    - average DD  
+    - Conditional Drawdown at Risk (CDaR)  
+
+
+```{r message=FALSE, warning=FALSE}
+from = "2013-01-01"
+to = "2016-12-31"
+tickers <- c("AAPL", "AMD", "ADI",  "ABBV", "AEZS", "A",  "APD", "AA","CF")
+assign_variable_global_env(tickers, from, to, ratio = 0.7)
+
+N <- ncol(prices)
+T <- nrow(prices)
+T_trn <- round(T*0.7)
+X <- X_log
+
+mu <- colMeans(X)
+Sigma <- cov(X)
+plot(prices/rep(prices[1, ], each = nrow(prices)), col = rainbow10equal, legend.loc = "topleft",main = "Normalized prices")
+```
+
+```{r}
+w_Markowitz <- MVP(mu, Sigma, lmd = 0.5, long_only = TRUE)
+w_GMVP <- GMVP(Sigma, long_only = TRUE)
+w_all <- cbind("GMVP"      = w_GMVP, 
+               "Markowitz" = w_Markowitz)
+barplot(t(w_all), col = rainbow10equal[1:2], legend = colnames(w_all), beside = TRUE,
+        main = "Portfolio allocation", xlab = "stocks", ylab = "dollars")
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_trn))
+t(table.AnnualizedReturns(ret_all_tst))
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich10equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)",
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich10equal)
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios", 
+                 legend.loc = "bottomleft", colorset = rich8equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+```
+
+## Alternative risk measure beased portfolio
+
+### Mean-downside risk portfolio
+
+$$\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} & \mathbf{w}^T\boldsymbol{\mu}-\lambda \frac{1}{T}\sum_{t=1}^T\left(\left(\tau - \mathbf{w}^T\mathbf{r}_t\right)^+\right)^\alpha\\
+\textsf{subject to} & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}$$
+
+The semi-variance is a special case of the more general lower partial moments (LPM)
+$$\textsf{LPM} = \mathsf{E}\left[\left((\tau - R)^+\right)^\alpha\right]$$
+where $(\cdot)^+=\max(0, \cdot)$
+
+The parameter α reflects the investor’s feeling about the relative consequences of falling short of τ by various amounts: the value α = 1 (which suits a neutral investor) separates risk-seeking ( 0 < α < 1 ) from risk-averse ( α > 1 ) behavior with regard to returns below the target τ.
+
+```{r}
+w_DR_alpha1 <- portfolioDR(X_log_trn, alpha = 1)
+w_DR_alpha2 <- portfolioDR(X_log_trn, alpha = 2)
+w_DR_alpha3 <- portfolioDR(X_log_trn, alpha = 3)
+
+# combine portfolios
+w_all <- cbind(
+  w_all,
+  "DR-alpha-1" = w_DR_alpha1,
+  "DR-alpha-2" = w_DR_alpha2,
+  "DR-alpha-3" = w_DR_alpha3
+)
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_trn))
+t(table.AnnualizedReturns(ret_all_tst))
+table.DownsideRisk(ret_all_tst)
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich6equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich6equal)
+
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios", 
+                 legend.loc = "bottomleft", colorset = rich6equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+w_all <- w_all[, ! colnames(w_all) %in% c("DR-alpha-1", "DR-alpha-2")]
+```
+
+### Mean-CVaR portfolio
+$$\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} & \mathbf{w}^{T}\boldsymbol{\mu}\\
+\textsf{subject to} 
+ & \mathsf{CVaR}_{\alpha}\left(f\left(\mathbf{w},\mathbf{r}\right)\right)\leq c\\
+ & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}
+\end{array}$$
+
+$$\begin{array}{ll}
+\underset{\mathbf{w}, \mathbf{z}, \zeta}{\textsf{maximize}} & \mathbf{w}^T\boldsymbol{\mu} - \lambda\left(\zeta+\frac{1}{1-\alpha}\frac{1}{T}\sum_{t=1}^{T}z_{t}\right)\\
+\textsf{subject to} 
+ & 0\leq z_{t}\geq-\mathbf{w}^{T}\mathbf{r}_{t}-\zeta,\quad t=1,\dots,T\\
+ & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}$$
+
+```{r}
+w_CVaR095 <- portolioCVaR(X_log_trn, alpha = 0.95)
+w_CVaR099 <- portolioCVaR(X_log_trn, alpha = 0.99)
+
+# combine portfolios
+w_all <- cbind(w_all, 
+               "CVaR-alpha-0.95" = w_CVaR095,
+               "CVaR-alpha-0.99" = w_CVaR099)
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_trn))
+t(table.AnnualizedReturns(ret_all_tst))
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich6equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich6equal)
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios", 
+                 legend.loc = "bottomleft", colorset = rich6equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+w_all <- w_all[, ! colnames(w_all) %in% c("CVaR-alpha-0.95")]
+```
+
+
+### Mean - Max-DD portfolio
+
+$$D(t)=\max_{1\le\tau\le t}r_p^{\sf cum}(\tau) - r_p^{\sf cum}(t)$$
+
+- maximum DD (Max-DD) 
+- average DD (Ave-DD) 
+- Conditional Drawdown at Risk (CDaR)
+
+$$\begin{array}{ll}
+\underset{\mathbf{w}, \{u_t\}}{\textsf{maximize}} & \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ & \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t \le \mathbf{w}^T\mathbf{r}_t^{\sf cum} + c, \quad\forall 1\le t\le T\\
+ & u_{t-1} \le u_t\\
+ & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}$$
+
+
+```{r}
+# solver may not find a solution for some c if c is too low
+w_MaxDD_c018 <- portfolioMaxDD(X_log_trn, c = 0.18)
+w_MaxDD_c021 <- portfolioMaxDD(X_log_trn, c = 0.21)
+w_MaxDD_c024 <- portfolioMaxDD(X_log_trn, c = 0.24)
+
+# combine portfolios
+w_all <- cbind(w_all,
+               "Max-DD-c-018" = w_MaxDD_c018,
+               "Max-DD-c-021" = w_MaxDD_c021,
+               "Max-DD-c-024" = w_MaxDD_c024)
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_tst)[3, ])
+t(maxDrawdown(ret_all_trn))
+t(maxDrawdown(ret_all_tst))
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios",
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich8equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)",
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich8equal)
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios",
+                 legend.loc = "bottomleft", colorset = rich8equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+w_all <- w_all[, ! colnames(w_all) %in% c("Max-DD-c-018", "Max-DD-c-024")]
+```
+
+### Mean - Ave-DD portfolio
+
+$$\begin{array}{ll}
+\underset{\mathbf{w}, \{u_t\}}{\textsf{maximize}} & \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ & \frac{1}{T}\sum_{t=1}^T u_t \le \sum_{t=1}^T\mathbf{w}^T\mathbf{r}_t^{\sf cum} + c\\
+ & \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t\\
+ & u_{t-1} \le u_t\\
+ & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}$$
+
+```{r}
+w_AveDD_c004 <- portfolioAveDD(X_log_trn, c = 0.04)
+w_AveDD_c006 <- portfolioAveDD(X_log_trn, c = 0.06)
+w_AveDD_c008 <- portfolioAveDD(X_log_trn, c = 0.08)
+
+# combine portfolios
+w_all <- cbind(w_all, 
+               "Ave-DD-c-004" = w_AveDD_c004, 
+               "Ave-DD-c-006" = w_AveDD_c006, 
+               "Ave-DD-c-008" = w_AveDD_c008)
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_tst)[3, ])
+t(maxDrawdown(ret_all_tst))
+t(AverageDrawdown(ret_all_trn))
+t(AverageDrawdown(ret_all_tst))
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich8equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich8equal)
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios", 
+                 legend.loc = "bottomleft", colorset = rich8equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+w_all <- w_all[, ! colnames(w_all) %in% c("Ave-DD-c-006", "Ave-DD-c-008")]
+```
+
+### Mean-CDaR portfolio
+$$\begin{array}{ll}
+\underset{\mathbf{w}, \{z_t\}, \zeta, \{u_t\}}{\textsf{maximize}} & \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ & \zeta+\frac{1}{1-\alpha}\frac{1}{T}\sum_{t=1}^{T}z_{t} \le c\\
+ & 0\leq z_{t}\geq u_t - \mathbf{w}^T\mathbf{r}_t^{\sf cum} - \zeta, \quad t=1,\dots,T\\
+ & \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t\\
+ & u_{t-1} \le u_t\\
+ & \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}$$
+
+```{r}
+w_CDaR095_c014 <- portfolioCDaR(X_log_trn, c = 0.14, alpha = 0.95)
+w_CDaR095_c016 <- portfolioCDaR(X_log_trn, c = 0.16, alpha = 0.95)
+w_CDaR099_c017 <- portfolioCDaR(X_log_trn, c = 0.17, alpha = 0.99)
+w_CDaR099_c019 <- portfolioCDaR(X_log_trn, c = 0.19, alpha = 0.99)
+
+# combine portfolios
+w_all <- cbind(w_all, 
+               "CDaR095-c-014" = w_CDaR095_c014, 
+               "CDaR095-c-016" = w_CDaR095_c016, 
+               "CDaR099-c-017" = w_CDaR099_c017, 
+               "CDaR099-c-019" = w_CDaR099_c019)
+
+# compute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+# performance
+t(table.AnnualizedReturns(ret_all_tst)[3, ])
+t(maxDrawdown(ret_all_tst))
+t(AverageDrawdown(ret_all_tst))
+t(CDD(ret_all_trn))
+t(CDD(ret_all_tst))
+{ chart.CumReturns(ret_all, main = "Cumulative return of portfolios", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich10equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+chart.CumReturns(ret_all_tst, main = "Cumulative return of portfolios (out-of-sample)", 
+                   wealth.index = TRUE, legend.loc = "topleft", colorset = rich10equal)
+{ chart.Drawdown(ret_all, main = "Drawdown of portfolios", 
+                 legend.loc = "bottomleft", colorset = rich10equal)
+  addEventLines(xts("training", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = "darkblue") }
+w_all <- w_all[, ! colnames(w_all) %in% c("CDaR095-c-016", "CDaR099-c-017", "CDaR099-c-019")]
+```
+
+## Comparison of DR, CVaR, and DD portfolios
+
+```{r out.width='100%'}
+# recompute returns of all portfolios
+ret_all <- xts(X_lin %*% w_all, index(X_lin))
+ret_all_trn <- ret_all[1:T_trn, ]
+ret_all_tst <- ret_all[-c(1:T_trn), ]
+
+t(table.AnnualizedReturns(ret_all_tst)[3, ])
+t(maxDrawdown(ret_all_tst))
+t(AverageDrawdown(ret_all_tst))
+t(CDD(ret_all_tst))
+{par(mfrow = c(1, 1), mar = c(5, 5, 4, 3))
+barplot(w_all, col = rainbow10equal[1:9], legend = rownames(w_all), args.legend = list(x="topright", bty = "n", cex=0.8, horiz=FALSE, inset = c(-0.1,0)), beside = TRUE, main = "Portfolio allocation", xlab = "portfolio design", ylab = "weights", las=2, cex.names=.6)}
+```
+
+## Conclusion {#alter_con}
+
+The maximum drawdown is extremely sensitive to minute changes in the portfolio weights and to the specific time period examined.
+
+If the returns are close to normally distributed, the distribution of drawdowns is just a function of the variance, so there’s no need to include drawdowns explicitly in your portfolio construction objective. Minimizing variance is the same as minimizing expected drawdowns.
+
+On the other hand, if returns are very non-normal and you want to find a portfolio that minimizes the expected drawdowns, you still wouldn’t choose weights that minimize historical drawdown. Why?
+
+Because minimizing historical drawdown is effectively the same as taking all your returns that weren’t part of a drawdown, and hiding them from your optimizer, which will lead to portfolio weights that are a lot less accurately estimated than if you let your optimizer see all the data you have.
+
+Instead, you might just include terms in your optimization objective that penalize negative skew and penalize positive kurtosis 
+
+As a note of caution, one has to be careful with CVaR and CDaR portfolios due to the sensitivity to the used data (if not enough data, they will not be reliable).
+
+

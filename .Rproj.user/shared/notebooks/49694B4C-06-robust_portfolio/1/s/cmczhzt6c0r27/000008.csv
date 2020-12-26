@@ -1,0 +1,5 @@
+"0","w_Markowitz <- MVP(mu, Sigma, long_only = TRUE)"
+"0","w_all_Markowitz <- cbind(w_Markowitz)"
+"0",""
+"0","# plot allocation"
+"0","barplot(t(w_all_Markowitz), col = rainbow8equal[1], legend = colnames(w_all_Markowitz), beside = TRUE, main = ""Markowitz portfolio allocation"", xlab = ""stocks"", ylab = ""dollars"")"

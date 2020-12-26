@@ -1,0 +1,6 @@
+"0","w_GMVP <- GMVP(Sigma, long_only = TRUE)"
+"0","w_all_GMVP <- cbind(w_GMVP)"
+"0",""
+"0","# plot allocation"
+"0","barplot(t(w_all_GMVP), col = rainbow8equal[1], legend = colnames(w_all_GMVP), beside = TRUE,"
+"0","        main = ""Global minimum variance portfolio allocation"", xlab = ""stocks"", ylab = ""dollars"")"

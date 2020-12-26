@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>B Appendix B | Portfolio Construction</title>
+  <meta name="description" content="Portfolio construction with R" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="B Appendix B | Portfolio Construction" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Portfolio construction with R" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="B Appendix B | Portfolio Construction" />
+  
+  <meta name="twitter:description" content="Portfolio construction with R" />
+  
+
+<meta name="author" content="Jian SHEN" />
+
+
+<meta name="date" content="2020-11-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="appendix-a.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/bokehjs-0.12.5/bokeh.min.css" rel="stylesheet" />
+<link href="libs/bokehjs-0.12.5/loader.css" rel="stylesheet" />
+<script src="libs/bokehjs-0.12.5/bokeh.min.js"></script>
+<script src="libs/rbokeh-binding-0.5.1/rbokeh.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Portfolio Construction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#structure-of-the-book"><i class="fa fa-check"></i>Structure of the book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-information-and-conventions"><i class="fa fa-check"></i>Software information and conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#get-started"><i class="fa fa-check"></i><b>1.2</b> Get started</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#some-tips"><i class="fa fa-check"></i><b>1.3</b> Some tips</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="portfolio-basics.html"><a href="portfolio-basics.html"><i class="fa fa-check"></i><b>2</b> Portfolio basics</a><ul>
+<li class="chapter" data-level="2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#return"><i class="fa fa-check"></i><b>2.1</b> Return</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#stylized-facts"><i class="fa fa-check"></i><b>2.1.1</b> Stylized facts</a></li>
+<li class="chapter" data-level="2.1.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#portfolio-return"><i class="fa fa-check"></i><b>2.1.2</b> Portfolio return</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#heuristic-portfolios"><i class="fa fa-check"></i><b>2.2</b> Heuristic portfolios</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#buy-hold-buy-rebalance"><i class="fa fa-check"></i><b>2.2.1</b> Buy &amp; Hold | Buy &amp; Rebalance</a></li>
+<li class="chapter" data-level="2.2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#equally-weighted-portfolio-ewp"><i class="fa fa-check"></i><b>2.2.2</b> Equally weighted portfolio (EWP)</a></li>
+<li class="chapter" data-level="2.2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#quintile-portfolio"><i class="fa fa-check"></i><b>2.2.3</b> Quintile portfolio</a></li>
+<li class="chapter" data-level="2.2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>2.2.4</b> Global maximum return portfolio (GMRP)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comparison"><i class="fa fa-check"></i><b>2.3</b> Comparison</a></li>
+<li class="chapter" data-level="2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#model"><i class="fa fa-check"></i><b>2.4</b> Model</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#markowitz-1952-model-i.i.d.-model"><i class="fa fa-check"></i><b>2.4.1</b> Markowitz 1952 model (i.i.d. model)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#factor-model"><i class="fa fa-check"></i><b>2.4.2</b> Factor model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#time-series-models"><i class="fa fa-check"></i><b>2.4.3</b> Time-series models:</a></li>
+<li class="chapter" data-level="2.4.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#fitting-method"><i class="fa fa-check"></i><b>2.4.4</b> Fitting method</a></li>
+<li class="chapter" data-level="2.4.5" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comment"><i class="fa fa-check"></i><b>2.4.5</b> Comment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="machine-learning-basics.html"><a href="machine-learning-basics.html"><i class="fa fa-check"></i><b>3</b> Machine learning basics</a></li>
+<li class="chapter" data-level="4" data-path="port-opt.html"><a href="port-opt.html"><i class="fa fa-check"></i><b>4</b> Portfolio optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="port-opt.html"><a href="port-opt.html#mean-variance-portfolio"><i class="fa fa-check"></i><b>4.1</b> Mean-variance portfolio</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="port-opt.html"><a href="port-opt.html#practical-constraints"><i class="fa fa-check"></i><b>4.1.1</b> Practical constraints</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="port-opt.html"><a href="port-opt.html#maximum-sharpe-ratio-portfolio-msrp"><i class="fa fa-check"></i><b>4.2</b> Maximum Sharpe ratio portfolio (MSRP)</a></li>
+<li class="chapter" data-level="4.3" data-path="port-opt.html"><a href="port-opt.html#risk-based-portfolio"><i class="fa fa-check"></i><b>4.3</b> Risk based portfolio</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>4.3.1</b> Global minimum variance portfolio (GMVP)</a></li>
+<li class="chapter" data-level="4.3.2" data-path="port-opt.html"><a href="port-opt.html#inverse-volatility-portfolio-ivp"><i class="fa fa-check"></i><b>4.3.2</b> Inverse volatility portfolio (IVP)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="port-opt.html"><a href="port-opt.html#risk-parity-portfolio-rpp-or-equal-risk-portfolio-erp"><i class="fa fa-check"></i><b>4.3.3</b> Risk parity portfolio (RPP) or equal risk portfolio (ERP)</a></li>
+<li class="chapter" data-level="4.3.4" data-path="port-opt.html"><a href="port-opt.html#most-diversified-portfolio-mdp"><i class="fa fa-check"></i><b>4.3.4</b> Most diversified portfolio (MDP)</a></li>
+<li class="chapter" data-level="4.3.5" data-path="port-opt.html"><a href="port-opt.html#maximum-decorrelation-portfolio-mdcp"><i class="fa fa-check"></i><b>4.3.5</b> Maximum decorrelation portfolio (MDCP)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="port-opt.html"><a href="port-opt.html#comparison_chap4"><i class="fa fa-check"></i><b>4.4</b> Comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="port-opt.html"><a href="port-opt.html#rebalancing-frequencies"><i class="fa fa-check"></i><b>4.5</b> Rebalancing frequencies</a></li>
+<li class="chapter" data-level="4.6" data-path="port-opt.html"><a href="port-opt.html#todo"><i class="fa fa-check"></i><b>4.6</b> TODO</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="factor-investing.html"><a href="factor-investing.html"><i class="fa fa-check"></i><b>5</b> Factor investing</a><ul>
+<li class="chapter" data-level="5.1" data-path="factor-investing.html"><a href="factor-investing.html#factor-overview"><i class="fa fa-check"></i><b>5.1</b> Factor overview</a></li>
+<li class="chapter" data-level="5.2" data-path="factor-investing.html"><a href="factor-investing.html#macroeconomic-factor"><i class="fa fa-check"></i><b>5.2</b> Macroeconomic factor</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-simple-form"><i class="fa fa-check"></i><b>5.2.1</b> LS fitting – simple form</a></li>
+<li class="chapter" data-level="5.2.2" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-matrix-form"><i class="fa fa-check"></i><b>5.2.2</b> LS fitting – matrix form</a></li>
+<li class="chapter" data-level="5.2.3" data-path="factor-investing.html"><a href="factor-investing.html#estimating-covriacne"><i class="fa fa-check"></i><b>5.2.3</b> Estimating covriacne</a></li>
+<li class="chapter" data-level="5.2.4" data-path="factor-investing.html"><a href="factor-investing.html#evaluating-etfs-performance"><i class="fa fa-check"></i><b>5.2.4</b> Evaluating ETFs performance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="factor-investing.html"><a href="factor-investing.html#fama-french"><i class="fa fa-check"></i><b>5.3</b> Fama-French</a></li>
+<li class="chapter" data-level="5.4" data-path="factor-investing.html"><a href="factor-investing.html#statisticalprincipal-factor-models"><i class="fa fa-check"></i><b>5.4</b> Statistical/principal factor models</a></li>
+<li class="chapter" data-level="5.5" data-path="factor-investing.html"><a href="factor-investing.html#comparison-of-covariance-matrix-estimations"><i class="fa fa-check"></i><b>5.5</b> Comparison of covariance matrix estimations</a></li>
+<li class="chapter" data-level="5.6" data-path="factor-investing.html"><a href="factor-investing.html#edhec-smart-beta"><i class="fa fa-check"></i><b>5.6</b> Edhec smart beta</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html"><i class="fa fa-check"></i><b>6</b> Robust portfolio design</a><ul>
+<li class="chapter" data-level="6.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#motivationChapt6"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#sensitivity-of-different-portfolio-design"><i class="fa fa-check"></i><b>6.2</b> Sensitivity of different portfolio design</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>6.2.1</b> Global Maximum Return Portfolio (GMRP)</a></li>
+<li class="chapter" data-level="6.2.2" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>6.2.2</b> Global Minimum Variance Portfolio (GMVP)</a></li>
+<li class="chapter" data-level="6.2.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#markowitzs-mean-variance-portfolio"><i class="fa fa-check"></i><b>6.2.3</b> Markowitz’s mean-variance portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#robust-portfolio-optimization"><i class="fa fa-check"></i><b>6.3</b> Robust portfolio optimization</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmrp"><i class="fa fa-check"></i><b>6.3.1</b> Worst-case robust GMRP</a></li>
+<li class="chapter" data-level="6.3.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmvp"><i class="fa fa-check"></i><b>6.3.2</b> Worst-case robust GMVP</a></li>
+<li class="chapter" data-level="6.3.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-markowitzs-portfolio"><i class="fa fa-check"></i><b>6.3.3</b> Worst-case Markowitz’s portfolio</a></li>
+<li class="chapter" data-level="6.3.4" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#variance-uncertainty-based-on-factor-model"><i class="fa fa-check"></i><b>6.3.4</b> Variance uncertainty based on factor model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html"><i class="fa fa-check"></i><b>7</b> Alternative risk measure</a><ul>
+<li class="chapter" data-level="7.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#motivation_alter_risk_measure"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#risk-measure"><i class="fa fa-check"></i><b>7.2</b> Risk measure</a></li>
+<li class="chapter" data-level="7.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#alternative-risk-measure-beased-portfolio"><i class="fa fa-check"></i><b>7.3</b> Alternative risk measure beased portfolio</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-downside-risk-portfolio"><i class="fa fa-check"></i><b>7.3.1</b> Mean-downside risk portfolio</a></li>
+<li class="chapter" data-level="7.3.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cvar-portfolio"><i class="fa fa-check"></i><b>7.3.2</b> Mean-CVaR portfolio</a></li>
+<li class="chapter" data-level="7.3.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-dd-portfolio"><i class="fa fa-check"></i><b>7.3.3</b> Mean-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean---ave-dd-portfolio"><i class="fa fa-check"></i><b>7.3.4</b> Mean - Ave-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cdar-portfolio"><i class="fa fa-check"></i><b>7.3.5</b> Mean-CDaR portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#comparison-of-dr-cvar-and-dd-portfolios"><i class="fa fa-check"></i><b>7.4</b> Comparison of DR, CVaR, and DD portfolios</a></li>
+<li class="chapter" data-level="7.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#conclusion"><i class="fa fa-check"></i><b>7.5</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html"><i class="fa fa-check"></i><b>8</b> Risk parity portfolio</a><ul>
+<li class="chapter" data-level="8.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#motiv_risk_parity"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#formulation"><i class="fa fa-check"></i><b>8.2</b> Formulation</a></li>
+<li class="chapter" data-level="8.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#risk-budgeting-portfolio-rbp"><i class="fa fa-check"></i><b>8.3</b> Risk budgeting portfolio (RBP)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#inverse-volatility-portfolio"><i class="fa fa-check"></i><b>8.3.1</b> Inverse volatility portfolio</a></li>
+<li class="chapter" data-level="8.3.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rpp-general-formulation"><i class="fa fa-check"></i><b>8.3.2</b> RPP: General formulation</a></li>
+<li class="chapter" data-level="8.3.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rbp-formulations"><i class="fa fa-check"></i><b>8.3.3</b> RBP formulations</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i><b>A</b> Appendix A</a></li>
+<li class="chapter" data-level="B" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i><b>B</b> Appendix B</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Portfolio Construction</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="appendix-b" class="section level1">
+<h1><span class="header-section-number">B</span> Appendix B</h1>
+<p>content</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="appendix-a.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["portr.pdf", "portr.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

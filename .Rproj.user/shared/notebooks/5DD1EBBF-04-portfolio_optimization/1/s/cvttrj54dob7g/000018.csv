@@ -1,0 +1,3 @@
+"0","w_all <- cbind(w_heuristic, w_Markowitz)"
+"0","barplot(w_all, col = rainbow10equal[1:9], legend = rownames(w_all), beside = TRUE,"
+"0","        main = ""Portfolio allocation"", xlab = ""portfolios"", ylab = ""weights"")"

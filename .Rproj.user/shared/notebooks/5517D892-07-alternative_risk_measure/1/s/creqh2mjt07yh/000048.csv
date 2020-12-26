@@ -1,0 +1,1 @@
+"0","w_all <- w_all[, ! colnames(w_all) %in% c(""Max-DD-c-018"", ""Max-DD-c-024"")]"

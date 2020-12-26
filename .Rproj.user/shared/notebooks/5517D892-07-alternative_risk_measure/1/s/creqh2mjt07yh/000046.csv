@@ -1,0 +1,3 @@
+"0","{ chart.Drawdown(ret_all, main = ""Drawdown of portfolios"","
+"0","                 legend.loc = ""bottomleft"", colorset = rich8equal)"
+"0","  addEventLines(xts(""training"", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = ""darkblue"") }"

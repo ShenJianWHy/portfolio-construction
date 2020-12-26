@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Robust portfolio design | Portfolio Construction</title>
+  <meta name="description" content="Portfolio construction with R" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Robust portfolio design | Portfolio Construction" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Portfolio construction with R" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Robust portfolio design | Portfolio Construction" />
+  
+  <meta name="twitter:description" content="Portfolio construction with R" />
+  
+
+<meta name="author" content="Jian SHEN" />
+
+
+<meta name="date" content="2020-11-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="factor-investing.html"/>
+<link rel="next" href="alternative-risk-measure.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/bokehjs-0.12.5/bokeh.min.css" rel="stylesheet" />
+<link href="libs/bokehjs-0.12.5/loader.css" rel="stylesheet" />
+<script src="libs/bokehjs-0.12.5/bokeh.min.js"></script>
+<script src="libs/rbokeh-binding-0.5.1/rbokeh.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Portfolio Construction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#structure-of-the-book"><i class="fa fa-check"></i>Structure of the book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-information-and-conventions"><i class="fa fa-check"></i>Software information and conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#get-started"><i class="fa fa-check"></i><b>1.2</b> Get started</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#some-tips"><i class="fa fa-check"></i><b>1.3</b> Some tips</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="portfolio-basics.html"><a href="portfolio-basics.html"><i class="fa fa-check"></i><b>2</b> Portfolio basics</a><ul>
+<li class="chapter" data-level="2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#return"><i class="fa fa-check"></i><b>2.1</b> Return</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#stylized-facts"><i class="fa fa-check"></i><b>2.1.1</b> Stylized facts</a></li>
+<li class="chapter" data-level="2.1.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#portfolio-return"><i class="fa fa-check"></i><b>2.1.2</b> Portfolio return</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#heuristic-portfolios"><i class="fa fa-check"></i><b>2.2</b> Heuristic portfolios</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#buy-hold-buy-rebalance"><i class="fa fa-check"></i><b>2.2.1</b> Buy &amp; Hold | Buy &amp; Rebalance</a></li>
+<li class="chapter" data-level="2.2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#equally-weighted-portfolio-ewp"><i class="fa fa-check"></i><b>2.2.2</b> Equally weighted portfolio (EWP)</a></li>
+<li class="chapter" data-level="2.2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#quintile-portfolio"><i class="fa fa-check"></i><b>2.2.3</b> Quintile portfolio</a></li>
+<li class="chapter" data-level="2.2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>2.2.4</b> Global maximum return portfolio (GMRP)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comparison"><i class="fa fa-check"></i><b>2.3</b> Comparison</a></li>
+<li class="chapter" data-level="2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#model"><i class="fa fa-check"></i><b>2.4</b> Model</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#markowitz-1952-model-i.i.d.-model"><i class="fa fa-check"></i><b>2.4.1</b> Markowitz 1952 model (i.i.d. model)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#factor-model"><i class="fa fa-check"></i><b>2.4.2</b> Factor model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#time-series-models"><i class="fa fa-check"></i><b>2.4.3</b> Time-series models:</a></li>
+<li class="chapter" data-level="2.4.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#fitting-method"><i class="fa fa-check"></i><b>2.4.4</b> Fitting method</a></li>
+<li class="chapter" data-level="2.4.5" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comment"><i class="fa fa-check"></i><b>2.4.5</b> Comment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="machine-learning-basics.html"><a href="machine-learning-basics.html"><i class="fa fa-check"></i><b>3</b> Machine learning basics</a></li>
+<li class="chapter" data-level="4" data-path="port-opt.html"><a href="port-opt.html"><i class="fa fa-check"></i><b>4</b> Portfolio optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="port-opt.html"><a href="port-opt.html#mean-variance-portfolio"><i class="fa fa-check"></i><b>4.1</b> Mean-variance portfolio</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="port-opt.html"><a href="port-opt.html#practical-constraints"><i class="fa fa-check"></i><b>4.1.1</b> Practical constraints</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="port-opt.html"><a href="port-opt.html#maximum-sharpe-ratio-portfolio-msrp"><i class="fa fa-check"></i><b>4.2</b> Maximum Sharpe ratio portfolio (MSRP)</a></li>
+<li class="chapter" data-level="4.3" data-path="port-opt.html"><a href="port-opt.html#risk-based-portfolio"><i class="fa fa-check"></i><b>4.3</b> Risk based portfolio</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>4.3.1</b> Global minimum variance portfolio (GMVP)</a></li>
+<li class="chapter" data-level="4.3.2" data-path="port-opt.html"><a href="port-opt.html#inverse-volatility-portfolio-ivp"><i class="fa fa-check"></i><b>4.3.2</b> Inverse volatility portfolio (IVP)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="port-opt.html"><a href="port-opt.html#risk-parity-portfolio-rpp-or-equal-risk-portfolio-erp"><i class="fa fa-check"></i><b>4.3.3</b> Risk parity portfolio (RPP) or equal risk portfolio (ERP)</a></li>
+<li class="chapter" data-level="4.3.4" data-path="port-opt.html"><a href="port-opt.html#most-diversified-portfolio-mdp"><i class="fa fa-check"></i><b>4.3.4</b> Most diversified portfolio (MDP)</a></li>
+<li class="chapter" data-level="4.3.5" data-path="port-opt.html"><a href="port-opt.html#maximum-decorrelation-portfolio-mdcp"><i class="fa fa-check"></i><b>4.3.5</b> Maximum decorrelation portfolio (MDCP)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="port-opt.html"><a href="port-opt.html#comparison_chap4"><i class="fa fa-check"></i><b>4.4</b> Comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="port-opt.html"><a href="port-opt.html#rebalancing-frequencies"><i class="fa fa-check"></i><b>4.5</b> Rebalancing frequencies</a></li>
+<li class="chapter" data-level="4.6" data-path="port-opt.html"><a href="port-opt.html#rolling-window-portfolios"><i class="fa fa-check"></i><b>4.6</b> Rolling window portfolios</a></li>
+<li class="chapter" data-level="4.7" data-path="port-opt.html"><a href="port-opt.html#todo"><i class="fa fa-check"></i><b>4.7</b> TODO</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="factor-investing.html"><a href="factor-investing.html"><i class="fa fa-check"></i><b>5</b> Factor investing</a><ul>
+<li class="chapter" data-level="5.1" data-path="factor-investing.html"><a href="factor-investing.html#factor-overview"><i class="fa fa-check"></i><b>5.1</b> Factor overview</a></li>
+<li class="chapter" data-level="5.2" data-path="factor-investing.html"><a href="factor-investing.html#macroeconomic-factor"><i class="fa fa-check"></i><b>5.2</b> Macroeconomic factor</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-simple-form"><i class="fa fa-check"></i><b>5.2.1</b> LS fitting – simple form</a></li>
+<li class="chapter" data-level="5.2.2" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-matrix-form"><i class="fa fa-check"></i><b>5.2.2</b> LS fitting – matrix form</a></li>
+<li class="chapter" data-level="5.2.3" data-path="factor-investing.html"><a href="factor-investing.html#estimating-covriacne"><i class="fa fa-check"></i><b>5.2.3</b> Estimating covriacne</a></li>
+<li class="chapter" data-level="5.2.4" data-path="factor-investing.html"><a href="factor-investing.html#evaluating-etfs-performance"><i class="fa fa-check"></i><b>5.2.4</b> Evaluating ETFs performance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="factor-investing.html"><a href="factor-investing.html#fama-french"><i class="fa fa-check"></i><b>5.3</b> Fama-French</a></li>
+<li class="chapter" data-level="5.4" data-path="factor-investing.html"><a href="factor-investing.html#statisticalprincipal-factor-models"><i class="fa fa-check"></i><b>5.4</b> Statistical/principal factor models</a></li>
+<li class="chapter" data-level="5.5" data-path="factor-investing.html"><a href="factor-investing.html#comparison-of-covariance-matrix-estimations"><i class="fa fa-check"></i><b>5.5</b> Comparison of covariance matrix estimations</a></li>
+<li class="chapter" data-level="5.6" data-path="factor-investing.html"><a href="factor-investing.html#edhec-smart-beta"><i class="fa fa-check"></i><b>5.6</b> Edhec smart beta</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html"><i class="fa fa-check"></i><b>6</b> Robust portfolio design</a><ul>
+<li class="chapter" data-level="6.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#motivationChapt6"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#sensitivity-of-different-portfolio-design"><i class="fa fa-check"></i><b>6.2</b> Sensitivity of different portfolio design</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#global-maximum-return-portfolio"><i class="fa fa-check"></i><b>6.2.1</b> Global Maximum Return Portfolio</a></li>
+<li class="chapter" data-level="6.2.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#global-minimum-variance-portfolio"><i class="fa fa-check"></i><b>6.2.2</b> Global Minimum Variance Portfolio</a></li>
+<li class="chapter" data-level="6.2.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#markowitzs-mean-variance-portfolio"><i class="fa fa-check"></i><b>6.2.3</b> Markowitz’s mean-variance portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#robust-portfolio-optimization"><i class="fa fa-check"></i><b>6.3</b> Robust portfolio optimization</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmrp"><i class="fa fa-check"></i><b>6.3.1</b> Worst-case robust GMRP</a></li>
+<li class="chapter" data-level="6.3.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmvp"><i class="fa fa-check"></i><b>6.3.2</b> Worst-case robust GMVP</a></li>
+<li class="chapter" data-level="6.3.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-markowitzs-portfolio"><i class="fa fa-check"></i><b>6.3.3</b> Worst-case Markowitz’s portfolio</a></li>
+<li class="chapter" data-level="6.3.4" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#variance-uncertainty-based-on-factor-model"><i class="fa fa-check"></i><b>6.3.4</b> Variance uncertainty based on factor model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html"><i class="fa fa-check"></i><b>7</b> Alternative risk measure</a><ul>
+<li class="chapter" data-level="7.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#motivation_alter_risk_measure"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#risk-measure"><i class="fa fa-check"></i><b>7.2</b> Risk measure</a></li>
+<li class="chapter" data-level="7.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#alternative-risk-measure-beased-portfolio"><i class="fa fa-check"></i><b>7.3</b> Alternative risk measure beased portfolio</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-downside-risk-portfolio"><i class="fa fa-check"></i><b>7.3.1</b> Mean-downside risk portfolio</a></li>
+<li class="chapter" data-level="7.3.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cvar-portfolio"><i class="fa fa-check"></i><b>7.3.2</b> Mean-CVaR portfolio</a></li>
+<li class="chapter" data-level="7.3.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-dd-portfolio"><i class="fa fa-check"></i><b>7.3.3</b> Mean-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean---ave-dd-portfolio"><i class="fa fa-check"></i><b>7.3.4</b> Mean - Ave-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cdar-portfolio"><i class="fa fa-check"></i><b>7.3.5</b> Mean-CDaR portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#comparison-of-dr-cvar-and-dd-portfolios"><i class="fa fa-check"></i><b>7.4</b> Comparison of DR, CVaR, and DD portfolios</a></li>
+<li class="chapter" data-level="7.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#conclusion"><i class="fa fa-check"></i><b>7.5</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html"><i class="fa fa-check"></i><b>8</b> Risk parity portfolio</a><ul>
+<li class="chapter" data-level="8.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#motiv_risk_parity"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#formulation"><i class="fa fa-check"></i><b>8.2</b> Formulation</a></li>
+<li class="chapter" data-level="8.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#risk-budgeting-portfolio-rbp"><i class="fa fa-check"></i><b>8.3</b> Risk budgeting portfolio (RBP)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#naive-risk-budgeting-portfolio"><i class="fa fa-check"></i><b>8.3.1</b> Naive risk budgeting portfolio</a></li>
+<li class="chapter" data-level="8.3.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#inverse-volatility-portfolio"><i class="fa fa-check"></i><b>8.3.2</b> Inverse volatility portfolio</a></li>
+<li class="chapter" data-level="8.3.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#pnl-comparison"><i class="fa fa-check"></i><b>8.3.3</b> PnL comparison</a></li>
+<li class="chapter" data-level="8.3.4" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#vanilla-rpp"><i class="fa fa-check"></i><b>8.3.4</b> vanilla RPP</a></li>
+<li class="chapter" data-level="8.3.5" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rpp-general-formulation"><i class="fa fa-check"></i><b>8.3.5</b> RPP: General formulation</a></li>
+<li class="chapter" data-level="8.3.6" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rbp-formulations"><i class="fa fa-check"></i><b>8.3.6</b> RBP formulations</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i><b>A</b> Appendix A</a></li>
+<li class="chapter" data-level="B" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i><b>B</b> Appendix B</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Portfolio Construction</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="robust-portfolio-design" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Robust portfolio design</h1>
+<div id="motivationChapt6" class="section level2">
+<h2><span class="header-section-number">6.1</span> Motivation</h2>
+<p>A convex optimization problem is written as</p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{x}}{\textsf{minimize}} &amp; f_{0}\left(\mathbf{x}\right)\\
+\textsf{subject to} 
+&amp; f_{i}\left(\mathbf{x}\right)\leq0\qquad i=1,\ldots,m\\
+&amp; \mathbf{h}\left(\mathbf{x}\right)=\mathbf{A}\mathbf{x}-\mathbf{b}=0
+\end{array}\]</span></p>
+<p>where <span class="math inline">\(f_{0},\,f_{1},\ldots,f_{m}\)</span> are convex and equality constraints are affine.</p>
+<p>Convex problems enjoy a rich theory (KKT conditions, zero duality gap, etc.) as well as a large number of efficient numerical algorithms guaranteed to deliver an optimal solution. However, the obtained optimal solution typically performs very poorly (or even useless!) in practice.</p>
+<p>The question is whether a small error in the parameters is going to be detrimental or can be ignored. That depends on each particular type of problem.</p>
+<p>To make explicit the fact that the functions depend on parameters <span class="math inline">\(\boldsymbol{\theta}\)</span>, we can write explicitly write <span class="math inline">\(f_{i}\left(\mathbf{x};\boldsymbol{\theta}\right)\)</span> and <span class="math inline">\(h_{i}\left(\mathbf{x};\boldsymbol{\theta}\right)\)</span>. The naive approach is to pretend that <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span> is close enough to <span class="math inline">\(\boldsymbol{\theta}\)</span> and solve the approximated problem.</p>
+<p><strong>Markowitz’s portfolio suffers from</strong>:</p>
+<ul>
+<li><p>it is highly sensitive to parameter estimation errors (i.e., to the covariance matrix Σ and especially to the mean vector μ): solution is robust optimization and improved parameter estimation,</p></li>
+<li><p>variance is not a good measure of risk in practice since it penalizes both the unwanted high losses and the desired low losses: the solution is to use alternative measures for risk, e.g., VaR and CVaR,</p></li>
+<li><p>it only considers the risk of the portfolio as a whole and ignores the risk diversification (i.e., concentrates risk too much in few assets, this was observed in the 2008 financial crisis): solution is the risk parity portfolio.</p></li>
+</ul>
+<p>In this chapter, we focus on the first issue (parameter estimation errors). There are several ways to make the problem robust to parameters errors, mainly:</p>
+<p><strong>Stochastic robust optimization (involving expectations)</strong>:<br />
+The problem with expectations is that only the average behavior is concerned and nothing is under control about the realizations worse than the average. For example, on average some constraint will be satisfied but it will be violated for many realizations</p>
+<p><strong>Worst-case robust optimization</strong>:<br />
+The problem with worst-case programming is that it is too conservative as one deals with the worst possible case.</p>
+<p><strong>Chance programming or chance robust optimization</strong>:</p>
+<p>The naive constraint <span class="math inline">\(f(\mathbf{x};\hat{\boldsymbol{\theta}})\leq0\)</span> is replaced with <span class="math inline">\(\mathsf{Pr}_{\boldsymbol{\theta}}\left[f(\mathbf{x};\boldsymbol{\theta})\leq0\right]\geq1-\epsilon=0.95\)</span>Chance programming tries to find a compromise. In particular, it also models the estimation errors statistically but instead of focusing on the average it guarantees a performance for, say, 95% of the cases. Chance or probabilistic constraints are generally very hard to deal with and one typically has to resort to approximations.</p>
+<p>_Data preparation__:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="robust-portfolio-design.html#cb1-1"></a>from =<span class="st"> &quot;2013-01-01&quot;</span></span>
+<span id="cb1-2"><a href="robust-portfolio-design.html#cb1-2"></a>to =<span class="st"> &quot;2018-12-31&quot;</span></span>
+<span id="cb1-3"><a href="robust-portfolio-design.html#cb1-3"></a>tickers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AAPL&quot;</span>, <span class="st">&quot;AMD&quot;</span>, <span class="st">&quot;ADI&quot;</span>,  <span class="st">&quot;ABBV&quot;</span>, <span class="st">&quot;AEZS&quot;</span>, <span class="st">&quot;A&quot;</span>,  <span class="st">&quot;APD&quot;</span>, <span class="st">&quot;AA&quot;</span>,<span class="st">&quot;CF&quot;</span>)</span>
+<span id="cb1-4"><a href="robust-portfolio-design.html#cb1-4"></a>prices &lt;-<span class="st"> </span><span class="kw">get_data</span>(tickers, from, to)</span>
+<span id="cb1-5"><a href="robust-portfolio-design.html#cb1-5"></a>N &lt;-<span class="st"> </span><span class="kw">ncol</span>(prices)</span>
+<span id="cb1-6"><a href="robust-portfolio-design.html#cb1-6"></a>T &lt;-<span class="st"> </span><span class="kw">nrow</span>(prices)</span>
+<span id="cb1-7"><a href="robust-portfolio-design.html#cb1-7"></a>X &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">log</span>(prices)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na.omit</span>()</span>
+<span id="cb1-8"><a href="robust-portfolio-design.html#cb1-8"></a>mu &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X)</span>
+<span id="cb1-9"><a href="robust-portfolio-design.html#cb1-9"></a>Sigma &lt;-<span class="st"> </span><span class="kw">cov</span>(X)</span>
+<span id="cb1-10"><a href="robust-portfolio-design.html#cb1-10"></a><span class="kw">plot</span>(prices<span class="op">/</span><span class="kw">rep</span>(prices[<span class="dv">1</span>, ], <span class="dt">each =</span> <span class="kw">nrow</span>(prices)), <span class="dt">col =</span> rainbow10equal, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>,</span>
+<span id="cb1-11"><a href="robust-portfolio-design.html#cb1-11"></a>     <span class="dt">main =</span> <span class="st">&quot;Normalized prices&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sensitivity-of-different-portfolio-design" class="section level2">
+<h2><span class="header-section-number">6.2</span> Sensitivity of different portfolio design</h2>
+<div id="global-maximum-return-portfolio" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Global Maximum Return Portfolio</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="robust-portfolio-design.html#cb2-1"></a>w_GMRP &lt;-<span class="st"> </span><span class="kw">GMRP</span>(mu)</span>
+<span id="cb2-2"><a href="robust-portfolio-design.html#cb2-2"></a>w_all_GMRP &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMRP)</span>
+<span id="cb2-3"><a href="robust-portfolio-design.html#cb2-3"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_GMRP), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_GMRP), <span class="dt">beside =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb2-4"><a href="robust-portfolio-design.html#cb2-4"></a>        <span class="dt">main =</span> <span class="st">&quot;Global maximum return portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" />
+Let’s now introduce some estimation error in <span class="math inline">\(\boldsymbol{\mu}\)</span> to see the effect:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="robust-portfolio-design.html#cb3-1"></a><span class="kw">library</span>(mvtnorm)</span>
+<span id="cb3-2"><a href="robust-portfolio-design.html#cb3-2"></a><span class="co"># generate a few noisy estimations of mu</span></span>
+<span id="cb3-3"><a href="robust-portfolio-design.html#cb3-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb3-4"><a href="robust-portfolio-design.html#cb3-4"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvnorm</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> (<span class="dv">1</span><span class="op">/</span>T)<span class="op">*</span>Sigma))</span>
+<span id="cb3-5"><a href="robust-portfolio-design.html#cb3-5"></a>  w_GMRP_noisy &lt;-<span class="st"> </span><span class="kw">GMRP</span>(mu_noisy)</span>
+<span id="cb3-6"><a href="robust-portfolio-design.html#cb3-6"></a>  w_all_GMRP &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMRP, w_GMRP_noisy)</span>
+<span id="cb3-7"><a href="robust-portfolio-design.html#cb3-7"></a>}</span>
+<span id="cb3-8"><a href="robust-portfolio-design.html#cb3-8"></a></span>
+<span id="cb3-9"><a href="robust-portfolio-design.html#cb3-9"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb3-10"><a href="robust-portfolio-design.html#cb3-10"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_GMRP), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_GMRP), <span class="dt">beside =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb3-11"><a href="robust-portfolio-design.html#cb3-11"></a>        <span class="dt">main =</span> <span class="st">&quot;Global maximum return portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;" />
+We can see that the optimal allocation changes totally from realization to realization, which is highly undesirable (in fact, it is totally unacceptable).</p>
+</div>
+<div id="global-minimum-variance-portfolio" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Global Minimum Variance Portfolio</h3>
+<p>Let’s continue with the GMVP formulated as</p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{minimize}} &amp; \mathbf{w}^T\mathbf{\Sigma}\mathbf{w}\\
+{\textsf{subject to}}
+ &amp; \mathbf{1}^T\mathbf{w} = 1\\
+ &amp; \mathbf{w}\ge\mathbf{0}
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="robust-portfolio-design.html#cb4-1"></a>w_GMVP &lt;-<span class="st"> </span><span class="kw">GMVP</span>(Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb4-2"><a href="robust-portfolio-design.html#cb4-2"></a>w_all_GMVP &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMVP)</span>
+<span id="cb4-3"><a href="robust-portfolio-design.html#cb4-3"></a></span>
+<span id="cb4-4"><a href="robust-portfolio-design.html#cb4-4"></a><span class="co"># plot allocation</span></span>
+<span id="cb4-5"><a href="robust-portfolio-design.html#cb4-5"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_GMVP), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_GMVP), <span class="dt">beside =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb4-6"><a href="robust-portfolio-design.html#cb4-6"></a>        <span class="dt">main =</span> <span class="st">&quot;Global minimum variance portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The GMVP is totally different from the maximum return portfolio. It’s quite the opposite: the budget is allocated to most of the stocks to diversity the risk.</p>
+<p>Let’s now introduce some estimation error in <span class="math inline">\(\boldsymbol{\Sigma}\)</span> to see the effect:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="robust-portfolio-design.html#cb5-1"></a><span class="kw">library</span>(PerformanceAnalytics)</span>
+<span id="cb5-2"><a href="robust-portfolio-design.html#cb5-2"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb5-3"><a href="robust-portfolio-design.html#cb5-3"></a>N &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)</span>
+<span id="cb5-4"><a href="robust-portfolio-design.html#cb5-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb5-5"><a href="robust-portfolio-design.html#cb5-5"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> <span class="kw">rep</span>(<span class="dv">0</span>, N), <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb5-6"><a href="robust-portfolio-design.html#cb5-6"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb5-7"><a href="robust-portfolio-design.html#cb5-7"></a>  w_GMVP_noisy &lt;-<span class="st"> </span><span class="kw">GMVP</span>(Sigma_noisy, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-8"><a href="robust-portfolio-design.html#cb5-8"></a>  w_all_GMVP &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMVP, w_GMVP_noisy)</span>
+<span id="cb5-9"><a href="robust-portfolio-design.html#cb5-9"></a>}</span>
+<span id="cb5-10"><a href="robust-portfolio-design.html#cb5-10"></a></span>
+<span id="cb5-11"><a href="robust-portfolio-design.html#cb5-11"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb5-12"><a href="robust-portfolio-design.html#cb5-12"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP), <span class="dt">main =</span> <span class="st">&quot;GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" />
+We can see that the optimal allocation still changes from realization to realization, although in this case is not that extreme.</p>
+</div>
+<div id="markowitzs-mean-variance-portfolio" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Markowitz’s mean-variance portfolio</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="robust-portfolio-design.html#cb6-1"></a>w_Markowitz &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu, Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb6-2"><a href="robust-portfolio-design.html#cb6-2"></a>w_all_Markowitz &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_Markowitz)</span>
+<span id="cb6-3"><a href="robust-portfolio-design.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="robust-portfolio-design.html#cb6-4"></a><span class="co"># plot allocation</span></span>
+<span id="cb6-5"><a href="robust-portfolio-design.html#cb6-5"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_Markowitz), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_Markowitz), <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;Markowitz portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="robust-portfolio-design.html#cb7-1"></a></span>
+<span id="cb7-2"><a href="robust-portfolio-design.html#cb7-2"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb7-3"><a href="robust-portfolio-design.html#cb7-3"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb7-4"><a href="robust-portfolio-design.html#cb7-4"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb7-5"><a href="robust-portfolio-design.html#cb7-5"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb7-6"><a href="robust-portfolio-design.html#cb7-6"></a>  w_Markowitz_noisy &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu_noisy, Sigma_noisy, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb7-7"><a href="robust-portfolio-design.html#cb7-7"></a>  w_all_Markowitz &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_Markowitz, w_Markowitz_noisy)</span>
+<span id="cb7-8"><a href="robust-portfolio-design.html#cb7-8"></a>}</span>
+<span id="cb7-9"><a href="robust-portfolio-design.html#cb7-9"></a></span>
+<span id="cb7-10"><a href="robust-portfolio-design.html#cb7-10"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb7-11"><a href="robust-portfolio-design.html#cb7-11"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_Markowitz), <span class="dt">main =</span> <span class="st">&quot;Markowitz portfolio allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-2.png" width="80%" style="display: block; margin: auto;" />
+Again, the allocations are totally different from realization to realization. Totally unacceptable. Who is going to trust these allocations to invest their money?</p>
+</div>
+</div>
+<div id="robust-portfolio-optimization" class="section level2">
+<h2><span class="header-section-number">6.3</span> Robust portfolio optimization</h2>
+<div id="worst-case-robust-gmrp" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Worst-case robust GMRP</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} &amp; \underset{\boldsymbol{\mu}\in\mathcal{U}_{\boldsymbol{\mu}}}{\min}\mathbf{w}^{T}\boldsymbol{\mu}\\
+\textsf{subject to} &amp; \mathbf{1}^{T}\mathbf{w}=1.
+\end{array}\]</span></p>
+<p>For an elliptical uncertainty set
+<span class="math display">\[\mathcal{U}_{\boldsymbol{\mu}} = \left\{\boldsymbol{\mu}=\hat{\boldsymbol{\mu}}+\kappa\mathbf{S}^{1/2}\mathbf{u}\mid\left\Vert \mathbf{u}\right\Vert _{2}\leq1\right\}\]</span></p>
+<p>For a box uncertainty set
+<span class="math display">\[\mathcal{U}_\boldsymbol{\mu}^b = \{\boldsymbol{\mu}\ | -\boldsymbol{\delta}\leq\boldsymbol{\mu}-\hat{\boldsymbol{\mu}}\leq\boldsymbol{\delta}\}\]</span>
+where typically <span class="math inline">\(\delta_i = \kappa\hat{\sigma}_i\)</span>, the the robust formulation becomes
+<span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} 
+ &amp; \mathbf{w}^T\hat{\boldsymbol{\mu}} - |\mathbf{w}|^T\boldsymbol{\delta}\\
+{\textsf{subject to}}
+ &amp; \mathbf{1}^T\mathbf{w} = 1\\
+ &amp; \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span>
+We have gone from an LP to an SOCP.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="robust-portfolio-design.html#cb8-1"></a>portfolioMaxReturnRobustBox &lt;-<span class="st"> </span><span class="cf">function</span>(mu_hat, delta) {</span>
+<span id="cb8-2"><a href="robust-portfolio-design.html#cb8-2"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(<span class="kw">length</span>(mu_hat))</span>
+<span id="cb8-3"><a href="robust-portfolio-design.html#cb8-3"></a>  prob &lt;-<span class="st"> </span><span class="kw">Problem</span>(<span class="kw">Maximize</span>( <span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>mu_hat <span class="op">-</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">abs</span>(w)) <span class="op">%*%</span><span class="st"> </span>delta ), </span>
+<span id="cb8-4"><a href="robust-portfolio-design.html#cb8-4"></a>                  <span class="dt">constraints =</span> <span class="kw">list</span>(w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb8-5"><a href="robust-portfolio-design.html#cb8-5"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb8-6"><a href="robust-portfolio-design.html#cb8-6"></a>  w &lt;-<span class="st"> </span><span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w))</span>
+<span id="cb8-7"><a href="robust-portfolio-design.html#cb8-7"></a>  <span class="kw">names</span>(w) &lt;-<span class="st"> </span><span class="kw">names</span>(mu_hat)</span>
+<span id="cb8-8"><a href="robust-portfolio-design.html#cb8-8"></a>  <span class="kw">return</span>(w)</span>
+<span id="cb8-9"><a href="robust-portfolio-design.html#cb8-9"></a>}</span>
+<span id="cb8-10"><a href="robust-portfolio-design.html#cb8-10"></a></span>
+<span id="cb8-11"><a href="robust-portfolio-design.html#cb8-11"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb8-12"><a href="robust-portfolio-design.html#cb8-12"></a>w_GMRP &lt;-<span class="st"> </span><span class="kw">GMRP</span>(mu)</span>
+<span id="cb8-13"><a href="robust-portfolio-design.html#cb8-13"></a><span class="kw">names</span>(w_GMRP) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb8-14"><a href="robust-portfolio-design.html#cb8-14"></a>w_all_GMRP_robust_box &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMRP)</span>
+<span id="cb8-15"><a href="robust-portfolio-design.html#cb8-15"></a></span>
+<span id="cb8-16"><a href="robust-portfolio-design.html#cb8-16"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb8-17"><a href="robust-portfolio-design.html#cb8-17"></a>kappa &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb8-18"><a href="robust-portfolio-design.html#cb8-18"></a>delta &lt;-<span class="st"> </span>kappa<span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">diag</span>(Sigma_noisy))</span>
+<span id="cb8-19"><a href="robust-portfolio-design.html#cb8-19"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb8-20"><a href="robust-portfolio-design.html#cb8-20"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb8-21"><a href="robust-portfolio-design.html#cb8-21"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb8-22"><a href="robust-portfolio-design.html#cb8-22"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb8-23"><a href="robust-portfolio-design.html#cb8-23"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb8-24"><a href="robust-portfolio-design.html#cb8-24"></a>  </span>
+<span id="cb8-25"><a href="robust-portfolio-design.html#cb8-25"></a>  w_GMRP_robust_box_noisy &lt;-<span class="st"> </span><span class="kw">portfolioMaxReturnRobustBox</span>(mu_noisy, delta)</span>
+<span id="cb8-26"><a href="robust-portfolio-design.html#cb8-26"></a>  w_all_GMRP_robust_box &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMRP_robust_box, w_GMRP_robust_box_noisy)</span>
+<span id="cb8-27"><a href="robust-portfolio-design.html#cb8-27"></a>}</span>
+<span id="cb8-28"><a href="robust-portfolio-design.html#cb8-28"></a></span>
+<span id="cb8-29"><a href="robust-portfolio-design.html#cb8-29"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb8-30"><a href="robust-portfolio-design.html#cb8-30"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_GMRP_robust_box), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_GMRP_robust_box), </span>
+<span id="cb8-31"><a href="robust-portfolio-design.html#cb8-31"></a>        <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">bg =</span> <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb8-32"><a href="robust-portfolio-design.html#cb8-32"></a>        <span class="dt">main =</span> <span class="st">&quot;Robust (box) global maximum return portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-10-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="robust-portfolio-design.html#cb9-1"></a>portfolioMaxReturnRobustEllipsoid &lt;-<span class="st"> </span><span class="cf">function</span>(mu_hat, S, <span class="dt">kappa =</span> <span class="fl">0.1</span>) {</span>
+<span id="cb9-2"><a href="robust-portfolio-design.html#cb9-2"></a>  S12 &lt;-<span class="st"> </span><span class="kw">chol</span>(S)  <span class="co"># t(S12) %*% S12 = Sigma</span></span>
+<span id="cb9-3"><a href="robust-portfolio-design.html#cb9-3"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(<span class="kw">length</span>(mu_hat))</span>
+<span id="cb9-4"><a href="robust-portfolio-design.html#cb9-4"></a>  prob &lt;-<span class="st"> </span><span class="kw">Problem</span>(<span class="kw">Maximize</span>( <span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>mu_hat <span class="op">-</span><span class="st"> </span>kappa<span class="op">*</span><span class="kw">norm2</span>(S12 <span class="op">%*%</span><span class="st"> </span>w) ), </span>
+<span id="cb9-5"><a href="robust-portfolio-design.html#cb9-5"></a>                  <span class="dt">constraints =</span> <span class="kw">list</span>(w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb9-6"><a href="robust-portfolio-design.html#cb9-6"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb9-7"><a href="robust-portfolio-design.html#cb9-7"></a>  <span class="kw">return</span>(<span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w)))</span>
+<span id="cb9-8"><a href="robust-portfolio-design.html#cb9-8"></a>}</span>
+<span id="cb9-9"><a href="robust-portfolio-design.html#cb9-9"></a></span>
+<span id="cb9-10"><a href="robust-portfolio-design.html#cb9-10"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb9-11"><a href="robust-portfolio-design.html#cb9-11"></a>w_GMRP &lt;-<span class="st"> </span><span class="kw">GMRP</span>(mu)</span>
+<span id="cb9-12"><a href="robust-portfolio-design.html#cb9-12"></a>w_all_GMRP_robust_ellipsoid &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMRP)</span>
+<span id="cb9-13"><a href="robust-portfolio-design.html#cb9-13"></a></span>
+<span id="cb9-14"><a href="robust-portfolio-design.html#cb9-14"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb9-15"><a href="robust-portfolio-design.html#cb9-15"></a>kappa &lt;-<span class="st"> </span><span class="fl">0.2</span></span>
+<span id="cb9-16"><a href="robust-portfolio-design.html#cb9-16"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb9-17"><a href="robust-portfolio-design.html#cb9-17"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb9-18"><a href="robust-portfolio-design.html#cb9-18"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb9-19"><a href="robust-portfolio-design.html#cb9-19"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb9-20"><a href="robust-portfolio-design.html#cb9-20"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb9-21"><a href="robust-portfolio-design.html#cb9-21"></a>  </span>
+<span id="cb9-22"><a href="robust-portfolio-design.html#cb9-22"></a>  w_GMRP_robust_ellipsoid_noisy &lt;-<span class="st"> </span><span class="kw">portfolioMaxReturnRobustEllipsoid</span>(mu_noisy, Sigma_noisy, kappa)</span>
+<span id="cb9-23"><a href="robust-portfolio-design.html#cb9-23"></a>  w_all_GMRP_robust_ellipsoid &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMRP_robust_ellipsoid, w_GMRP_robust_ellipsoid_noisy)</span>
+<span id="cb9-24"><a href="robust-portfolio-design.html#cb9-24"></a>}</span>
+<span id="cb9-25"><a href="robust-portfolio-design.html#cb9-25"></a></span>
+<span id="cb9-26"><a href="robust-portfolio-design.html#cb9-26"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb9-27"><a href="robust-portfolio-design.html#cb9-27"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMRP_robust_ellipsoid), </span>
+<span id="cb9-28"><a href="robust-portfolio-design.html#cb9-28"></a>                 <span class="dt">main =</span> <span class="st">&quot;Robust (ellipsoid) global maximum return portfolio allocation&quot;</span>, </span>
+<span id="cb9-29"><a href="robust-portfolio-design.html#cb9-29"></a>                 <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-11-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="worst-case-robust-gmvp" class="section level3">
+<h3><span class="header-section-number">6.3.2</span> Worst-case robust GMVP</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{minimize}} &amp; \underset{\boldsymbol{\Sigma}\in\mathcal{U}_{\boldsymbol{\Sigma}}}{\max}\mathbf{w}^{T}\boldsymbol{\Sigma}\mathbf{w}\\
+\textsf{subject to} &amp; \mathbf{1}^{T}\mathbf{w}=1.
+\end{array}\]</span></p>
+<p>we will then model the data matrix as</p>
+<p><span class="math display">\[\mathcal{U}_{\mathbf{X}}  =\left\{\mathbf{X}\mid\left\Vert\mathbf{X}-\hat{\mathbf{X}}\right\Vert_{F}\leq\delta_{\mathbf{X}}\right\}\]</span></p>
+<p>The robust problem formulation finally becomes:</p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w},\mathbf{X},\mathbf{Z}}{\textsf{minimize}} 
+ &amp; \textsf{Tr}\left(\hat{\boldsymbol{\Sigma}}\left(\mathbf{X}+\mathbf{Z}\right)\right) + \delta\left\Vert \mathbf{S}_{\boldsymbol{\Sigma}}^{1/2}\left(\textsf{vec}(\mathbf{X})+\textsf{vec}(\mathbf{Z})\right)\right\Vert _{2}\\
+\textsf{subject to} 
+ &amp; \mathbf{w}^{T}\mathbf{1}=1,\quad \mathbf{w}\ge\mathbf{0}\\
+ &amp; \left[\begin{array}{cc}\mathbf{X} &amp; \mathbf{w}\\ \mathbf{w}^{T} &amp; 1\end{array} \right]\succeq\mathbf{0}\\
+ &amp; \mathbf{Z}\succeq\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="robust-portfolio-design.html#cb10-1"></a><span class="co"># define function (check: https://cvxr.rbind.io/post/cvxr_functions/)</span></span>
+<span id="cb10-2"><a href="robust-portfolio-design.html#cb10-2"></a>portfolioGMVPRobustBox &lt;-<span class="st"> </span><span class="cf">function</span>(Sigma_lb, Sigma_ub) {</span>
+<span id="cb10-3"><a href="robust-portfolio-design.html#cb10-3"></a>  N &lt;-<span class="st"> </span><span class="kw">nrow</span>(Sigma_lb)</span>
+<span id="cb10-4"><a href="robust-portfolio-design.html#cb10-4"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(N)</span>
+<span id="cb10-5"><a href="robust-portfolio-design.html#cb10-5"></a>  Lambda_ub &lt;-<span class="st"> </span><span class="kw">Variable</span>(N, N)</span>
+<span id="cb10-6"><a href="robust-portfolio-design.html#cb10-6"></a>  Lambda_lb &lt;-<span class="st"> </span><span class="kw">Variable</span>(N, N)</span>
+<span id="cb10-7"><a href="robust-portfolio-design.html#cb10-7"></a>  prob &lt;-</span>
+<span id="cb10-8"><a href="robust-portfolio-design.html#cb10-8"></a><span class="st">    </span><span class="kw">Problem</span>(</span>
+<span id="cb10-9"><a href="robust-portfolio-design.html#cb10-9"></a>      <span class="kw">Minimize</span>(</span>
+<span id="cb10-10"><a href="robust-portfolio-design.html#cb10-10"></a>        <span class="kw">matrix_trace</span>(Lambda_ub <span class="op">%*%</span><span class="st"> </span>Sigma_ub) <span class="op">-</span><span class="st"> </span><span class="kw">matrix_trace</span>(Lambda_lb <span class="op">%*%</span><span class="st"> </span>Sigma_lb)</span>
+<span id="cb10-11"><a href="robust-portfolio-design.html#cb10-11"></a>      ),</span>
+<span id="cb10-12"><a href="robust-portfolio-design.html#cb10-12"></a>      <span class="dt">constraints =</span> <span class="kw">list</span>(</span>
+<span id="cb10-13"><a href="robust-portfolio-design.html#cb10-13"></a>        w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb10-14"><a href="robust-portfolio-design.html#cb10-14"></a>        <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb10-15"><a href="robust-portfolio-design.html#cb10-15"></a>        Lambda_ub <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb10-16"><a href="robust-portfolio-design.html#cb10-16"></a>        Lambda_lb <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb10-17"><a href="robust-portfolio-design.html#cb10-17"></a>        <span class="kw">bmat</span>(<span class="kw">list</span>(<span class="kw">list</span>(</span>
+<span id="cb10-18"><a href="robust-portfolio-design.html#cb10-18"></a>          Lambda_ub <span class="op">-</span><span class="st"> </span>Lambda_lb, w</span>
+<span id="cb10-19"><a href="robust-portfolio-design.html#cb10-19"></a>        ),</span>
+<span id="cb10-20"><a href="robust-portfolio-design.html#cb10-20"></a>        <span class="kw">list</span>(<span class="kw">t</span>(</span>
+<span id="cb10-21"><a href="robust-portfolio-design.html#cb10-21"></a>          w</span>
+<span id="cb10-22"><a href="robust-portfolio-design.html#cb10-22"></a>        ), <span class="dv">1</span>))) <span class="op">==</span><span class="st"> </span><span class="kw">Variable</span>(<span class="kw">c</span>(N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">PSD=</span><span class="ot">TRUE</span>)</span>
+<span id="cb10-23"><a href="robust-portfolio-design.html#cb10-23"></a>      )</span>
+<span id="cb10-24"><a href="robust-portfolio-design.html#cb10-24"></a>    )</span>
+<span id="cb10-25"><a href="robust-portfolio-design.html#cb10-25"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb10-26"><a href="robust-portfolio-design.html#cb10-26"></a>  <span class="kw">return</span>(<span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w)))</span>
+<span id="cb10-27"><a href="robust-portfolio-design.html#cb10-27"></a>}</span>
+<span id="cb10-28"><a href="robust-portfolio-design.html#cb10-28"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb10-29"><a href="robust-portfolio-design.html#cb10-29"></a>w_GMVP &lt;-<span class="st"> </span><span class="kw">GMVP</span>(Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-30"><a href="robust-portfolio-design.html#cb10-30"></a><span class="kw">names</span>(w_GMVP) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb10-31"><a href="robust-portfolio-design.html#cb10-31"></a>w_all_GMVP_robust_box &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMVP)</span>
+<span id="cb10-32"><a href="robust-portfolio-design.html#cb10-32"></a></span>
+<span id="cb10-33"><a href="robust-portfolio-design.html#cb10-33"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb10-34"><a href="robust-portfolio-design.html#cb10-34"></a>delta &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb10-35"><a href="robust-portfolio-design.html#cb10-35"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb10-36"><a href="robust-portfolio-design.html#cb10-36"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb10-37"><a href="robust-portfolio-design.html#cb10-37"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb10-38"><a href="robust-portfolio-design.html#cb10-38"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb10-39"><a href="robust-portfolio-design.html#cb10-39"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb10-40"><a href="robust-portfolio-design.html#cb10-40"></a>  Sigma_lb &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>delta)<span class="op">*</span>Sigma_noisy</span>
+<span id="cb10-41"><a href="robust-portfolio-design.html#cb10-41"></a>  <span class="co">#diag(Sigma_lb) &lt;- diag(Sigma_noisy)</span></span>
+<span id="cb10-42"><a href="robust-portfolio-design.html#cb10-42"></a>  Sigma_ub &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>delta)<span class="op">*</span>Sigma_noisy</span>
+<span id="cb10-43"><a href="robust-portfolio-design.html#cb10-43"></a>  <span class="kw">diag</span>(Sigma_ub) &lt;-<span class="st"> </span><span class="kw">diag</span>(Sigma_noisy)</span>
+<span id="cb10-44"><a href="robust-portfolio-design.html#cb10-44"></a>  w_GMVP_robust_box_noisy &lt;-<span class="st"> </span><span class="kw">portfolioGMVPRobustBox</span>(Sigma_lb, Sigma_ub)</span>
+<span id="cb10-45"><a href="robust-portfolio-design.html#cb10-45"></a>  w_all_GMVP_robust_box &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMVP_robust_box, w_GMVP_robust_box_noisy)</span>
+<span id="cb10-46"><a href="robust-portfolio-design.html#cb10-46"></a>}</span>
+<span id="cb10-47"><a href="robust-portfolio-design.html#cb10-47"></a></span>
+<span id="cb10-48"><a href="robust-portfolio-design.html#cb10-48"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb10-49"><a href="robust-portfolio-design.html#cb10-49"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_GMVP_robust_box), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_GMVP_robust_box), </span>
+<span id="cb10-50"><a href="robust-portfolio-design.html#cb10-50"></a>        <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">bg =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;topleft&quot;</span>),</span>
+<span id="cb10-51"><a href="robust-portfolio-design.html#cb10-51"></a>        <span class="dt">main =</span> <span class="st">&quot;Robust (box) GMVP allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-12-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="robust-portfolio-design.html#cb11-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP), <span class="dt">main =</span> <span class="st">&quot;Naive GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-12-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="robust-portfolio-design.html#cb12-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP_robust_box), </span>
+<span id="cb12-2"><a href="robust-portfolio-design.html#cb12-2"></a>                 <span class="dt">main =</span> <span class="st">&quot;Robust (box) GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-12-3.png" width="80%" style="display: block; margin: auto;" />
+The naive GMVP was already kind of stable. Nevertheless, the robust GMVP becomes even more stable (less sensitive to the estimation errors).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="robust-portfolio-design.html#cb13-1"></a>portfolioGMVPRobustSphereX &lt;-<span class="st"> </span><span class="cf">function</span>(X_hat, delta) {</span>
+<span id="cb13-2"><a href="robust-portfolio-design.html#cb13-2"></a>  N &lt;-<span class="st"> </span><span class="kw">ncol</span>(X_hat)</span>
+<span id="cb13-3"><a href="robust-portfolio-design.html#cb13-3"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(N)</span>
+<span id="cb13-4"><a href="robust-portfolio-design.html#cb13-4"></a>  X_ &lt;-<span class="st"> </span><span class="kw">scale</span>(X_hat, <span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">FALSE</span>)  <span class="co"># demean</span></span>
+<span id="cb13-5"><a href="robust-portfolio-design.html#cb13-5"></a>  prob &lt;-<span class="st"> </span><span class="kw">Problem</span>(<span class="kw">Minimize</span>(<span class="kw">norm2</span>(X_ <span class="op">%*%</span><span class="st"> </span>w) <span class="op">+</span><span class="st"> </span>delta<span class="op">*</span><span class="kw">norm2</span>(w)),</span>
+<span id="cb13-6"><a href="robust-portfolio-design.html#cb13-6"></a>                  <span class="dt">constraints =</span> <span class="kw">list</span>(w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb13-7"><a href="robust-portfolio-design.html#cb13-7"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb13-8"><a href="robust-portfolio-design.html#cb13-8"></a>  <span class="kw">return</span>(<span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w)))</span>
+<span id="cb13-9"><a href="robust-portfolio-design.html#cb13-9"></a>}</span>
+<span id="cb13-10"><a href="robust-portfolio-design.html#cb13-10"></a></span>
+<span id="cb13-11"><a href="robust-portfolio-design.html#cb13-11"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb13-12"><a href="robust-portfolio-design.html#cb13-12"></a>w_GMVP &lt;-<span class="st"> </span><span class="kw">GMVP</span>(Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb13-13"><a href="robust-portfolio-design.html#cb13-13"></a><span class="kw">names</span>(w_GMVP) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb13-14"><a href="robust-portfolio-design.html#cb13-14"></a>w_all_GMVP_robust_sphereX &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMVP)</span>
+<span id="cb13-15"><a href="robust-portfolio-design.html#cb13-15"></a></span>
+<span id="cb13-16"><a href="robust-portfolio-design.html#cb13-16"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb13-17"><a href="robust-portfolio-design.html#cb13-17"></a>delta &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb13-18"><a href="robust-portfolio-design.html#cb13-18"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb13-19"><a href="robust-portfolio-design.html#cb13-19"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb13-20"><a href="robust-portfolio-design.html#cb13-20"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb13-21"><a href="robust-portfolio-design.html#cb13-21"></a>  w_GMVP_robust_sphereX_noisy &lt;-<span class="st"> </span><span class="kw">portfolioGMVPRobustSphereX</span>(X_noisy, delta)</span>
+<span id="cb13-22"><a href="robust-portfolio-design.html#cb13-22"></a>  w_all_GMVP_robust_sphereX &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMVP_robust_sphereX, w_GMVP_robust_sphereX_noisy)</span>
+<span id="cb13-23"><a href="robust-portfolio-design.html#cb13-23"></a>}</span>
+<span id="cb13-24"><a href="robust-portfolio-design.html#cb13-24"></a></span>
+<span id="cb13-25"><a href="robust-portfolio-design.html#cb13-25"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb13-26"><a href="robust-portfolio-design.html#cb13-26"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP), <span class="dt">main =</span> <span class="st">&quot;Naive GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="robust-portfolio-design.html#cb14-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP_robust_sphereX), <span class="dt">main =</span> <span class="st">&quot;Robust (sphere in X) GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-13-2.png" width="80%" style="display: block; margin: auto;" />
+Finally, let’s consider the robust formulation for the elliptical uncertainty region on the covariance matrix</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="robust-portfolio-design.html#cb15-1"></a>portfolioGMVPRobustEllipsoid &lt;-<span class="st"> </span><span class="cf">function</span>(Sigma_hat, S, delta) {</span>
+<span id="cb15-2"><a href="robust-portfolio-design.html#cb15-2"></a>  N &lt;-<span class="st"> </span><span class="kw">ncol</span>(Sigma_hat)</span>
+<span id="cb15-3"><a href="robust-portfolio-design.html#cb15-3"></a>  S12 &lt;-<span class="st"> </span><span class="kw">chol</span>(S)  <span class="co"># t(S12) %*% S12 = Sigma</span></span>
+<span id="cb15-4"><a href="robust-portfolio-design.html#cb15-4"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(N)</span>
+<span id="cb15-5"><a href="robust-portfolio-design.html#cb15-5"></a>  X &lt;-<span class="st"> </span><span class="kw">Variable</span>(N, N)</span>
+<span id="cb15-6"><a href="robust-portfolio-design.html#cb15-6"></a>  Z &lt;-<span class="st"> </span><span class="kw">Variable</span>(N, N)</span>
+<span id="cb15-7"><a href="robust-portfolio-design.html#cb15-7"></a>  prob &lt;-</span>
+<span id="cb15-8"><a href="robust-portfolio-design.html#cb15-8"></a><span class="st">    </span><span class="kw">Problem</span>(</span>
+<span id="cb15-9"><a href="robust-portfolio-design.html#cb15-9"></a>      <span class="kw">Minimize</span>(<span class="kw">matrix_trace</span>(Sigma_hat <span class="op">%*%</span><span class="st"> </span>(X <span class="op">+</span><span class="st"> </span>Z)) <span class="op">+</span><span class="st"> </span>delta <span class="op">*</span><span class="st"> </span><span class="kw">norm2</span>(S12 <span class="op">%*%</span><span class="st"> </span>(<span class="kw">vec</span>(X) <span class="op">+</span><span class="st"> </span><span class="kw">vec</span>(Z)))),</span>
+<span id="cb15-10"><a href="robust-portfolio-design.html#cb15-10"></a>      <span class="dt">constraints =</span> <span class="kw">list</span>(</span>
+<span id="cb15-11"><a href="robust-portfolio-design.html#cb15-11"></a>        w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb15-12"><a href="robust-portfolio-design.html#cb15-12"></a>        <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb15-13"><a href="robust-portfolio-design.html#cb15-13"></a>        <span class="kw">bmat</span>(<span class="kw">list</span>(<span class="kw">list</span>(X, w),</span>
+<span id="cb15-14"><a href="robust-portfolio-design.html#cb15-14"></a>                  <span class="kw">list</span>(<span class="kw">t</span>(w), <span class="dv">1</span>))) <span class="op">==</span><span class="st"> </span><span class="kw">Variable</span>(<span class="kw">c</span>(N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, N <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">PSD =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb15-15"><a href="robust-portfolio-design.html#cb15-15"></a>        Z <span class="op">==</span><span class="st"> </span><span class="kw">Variable</span>(<span class="kw">c</span>(N, N), <span class="dt">PSD =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb15-16"><a href="robust-portfolio-design.html#cb15-16"></a>      )</span>
+<span id="cb15-17"><a href="robust-portfolio-design.html#cb15-17"></a>    )</span>
+<span id="cb15-18"><a href="robust-portfolio-design.html#cb15-18"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb15-19"><a href="robust-portfolio-design.html#cb15-19"></a>  <span class="kw">return</span>(<span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w)))</span>
+<span id="cb15-20"><a href="robust-portfolio-design.html#cb15-20"></a>}</span>
+<span id="cb15-21"><a href="robust-portfolio-design.html#cb15-21"></a></span>
+<span id="cb15-22"><a href="robust-portfolio-design.html#cb15-22"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb15-23"><a href="robust-portfolio-design.html#cb15-23"></a>w_GMVP &lt;-<span class="kw">GMVP</span>(Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb15-24"><a href="robust-portfolio-design.html#cb15-24"></a><span class="kw">names</span>(w_GMVP) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb15-25"><a href="robust-portfolio-design.html#cb15-25"></a>w_all_GMVP_robust_ellipsoid &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_GMVP)</span>
+<span id="cb15-26"><a href="robust-portfolio-design.html#cb15-26"></a></span>
+<span id="cb15-27"><a href="robust-portfolio-design.html#cb15-27"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb15-28"><a href="robust-portfolio-design.html#cb15-28"></a>delta &lt;-<span class="st"> </span><span class="fl">0.0005</span></span>
+<span id="cb15-29"><a href="robust-portfolio-design.html#cb15-29"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb15-30"><a href="robust-portfolio-design.html#cb15-30"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb15-31"><a href="robust-portfolio-design.html#cb15-31"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb15-32"><a href="robust-portfolio-design.html#cb15-32"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb15-33"><a href="robust-portfolio-design.html#cb15-33"></a></span>
+<span id="cb15-34"><a href="robust-portfolio-design.html#cb15-34"></a>  w_GMVP_robust_ellipsoid_noisy &lt;-<span class="st"> </span><span class="kw">portfolioGMVPRobustEllipsoid</span>(Sigma_noisy, <span class="kw">diag</span>(N<span class="op">^</span><span class="dv">2</span>), delta)</span>
+<span id="cb15-35"><a href="robust-portfolio-design.html#cb15-35"></a>  w_all_GMVP_robust_ellipsoid &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_GMVP_robust_ellipsoid, w_GMVP_robust_ellipsoid_noisy)</span>
+<span id="cb15-36"><a href="robust-portfolio-design.html#cb15-36"></a>}</span>
+<span id="cb15-37"><a href="robust-portfolio-design.html#cb15-37"></a></span>
+<span id="cb15-38"><a href="robust-portfolio-design.html#cb15-38"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb15-39"><a href="robust-portfolio-design.html#cb15-39"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP), <span class="dt">main =</span> <span class="st">&quot;Naive GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-14-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="robust-portfolio-design.html#cb16-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_GMVP_robust_ellipsoid), </span>
+<span id="cb16-2"><a href="robust-portfolio-design.html#cb16-2"></a>                 <span class="dt">main =</span> <span class="st">&quot;Robust (ellipsoid) GMVP allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-14-2.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="worst-case-markowitzs-portfolio" class="section level3">
+<h3><span class="header-section-number">6.3.3</span> Worst-case Markowitz’s portfolio</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w},\mathbf{X},\mathbf{Z}}{\textsf{maximize}} 
+&amp; 
+\begin{array}{r}
+\underset{\boldsymbol{\mu}\in\mathcal{U}_{\boldsymbol{\mu}}}{\min}\mathbf{w}^{T}\boldsymbol{\mu}-\lambda\left(\mathsf{Tr}\left(\hat{\boldsymbol{\Sigma}}\left(\mathbf{X}+\mathbf{Z}\right)\right)\right.\hspace{2cm}\\
+\left.+\delta_{\boldsymbol{\Sigma}}\left\Vert \mathbf{S}_{\boldsymbol{\Sigma}}^{1/2}\left(\mathsf{vec}(\mathbf{X})+\mathsf{vec}(\mathbf{Z})\right)\right\Vert _{2}\right)
+\end{array}\\
+\textsf{subject to}
+&amp; \mathbf{w}^{T}\mathbf{1}=1,\quad\mathbf{w}\in\mathcal{W}\\
+&amp;\left[\begin{array}{cc}
+\mathbf{X} &amp; \mathbf{w}\\
+\mathbf{w}^{T} &amp; 1
+\end{array}\right]\succeq\mathbf{0}\\
+&amp; \mathbf{Z}\succeq\mathbf{0}.
+\end{array}\]</span></p>
+<p>Consider the two uncertainty sets:
+<span class="math display">\[\begin{aligned}
+\mathcal{U}_{\boldsymbol{\mu}}^{b} &amp;= \left\{\boldsymbol{\mu}\mid-\boldsymbol{\delta}\leq\boldsymbol{\mu}-\hat{\boldsymbol{\mu}}\leq\boldsymbol{\delta}\right\},\\
+\mathcal{U}_{\boldsymbol{\Sigma}}^{b}   &amp;= \left\{\boldsymbol{\Sigma}\mid\underline{\boldsymbol{\Sigma}}\leq\boldsymbol{\Sigma}\leq\overline{\boldsymbol{\Sigma}},\boldsymbol{\Sigma}\succeq\mathbf{0}\right\}
+\end{aligned}\]</span></p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w},\overline{\boldsymbol{\Lambda}},\underline{\boldsymbol{\Lambda}}}{\textsf{maximize}} &amp; 
+\mathbf{w}^{T}\hat{\boldsymbol{\mu}}-|\mathbf{w}|^{T}\boldsymbol{\delta}-\lambda\left(\textsf{Tr}(\overline{\boldsymbol{\Lambda}}\,\overline{\boldsymbol{\Sigma}})-\textsf{Tr}(\underline{\boldsymbol{\Lambda}}\,\underline{\boldsymbol{\Sigma}})\right)\\
+\textsf{subject to} 
+&amp; \mathbf{w}^{T}\mathbf{1}=1,\quad\mathbf{w}\in\mathcal{W},\\
+&amp; \begin{bmatrix}\overline{\boldsymbol{\Lambda}}-\underline{\boldsymbol{\Lambda}} &amp; \mathbf{w}\\
+\mathbf{w}^{T} &amp; 1
+\end{bmatrix}\succeq\mathbf{0},\\
+&amp; \overline{\boldsymbol{\Lambda}}\geq\mathbf{0},\quad\underline{\boldsymbol{\Lambda}}\geq\mathbf{0}.
+\end{array}\]</span></p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} 
+ &amp; \mathbf{w}^T\hat{\boldsymbol{\mu}} - \kappa\|\hat{\mathbf{\Sigma}}^{1/2}\mathbf{w}\|_{2}
+   - \lambda\left(\|\hat{\mathbf{\Sigma}}^{1/2}\mathbf{w}\|_2 + \frac{\delta}{\sqrt(T-1)} \|\mathbf{w}\|_2\right)^2\\
+{\textsf{subject to}}
+ &amp; \mathbf{1}^T\mathbf{w} = 1\\
+ &amp; \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="robust-portfolio-design.html#cb17-1"></a>portfolioMarkowitzRobust &lt;-<span class="st"> </span><span class="cf">function</span>(mu_hat, Sigma_hat, kappa, delta_, <span class="dt">lmd =</span> <span class="fl">0.5</span>) {</span>
+<span id="cb17-2"><a href="robust-portfolio-design.html#cb17-2"></a>  N &lt;-<span class="st"> </span><span class="kw">length</span>(mu_hat)</span>
+<span id="cb17-3"><a href="robust-portfolio-design.html#cb17-3"></a>  S12 &lt;-<span class="st"> </span><span class="kw">chol</span>(Sigma_hat)  <span class="co"># t(S12) %*% S12 = Sigma</span></span>
+<span id="cb17-4"><a href="robust-portfolio-design.html#cb17-4"></a>  w &lt;-<span class="st"> </span><span class="kw">Variable</span>(N)</span>
+<span id="cb17-5"><a href="robust-portfolio-design.html#cb17-5"></a>  prob &lt;-<span class="st"> </span><span class="kw">Problem</span>(<span class="kw">Maximize</span>(<span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>mu_hat <span class="op">-</span><span class="st"> </span>kappa<span class="op">*</span><span class="kw">norm2</span>(S12 <span class="op">%*%</span><span class="st"> </span>w) </span>
+<span id="cb17-6"><a href="robust-portfolio-design.html#cb17-6"></a>                           <span class="op">-</span><span class="st"> </span>lmd<span class="op">*</span>(<span class="kw">norm2</span>(S12 <span class="op">%*%</span><span class="st"> </span>w) <span class="op">+</span><span class="st"> </span>delta_<span class="op">*</span><span class="kw">norm2</span>(w))<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb17-7"><a href="robust-portfolio-design.html#cb17-7"></a>                  <span class="dt">constraints =</span> <span class="kw">list</span>(w <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="kw">sum</span>(w) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb17-8"><a href="robust-portfolio-design.html#cb17-8"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb17-9"><a href="robust-portfolio-design.html#cb17-9"></a>  <span class="kw">return</span>(<span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w)))</span>
+<span id="cb17-10"><a href="robust-portfolio-design.html#cb17-10"></a>}</span>
+<span id="cb17-11"><a href="robust-portfolio-design.html#cb17-11"></a></span>
+<span id="cb17-12"><a href="robust-portfolio-design.html#cb17-12"></a><span class="co"># clairvoyant solution</span></span>
+<span id="cb17-13"><a href="robust-portfolio-design.html#cb17-13"></a>w_Markowitz &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu, Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb17-14"><a href="robust-portfolio-design.html#cb17-14"></a><span class="kw">names</span>(w_Markowitz) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb17-15"><a href="robust-portfolio-design.html#cb17-15"></a>w_all_Markowitz_robust &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_Markowitz)</span>
+<span id="cb17-16"><a href="robust-portfolio-design.html#cb17-16"></a></span>
+<span id="cb17-17"><a href="robust-portfolio-design.html#cb17-17"></a><span class="co"># multiple robust solutions</span></span>
+<span id="cb17-18"><a href="robust-portfolio-design.html#cb17-18"></a>kappa &lt;-<span class="st"> </span><span class="fl">1.0</span></span>
+<span id="cb17-19"><a href="robust-portfolio-design.html#cb17-19"></a>delta &lt;-<span class="st"> </span><span class="fl">0.1</span><span class="op">*</span><span class="kw">sqrt</span>(T)</span>
+<span id="cb17-20"><a href="robust-portfolio-design.html#cb17-20"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb17-21"><a href="robust-portfolio-design.html#cb17-21"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) {</span>
+<span id="cb17-22"><a href="robust-portfolio-design.html#cb17-22"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb17-23"><a href="robust-portfolio-design.html#cb17-23"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb17-24"><a href="robust-portfolio-design.html#cb17-24"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb17-25"><a href="robust-portfolio-design.html#cb17-25"></a>  </span>
+<span id="cb17-26"><a href="robust-portfolio-design.html#cb17-26"></a>  w_Markowitz_robust_noisy &lt;-<span class="st"> </span><span class="kw">portfolioMarkowitzRobust</span>(mu_noisy, Sigma_noisy, kappa, delta<span class="op">/</span><span class="kw">sqrt</span>(T<span class="dv">-1</span>))</span>
+<span id="cb17-27"><a href="robust-portfolio-design.html#cb17-27"></a>  w_all_Markowitz_robust &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_Markowitz_robust, w_Markowitz_robust_noisy)</span>
+<span id="cb17-28"><a href="robust-portfolio-design.html#cb17-28"></a>}</span>
+<span id="cb17-29"><a href="robust-portfolio-design.html#cb17-29"></a></span>
+<span id="cb17-30"><a href="robust-portfolio-design.html#cb17-30"></a><span class="co"># plot to compare the allocations</span></span>
+<span id="cb17-31"><a href="robust-portfolio-design.html#cb17-31"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all_Markowitz_robust), <span class="dt">col =</span> rainbow8equal[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all_Markowitz_robust), </span>
+<span id="cb17-32"><a href="robust-portfolio-design.html#cb17-32"></a>        <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">bg =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;topleft&quot;</span>),</span>
+<span id="cb17-33"><a href="robust-portfolio-design.html#cb17-33"></a>        <span class="dt">main =</span> <span class="st">&quot;Robust Markowitz portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-15-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="robust-portfolio-design.html#cb18-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_Markowitz), </span>
+<span id="cb18-2"><a href="robust-portfolio-design.html#cb18-2"></a>                 <span class="dt">main =</span> <span class="st">&quot;Naive Markowitz allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-15-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="robust-portfolio-design.html#cb19-1"></a><span class="kw">chart.StackedBar</span>(<span class="kw">t</span>(w_all_Markowitz_robust), </span>
+<span id="cb19-2"><a href="robust-portfolio-design.html#cb19-2"></a>                 <span class="dt">main =</span> <span class="st">&quot;Robust Markowitz portfolio allocation&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;w&quot;</span>, <span class="dt">space =</span> <span class="dv">0</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-15-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="robust-portfolio-design.html#cb20-1"></a><span class="co"># clairvoyant solutions</span></span>
+<span id="cb20-2"><a href="robust-portfolio-design.html#cb20-2"></a>w_Markowitz &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu, Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-3"><a href="robust-portfolio-design.html#cb20-3"></a><span class="kw">names</span>(w_Markowitz) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb20-4"><a href="robust-portfolio-design.html#cb20-4"></a>portfolioMaxSharpeRatio &lt;-<span class="st"> </span><span class="cf">function</span>(mu, Sigma) {</span>
+<span id="cb20-5"><a href="robust-portfolio-design.html#cb20-5"></a>  w_ &lt;-<span class="st"> </span><span class="kw">Variable</span>(<span class="kw">nrow</span>(Sigma))</span>
+<span id="cb20-6"><a href="robust-portfolio-design.html#cb20-6"></a>  prob &lt;-<span class="st"> </span><span class="kw">Problem</span>(<span class="kw">Minimize</span>(<span class="kw">quad_form</span>(w_, Sigma)),</span>
+<span id="cb20-7"><a href="robust-portfolio-design.html#cb20-7"></a>                  <span class="dt">constraints =</span> <span class="kw">list</span>(w_ <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>, <span class="kw">t</span>(mu) <span class="op">%*%</span><span class="st"> </span>w_ <span class="op">==</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb20-8"><a href="robust-portfolio-design.html#cb20-8"></a>  result &lt;-<span class="st"> </span><span class="kw">solve</span>(prob)</span>
+<span id="cb20-9"><a href="robust-portfolio-design.html#cb20-9"></a>  w &lt;-<span class="st"> </span><span class="kw">as.vector</span>(result<span class="op">$</span><span class="kw">getValue</span>(w_)<span class="op">/</span><span class="kw">sum</span>(result<span class="op">$</span><span class="kw">getValue</span>(w_)))</span>
+<span id="cb20-10"><a href="robust-portfolio-design.html#cb20-10"></a>  <span class="kw">names</span>(w) &lt;-<span class="st"> </span><span class="kw">colnames</span>(Sigma)</span>
+<span id="cb20-11"><a href="robust-portfolio-design.html#cb20-11"></a>  <span class="kw">return</span>(w)</span>
+<span id="cb20-12"><a href="robust-portfolio-design.html#cb20-12"></a>}</span>
+<span id="cb20-13"><a href="robust-portfolio-design.html#cb20-13"></a>w_MaxSR &lt;-<span class="st"> </span><span class="kw">portfolioMaxSharpeRatio</span>(mu, Sigma)</span>
+<span id="cb20-14"><a href="robust-portfolio-design.html#cb20-14"></a><span class="kw">names</span>(w_MaxSR) &lt;-<span class="st"> </span><span class="kw">colnames</span>(X)</span>
+<span id="cb20-15"><a href="robust-portfolio-design.html#cb20-15"></a></span>
+<span id="cb20-16"><a href="robust-portfolio-design.html#cb20-16"></a><span class="co"># multiple naive and robust solutions</span></span>
+<span id="cb20-17"><a href="robust-portfolio-design.html#cb20-17"></a>kappa &lt;-<span class="st"> </span><span class="fl">0.25</span>  <span class="co"># smaller gives some bad outliers</span></span>
+<span id="cb20-18"><a href="robust-portfolio-design.html#cb20-18"></a>delta &lt;-<span class="st"> </span><span class="fl">0.01</span><span class="op">*</span><span class="kw">sqrt</span>(T)  <span class="co">#larger gives a much more stable performance</span></span>
+<span id="cb20-19"><a href="robust-portfolio-design.html#cb20-19"></a>w_all_Markowitz_naive &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb20-20"><a href="robust-portfolio-design.html#cb20-20"></a>w_all_Markowitz_robust &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb20-21"><a href="robust-portfolio-design.html#cb20-21"></a><span class="kw">set.seed</span>(<span class="dv">357</span>)</span>
+<span id="cb20-22"><a href="robust-portfolio-design.html#cb20-22"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {</span>
+<span id="cb20-23"><a href="robust-portfolio-design.html#cb20-23"></a>  X_noisy &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(<span class="dt">n =</span> T, <span class="dt">mean =</span> mu, <span class="dt">sigma =</span> Sigma)</span>
+<span id="cb20-24"><a href="robust-portfolio-design.html#cb20-24"></a>  mu_noisy &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_noisy)</span>
+<span id="cb20-25"><a href="robust-portfolio-design.html#cb20-25"></a>  Sigma_noisy &lt;-<span class="st"> </span><span class="kw">cov</span>(X_noisy)</span>
+<span id="cb20-26"><a href="robust-portfolio-design.html#cb20-26"></a>  </span>
+<span id="cb20-27"><a href="robust-portfolio-design.html#cb20-27"></a>  w_Markowitz_noisy &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu_noisy, Sigma_noisy, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-28"><a href="robust-portfolio-design.html#cb20-28"></a>  w_Markowitz_robust_noisy &lt;-<span class="st"> </span><span class="kw">portfolioMarkowitzRobust</span>(mu_noisy, Sigma_noisy, kappa, delta<span class="op">/</span><span class="kw">sqrt</span>(T<span class="dv">-1</span>))</span>
+<span id="cb20-29"><a href="robust-portfolio-design.html#cb20-29"></a>  w_all_Markowitz_naive &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_Markowitz_naive, w_Markowitz_noisy)</span>
+<span id="cb20-30"><a href="robust-portfolio-design.html#cb20-30"></a>  w_all_Markowitz_robust &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all_Markowitz_robust, w_Markowitz_robust_noisy)</span>
+<span id="cb20-31"><a href="robust-portfolio-design.html#cb20-31"></a>}</span>
+<span id="cb20-32"><a href="robust-portfolio-design.html#cb20-32"></a></span>
+<span id="cb20-33"><a href="robust-portfolio-design.html#cb20-33"></a><span class="co"># performance</span></span>
+<span id="cb20-34"><a href="robust-portfolio-design.html#cb20-34"></a>mean_variance &lt;-<span class="st"> </span><span class="cf">function</span>(w, mu, Sigma) </span>
+<span id="cb20-35"><a href="robust-portfolio-design.html#cb20-35"></a>  <span class="kw">return</span>(<span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>mu <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>Sigma <span class="op">%*%</span><span class="st"> </span>w)</span>
+<span id="cb20-36"><a href="robust-portfolio-design.html#cb20-36"></a></span>
+<span id="cb20-37"><a href="robust-portfolio-design.html#cb20-37"></a>Sharpe_ratio &lt;-<span class="st"> </span><span class="cf">function</span>(w, mu, Sigma) </span>
+<span id="cb20-38"><a href="robust-portfolio-design.html#cb20-38"></a>  <span class="kw">return</span>(<span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>mu <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">t</span>(w) <span class="op">%*%</span><span class="st"> </span>Sigma <span class="op">%*%</span><span class="st"> </span>w))</span>
+<span id="cb20-39"><a href="robust-portfolio-design.html#cb20-39"></a></span>
+<span id="cb20-40"><a href="robust-portfolio-design.html#cb20-40"></a>mean_variance_clairvoyant &lt;-<span class="st"> </span><span class="kw">mean_variance</span>(w_Markowitz, mu, Sigma)</span>
+<span id="cb20-41"><a href="robust-portfolio-design.html#cb20-41"></a>mean_variance_naive &lt;-<span class="st"> </span><span class="kw">apply</span>(w_all_Markowitz_naive, <span class="dt">MARGIN =</span> <span class="dv">2</span>, <span class="dt">FUN =</span> mean_variance, mu, Sigma)</span>
+<span id="cb20-42"><a href="robust-portfolio-design.html#cb20-42"></a>mean_variance_robust &lt;-<span class="st"> </span><span class="kw">apply</span>(w_all_Markowitz_robust, <span class="dt">MARGIN =</span> <span class="dv">2</span>, <span class="dt">FUN =</span> mean_variance, mu, Sigma)</span>
+<span id="cb20-43"><a href="robust-portfolio-design.html#cb20-43"></a></span>
+<span id="cb20-44"><a href="robust-portfolio-design.html#cb20-44"></a>SR_clairvoyant &lt;-<span class="st"> </span><span class="kw">Sharpe_ratio</span>(w_MaxSR, mu, Sigma)</span>
+<span id="cb20-45"><a href="robust-portfolio-design.html#cb20-45"></a>SR_naive &lt;-<span class="st"> </span><span class="kw">apply</span>(w_all_Markowitz_naive, <span class="dt">MARGIN =</span> <span class="dv">2</span>, <span class="dt">FUN =</span> Sharpe_ratio, mu, Sigma)</span>
+<span id="cb20-46"><a href="robust-portfolio-design.html#cb20-46"></a>SR_robust &lt;-<span class="st"> </span><span class="kw">apply</span>(w_all_Markowitz_robust, <span class="dt">MARGIN =</span> <span class="dv">2</span>, <span class="dt">FUN =</span> Sharpe_ratio, mu, Sigma)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="robust-portfolio-design.html#cb21-1"></a><span class="kw">library</span>(rbokeh)</span>
+<span id="cb21-2"><a href="robust-portfolio-design.html#cb21-2"></a><span class="kw">figure</span>(<span class="dt">width =</span> <span class="dv">800</span>, <span class="dt">title =</span> <span class="st">&quot;Performance Markowitz&quot;</span>, </span>
+<span id="cb21-3"><a href="robust-portfolio-design.html#cb21-3"></a>       <span class="dt">xlab =</span> <span class="st">&quot;realization&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;mean-variance&quot;</span>, <span class="dt">legend_location =</span> <span class="st">&quot;bottom_right&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb21-4"><a href="robust-portfolio-design.html#cb21-4"></a><span class="st">  </span><span class="kw">ly_points</span>(mean_variance_naive, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">legend =</span> <span class="st">&quot;naive&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb21-5"><a href="robust-portfolio-design.html#cb21-5"></a><span class="st">  </span><span class="kw">ly_points</span>(mean_variance_robust, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">legend =</span> <span class="st">&quot;robust&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb21-6"><a href="robust-portfolio-design.html#cb21-6"></a><span class="st">  </span><span class="kw">ly_abline</span>(<span class="dt">h =</span> mean_variance_clairvoyant, <span class="dt">legend =</span> <span class="st">&quot;clairvoyant&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-4a058f850c1bb53d60f2" style="width:800px;height:500px;" class="rbokeh html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4a058f850c1bb53d60f2">{"x":{"elementid":"699cf6e6faf6020259ca3710d966c447","modeltype":"Plot","modelid":"cbbe49894554b369af8e028ed9070bfd","docid":"93b972064d1f7ef5f8ede232c08009f2","docs_json":{"93b972064d1f7ef5f8ede232c08009f2":{"version":"0.12.5","title":"Bokeh Figure","roots":{"root_ids":["cbbe49894554b369af8e028ed9070bfd"],"references":[{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","attributes":{"id":"cbbe49894554b369af8e028ed9070bfd","plot_width":800,"plot_height":500,"sizing_mode":"scale_both","x_range":{"type":"Range1d","id":"683436fdd4bc0a7daef5e423170c9242"},"y_range":{"type":"Range1d","id":"99e6dba6351588cb34634affbc383d74"},"left":[{"type":"LinearAxis","id":"04de895a7a71aeba8380ae07751280c2"}],"below":[{"type":"LinearAxis","id":"a489cf95ed413909072c554f6e58a2ee"}],"right":[],"above":[],"renderers":[{"type":"BoxAnnotation","id":"6089e3b44f4d59cd7195ed3849846d03"},{"type":"GlyphRenderer","id":"de8c12a639ed7d51e32f30b2441d6838"},{"type":"GlyphRenderer","id":"e31152b1be522c4dc267e125a851678d"},{"type":"GlyphRenderer","id":"d1198593ad5846b26898c2e9c9da88d8"},{"type":"GlyphRenderer","id":"62ad8e247c723218bbf30444fac452a9"},{"type":"GlyphRenderer","id":"c27fb1a5edb567295111844dcad68c93"},{"type":"GlyphRenderer","id":"78108de1e2df46112b2759ceab1c9730"},{"type":"Legend","id":"60934a1c5537747c89b4ecdb41d74de8"},{"type":"LinearAxis","id":"a489cf95ed413909072c554f6e58a2ee"},{"type":"Grid","id":"c05a1703c86fca64a62086238f91deef"},{"type":"LinearAxis","id":"04de895a7a71aeba8380ae07751280c2"},{"type":"Grid","id":"f4fd3f76fef425dd1abd9143a519ffb7"}],"extra_y_ranges":{},"extra_x_ranges":{},"tags":[],"min_border_left":4,"min_border_right":4,"min_border_top":4,"min_border_bottom":4,"lod_threshold":null,"toolbar":{"type":"Toolbar","id":"1afc1a4a3c78007f513f3f6211306d0b"},"tool_events":{"type":"ToolEvents","id":"6e0eef8f04fdaed75b256a2f053fa275"},"title":{"type":"Title","id":"5c2a02dd4493ca34b8b3960c4096536b"}},"subtype":"Figure"},{"type":"Toolbar","id":"1afc1a4a3c78007f513f3f6211306d0b","attributes":{"id":"1afc1a4a3c78007f513f3f6211306d0b","tags":[],"active_drag":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"type":"PanTool","id":"427de39afe5c8bc926947d3206c162f5"},{"type":"WheelZoomTool","id":"b6371323cfe3fd7ea1e5bca1608bc348"},{"type":"BoxZoomTool","id":"6d919b66659981643dd9f0727eb1dd43"},{"type":"ResetTool","id":"f8dda2e81103bf0852fd187a9a1bfef0"},{"type":"SaveTool","id":"d1844161d44e26a4084b717c0da41ec8"},{"type":"HelpTool","id":"ddeb848d6101e800d1aac3f96e5e07ef"}],"logo":null}},{"type":"PanTool","id":"427de39afe5c8bc926947d3206c162f5","attributes":{"id":"427de39afe5c8bc926947d3206c162f5","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"dimensions":"both"}},{"type":"ToolEvents","id":"6e0eef8f04fdaed75b256a2f053fa275","attributes":{"id":"6e0eef8f04fdaed75b256a2f053fa275","tags":[]},"geometries":[]},{"type":"WheelZoomTool","id":"b6371323cfe3fd7ea1e5bca1608bc348","attributes":{"id":"b6371323cfe3fd7ea1e5bca1608bc348","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"dimensions":"both"}},{"type":"BoxAnnotation","id":"6089e3b44f4d59cd7195ed3849846d03","attributes":{"id":"6089e3b44f4d59cd7195ed3849846d03","tags":[],"line_color":{"units":"data","value":"black"},"line_alpha":{"units":"data","value":1},"fill_color":{"units":"data","value":"lightgrey"},"fill_alpha":{"units":"data","value":0.5},"line_dash":[4,4],"line_width":{"units":"data","value":2},"level":"overlay","top_units":"screen","bottom_units":"screen","left_units":"screen","right_units":"screen","render_mode":"css"}},{"type":"BoxZoomTool","id":"6d919b66659981643dd9f0727eb1dd43","attributes":{"id":"6d919b66659981643dd9f0727eb1dd43","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"overlay":{"type":"BoxAnnotation","id":"6089e3b44f4d59cd7195ed3849846d03"}}},{"type":"ResetTool","id":"f8dda2e81103bf0852fd187a9a1bfef0","attributes":{"id":"f8dda2e81103bf0852fd187a9a1bfef0","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"}}},{"type":"SaveTool","id":"d1844161d44e26a4084b717c0da41ec8","attributes":{"id":"d1844161d44e26a4084b717c0da41ec8","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"}}},{"type":"HelpTool","id":"ddeb848d6101e800d1aac3f96e5e07ef","attributes":{"id":"ddeb848d6101e800d1aac3f96e5e07ef","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"redirect":"https://hafen.github.io/rbokeh","help_tooltip":"Click to learn more about rbokeh."}},{"type":"Title","id":"5c2a02dd4493ca34b8b3960c4096536b","attributes":{"id":"5c2a02dd4493ca34b8b3960c4096536b","tags":[],"plot":null,"text":"Performance Markowitz"}},{"type":"ColumnDataSource","id":"fe0add2c65a1759dc948789b5c600c37","attributes":{"id":"fe0add2c65a1759dc948789b5c600c37","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[1,2,3,4,5,6,7,8,9,10],"y":[0.000402450673290116,0.000771605606323833,0.000596241040228639,0.000752101181697704,0.000673775913784091,0.000741525750325377,0.000597408356725906,0.000527880296390756,0.000639195266991477,0.000625043852912185]}}},{"type":"Circle","id":"8b4f8cb3dcad07729818121010b568a7","attributes":{"id":"8b4f8cb3dcad07729818121010b568a7","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"6586c28f95415bd18d0ebfadc83d4aef","attributes":{"id":"6586c28f95415bd18d0ebfadc83d4aef","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"74bc2598b03be2bdda0d3a5f46051a02","attributes":{"id":"74bc2598b03be2bdda0d3a5f46051a02","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"GlyphRenderer","id":"de8c12a639ed7d51e32f30b2441d6838","attributes":{"id":"de8c12a639ed7d51e32f30b2441d6838","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"6586c28f95415bd18d0ebfadc83d4aef"},"hover_glyph":{"type":"Circle","id":"74bc2598b03be2bdda0d3a5f46051a02"},"name":null,"data_source":{"type":"ColumnDataSource","id":"fe0add2c65a1759dc948789b5c600c37"},"glyph":{"type":"Circle","id":"8b4f8cb3dcad07729818121010b568a7"}}},{"type":"ColumnDataSource","id":"88fbe3ddb6fd4186f5144417e3d3d2c7","attributes":{"id":"88fbe3ddb6fd4186f5144417e3d3d2c7","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[1,2,3,4,5,6,7,8,9,10],"y":[0.000532731273932284,0.000569158752508685,0.000570003160937953,0.000572951648817315,0.000563033576149727,0.000541368265966598,0.000538261722381792,0.000535557211499833,0.000502924032040351,0.00056632336442433]}}},{"type":"Circle","id":"eaac06f52c2d47b5253f41d6c143cadb","attributes":{"id":"eaac06f52c2d47b5253f41d6c143cadb","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"6cce3ad76cf7437bede2799fce8adb7a","attributes":{"id":"6cce3ad76cf7437bede2799fce8adb7a","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"8089090b967898f832b12c73d7df6317","attributes":{"id":"8089090b967898f832b12c73d7df6317","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"GlyphRenderer","id":"e31152b1be522c4dc267e125a851678d","attributes":{"id":"e31152b1be522c4dc267e125a851678d","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"6cce3ad76cf7437bede2799fce8adb7a"},"hover_glyph":{"type":"Circle","id":"8089090b967898f832b12c73d7df6317"},"name":null,"data_source":{"type":"ColumnDataSource","id":"88fbe3ddb6fd4186f5144417e3d3d2c7"},"glyph":{"type":"Circle","id":"eaac06f52c2d47b5253f41d6c143cadb"}}},{"type":"ColumnDataSource","id":"e39edc688fcbb7187b8d87cf9f6daa27","attributes":{"id":"e39edc688fcbb7187b8d87cf9f6daa27","tags":[],"column_names":["x0","y0","x1","y1"],"selected":[],"data":{"x0":[0],"y0":[[[0.000799588678517032]]],"x1":[1],"y1":[[[0.000799588678517032]]]}}},{"type":"Segment","id":"5496259e24101c26047c97f87065d6e3","attributes":{"id":"5496259e24101c26047c97f87065d6e3","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"Segment","id":"dea181b9ad0b9477a693f2c5bda36591","attributes":{"id":"dea181b9ad0b9477a693f2c5bda36591","tags":[],"line_color":{"units":"data","value":"#e1e1e1"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"Segment","id":"a71d18ab11bf64ccdcb895a9055e8326","attributes":{"id":"a71d18ab11bf64ccdcb895a9055e8326","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"GlyphRenderer","id":"d1198593ad5846b26898c2e9c9da88d8","attributes":{"id":"d1198593ad5846b26898c2e9c9da88d8","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Segment","id":"dea181b9ad0b9477a693f2c5bda36591"},"hover_glyph":{"type":"Segment","id":"a71d18ab11bf64ccdcb895a9055e8326"},"name":null,"data_source":{"type":"ColumnDataSource","id":"c67a0b9ad892a8acc52bec54c24ae030"},"glyph":{"type":"Segment","id":"5496259e24101c26047c97f87065d6e3"}}},{"type":"ColumnDataSource","id":"b7082b25ad765f6ebc5a005543fe8987","attributes":{"id":"b7082b25ad765f6ebc5a005543fe8987","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[null,null],"y":[null,null]}}},{"type":"Circle","id":"8935fe2d0adffa18895592f65bbc9779","attributes":{"id":"8935fe2d0adffa18895592f65bbc9779","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"ff95772ee263e2b6456765dfa9a2d457","attributes":{"id":"ff95772ee263e2b6456765dfa9a2d457","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"d6b283b3a926d34f61bc852dff6888fa","attributes":{"id":"d6b283b3a926d34f61bc852dff6888fa","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"62ad8e247c723218bbf30444fac452a9","attributes":{"id":"62ad8e247c723218bbf30444fac452a9","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"ff95772ee263e2b6456765dfa9a2d457"},"hover_glyph":{"type":"Circle","id":"d6b283b3a926d34f61bc852dff6888fa"},"name":null,"data_source":{"type":"ColumnDataSource","id":"b7082b25ad765f6ebc5a005543fe8987"},"glyph":{"type":"Circle","id":"8935fe2d0adffa18895592f65bbc9779"}}},{"type":"Circle","id":"2746d59ecf47434d535ca290aa6c04ea","attributes":{"id":"2746d59ecf47434d535ca290aa6c04ea","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"0e18a0ea1b2bae54de3db7dec5146f6e","attributes":{"id":"0e18a0ea1b2bae54de3db7dec5146f6e","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"1d073ac714cc1b06cb866693dfec0032","attributes":{"id":"1d073ac714cc1b06cb866693dfec0032","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"c27fb1a5edb567295111844dcad68c93","attributes":{"id":"c27fb1a5edb567295111844dcad68c93","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"0e18a0ea1b2bae54de3db7dec5146f6e"},"hover_glyph":{"type":"Circle","id":"1d073ac714cc1b06cb866693dfec0032"},"name":null,"data_source":{"type":"ColumnDataSource","id":"b7082b25ad765f6ebc5a005543fe8987"},"glyph":{"type":"Circle","id":"2746d59ecf47434d535ca290aa6c04ea"}}},{"type":"Segment","id":"d75efeecba7647a5a4e4dab9ec38eb88","attributes":{"id":"d75efeecba7647a5a4e4dab9ec38eb88","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1}}},{"type":"Segment","id":"7f9b62d7ce62c983eb6831275654f35d","attributes":{"id":"7f9b62d7ce62c983eb6831275654f35d","tags":[],"line_color":{"units":"data","value":"#e1e1e1"},"line_width":{"units":"data","value":1}}},{"type":"Segment","id":"d70fcd205bc9c204fa49ae0473b1a3fd","attributes":{"id":"d70fcd205bc9c204fa49ae0473b1a3fd","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"78108de1e2df46112b2759ceab1c9730","attributes":{"id":"78108de1e2df46112b2759ceab1c9730","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Segment","id":"7f9b62d7ce62c983eb6831275654f35d"},"hover_glyph":{"type":"Segment","id":"d70fcd205bc9c204fa49ae0473b1a3fd"},"name":null,"data_source":{"type":"ColumnDataSource","id":"b7082b25ad765f6ebc5a005543fe8987"},"glyph":{"type":"Segment","id":"d75efeecba7647a5a4e4dab9ec38eb88"}}},{"type":"LegendItem","id":"6cc71f5385ef8783ed16201ff611f37d","attributes":{"id":"6cc71f5385ef8783ed16201ff611f37d","tags":[],"label":{"value":"naive"},"renderers":[{"type":"GlyphRenderer","id":"62ad8e247c723218bbf30444fac452a9"}]}},{"type":"LegendItem","id":"d027fbfd7a6e7e801a2122e26a655a62","attributes":{"id":"d027fbfd7a6e7e801a2122e26a655a62","tags":[],"label":{"value":"robust"},"renderers":[{"type":"GlyphRenderer","id":"c27fb1a5edb567295111844dcad68c93"}]}},{"type":"LegendItem","id":"0f0aab053b3ce2573e6edd226c58ec68","attributes":{"id":"0f0aab053b3ce2573e6edd226c58ec68","tags":[],"label":{"value":"clairvoyant"},"renderers":[{"type":"GlyphRenderer","id":"78108de1e2df46112b2759ceab1c9730"}]}},{"type":"Legend","id":"60934a1c5537747c89b4ecdb41d74de8","attributes":{"id":"60934a1c5537747c89b4ecdb41d74de8","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"items":[{"type":"LegendItem","id":"6cc71f5385ef8783ed16201ff611f37d"},{"type":"LegendItem","id":"d027fbfd7a6e7e801a2122e26a655a62"},{"type":"LegendItem","id":"0f0aab053b3ce2573e6edd226c58ec68"}],"location":"bottom_right"}},{"type":"Range1d","id":"683436fdd4bc0a7daef5e423170c9242","attributes":{"id":"683436fdd4bc0a7daef5e423170c9242","tags":[],"start":0.37,"end":10.63}},{"type":"Range1d","id":"99e6dba6351588cb34634affbc383d74","attributes":{"id":"99e6dba6351588cb34634affbc383d74","tags":[],"start":0.000376609827977755,"end":0.000797446451636194}},{"type":"LinearAxis","id":"a489cf95ed413909072c554f6e58a2ee","attributes":{"id":"a489cf95ed413909072c554f6e58a2ee","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"axis_label":"realization","formatter":{"type":"BasicTickFormatter","id":"cd1d66448d91a452035abd88191b5903"},"ticker":{"type":"BasicTicker","id":"0d2714c2c248ef88c2b70c027d356518"},"visible":true,"axis_label_text_font_size":"12pt"}},{"type":"BasicTickFormatter","id":"cd1d66448d91a452035abd88191b5903","attributes":{"id":"cd1d66448d91a452035abd88191b5903","tags":[]}},{"type":"BasicTicker","id":"0d2714c2c248ef88c2b70c027d356518","attributes":{"id":"0d2714c2c248ef88c2b70c027d356518","tags":[],"num_minor_ticks":5}},{"type":"Grid","id":"c05a1703c86fca64a62086238f91deef","attributes":{"id":"c05a1703c86fca64a62086238f91deef","tags":[],"dimension":0,"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"ticker":{"type":"BasicTicker","id":"0d2714c2c248ef88c2b70c027d356518"}}},{"type":"LinearAxis","id":"04de895a7a71aeba8380ae07751280c2","attributes":{"id":"04de895a7a71aeba8380ae07751280c2","tags":[],"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"axis_label":"mean-variance","formatter":{"type":"BasicTickFormatter","id":"645f271c78eafcf62f61073df2139331"},"ticker":{"type":"BasicTicker","id":"b63fb0f903b12c3d4ef5ea320784a2f0"},"visible":true,"axis_label_text_font_size":"12pt"}},{"type":"BasicTickFormatter","id":"645f271c78eafcf62f61073df2139331","attributes":{"id":"645f271c78eafcf62f61073df2139331","tags":[]}},{"type":"BasicTicker","id":"b63fb0f903b12c3d4ef5ea320784a2f0","attributes":{"id":"b63fb0f903b12c3d4ef5ea320784a2f0","tags":[],"num_minor_ticks":5}},{"type":"Grid","id":"f4fd3f76fef425dd1abd9143a519ffb7","attributes":{"id":"f4fd3f76fef425dd1abd9143a519ffb7","tags":[],"dimension":1,"plot":{"type":"Plot","id":"cbbe49894554b369af8e028ed9070bfd","subtype":"Figure"},"ticker":{"type":"BasicTicker","id":"b63fb0f903b12c3d4ef5ea320784a2f0"}}},{"type":"ColumnDataSource","id":"c67a0b9ad892a8acc52bec54c24ae030","attributes":{"id":"c67a0b9ad892a8acc52bec54c24ae030","tags":[],"column_names":["x0","y0","x1","y1"],"selected":[],"data":{"x0":[0.37],"y0":[[[0.000799588678517032]]],"x1":[10.63],"y1":[[[0.000799588678517032]]]}}}]}}},"debug":false},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="robust-portfolio-design.html#cb22-1"></a><span class="kw">figure</span>(<span class="dt">width =</span> <span class="dv">800</span>, <span class="dt">title =</span> <span class="st">&quot;Performance Markowitz&quot;</span>, </span>
+<span id="cb22-2"><a href="robust-portfolio-design.html#cb22-2"></a>       <span class="dt">xlab =</span> <span class="st">&quot;realization&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Sharpe-ratio&quot;</span>, <span class="dt">legend_location =</span> <span class="st">&quot;bottom_right&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb22-3"><a href="robust-portfolio-design.html#cb22-3"></a><span class="st">  </span><span class="kw">ly_points</span>(SR_naive, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">legend =</span> <span class="st">&quot;naive&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb22-4"><a href="robust-portfolio-design.html#cb22-4"></a><span class="st">  </span><span class="kw">ly_points</span>(SR_robust, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">legend =</span> <span class="st">&quot;robust&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb22-5"><a href="robust-portfolio-design.html#cb22-5"></a><span class="st">  </span><span class="kw">ly_abline</span>(<span class="dt">h =</span> SR_clairvoyant, <span class="dt">legend =</span> <span class="st">&quot;clairvoyant&quot;</span>)</span></code></pre></div>
+<p><div id="htmlwidget-f991015a363542949c63" style="width:800px;height:500px;" class="rbokeh html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f991015a363542949c63">{"x":{"elementid":"9d7d092317018149eb53f41083b41e77","modeltype":"Plot","modelid":"e3c5bb410c6dbaeb938de09d7762b869","docid":"93b972064d1f7ef5f8ede232c08009f2","docs_json":{"93b972064d1f7ef5f8ede232c08009f2":{"version":"0.12.5","title":"Bokeh Figure","roots":{"root_ids":["e3c5bb410c6dbaeb938de09d7762b869"],"references":[{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","attributes":{"id":"e3c5bb410c6dbaeb938de09d7762b869","plot_width":800,"plot_height":500,"sizing_mode":"scale_both","x_range":{"type":"Range1d","id":"e5f68fbf44ffce18682dcb926e507b00"},"y_range":{"type":"Range1d","id":"5b484b69200b0cd4290a45472f522696"},"left":[{"type":"LinearAxis","id":"84bf551505d7db9a90d5c0817a9eada9"}],"below":[{"type":"LinearAxis","id":"f565181b86557eac01031728b224c557"}],"right":[],"above":[],"renderers":[{"type":"BoxAnnotation","id":"d44de9e0fca90f6e4d572c3396c53fa2"},{"type":"GlyphRenderer","id":"bc8f19812517af000615441b28f85848"},{"type":"GlyphRenderer","id":"e38e953789564723df1cbaa65967d8a6"},{"type":"GlyphRenderer","id":"771bf8ba8d106e15f094e906346d1866"},{"type":"GlyphRenderer","id":"c95331e02efdc238a47a9afc60e873ec"},{"type":"GlyphRenderer","id":"f52cd858977b1ee38fe57c1f2b79ae86"},{"type":"GlyphRenderer","id":"ec81bcbb74a32464abba2124a22b9bd4"},{"type":"Legend","id":"0d963077f4848268b0b3c5f2ca8c8af4"},{"type":"LinearAxis","id":"f565181b86557eac01031728b224c557"},{"type":"Grid","id":"82577dcfd498c8e9bb23ee2eb1a1dbea"},{"type":"LinearAxis","id":"84bf551505d7db9a90d5c0817a9eada9"},{"type":"Grid","id":"d4e6e2c8ae5ad46fa14892469ec9521e"}],"extra_y_ranges":{},"extra_x_ranges":{},"tags":[],"min_border_left":4,"min_border_right":4,"min_border_top":4,"min_border_bottom":4,"lod_threshold":null,"toolbar":{"type":"Toolbar","id":"d3e62eb780167c71de25572990cb557a"},"tool_events":{"type":"ToolEvents","id":"21570ac503d3c888ccdcac4e08f1e9fc"},"title":{"type":"Title","id":"57a69535938d0357f8d31e811a625bf1"}},"subtype":"Figure"},{"type":"Toolbar","id":"d3e62eb780167c71de25572990cb557a","attributes":{"id":"d3e62eb780167c71de25572990cb557a","tags":[],"active_drag":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"type":"PanTool","id":"4e568e9b0e04980d22690aeee4548aca"},{"type":"WheelZoomTool","id":"9c7ad5cd221d06dee69eaffc13d49a70"},{"type":"BoxZoomTool","id":"44e690beee71652b4888f26ffe81ba5a"},{"type":"ResetTool","id":"eabad96ec22bf8987207a66a012df185"},{"type":"SaveTool","id":"8fb349e9fa75ce8f7ce307a5d8022d25"},{"type":"HelpTool","id":"2f2052d606d5d3e7ba179e8860a345bc"}],"logo":null}},{"type":"PanTool","id":"4e568e9b0e04980d22690aeee4548aca","attributes":{"id":"4e568e9b0e04980d22690aeee4548aca","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"dimensions":"both"}},{"type":"ToolEvents","id":"21570ac503d3c888ccdcac4e08f1e9fc","attributes":{"id":"21570ac503d3c888ccdcac4e08f1e9fc","tags":[]},"geometries":[]},{"type":"WheelZoomTool","id":"9c7ad5cd221d06dee69eaffc13d49a70","attributes":{"id":"9c7ad5cd221d06dee69eaffc13d49a70","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"dimensions":"both"}},{"type":"BoxAnnotation","id":"d44de9e0fca90f6e4d572c3396c53fa2","attributes":{"id":"d44de9e0fca90f6e4d572c3396c53fa2","tags":[],"line_color":{"units":"data","value":"black"},"line_alpha":{"units":"data","value":1},"fill_color":{"units":"data","value":"lightgrey"},"fill_alpha":{"units":"data","value":0.5},"line_dash":[4,4],"line_width":{"units":"data","value":2},"level":"overlay","top_units":"screen","bottom_units":"screen","left_units":"screen","right_units":"screen","render_mode":"css"}},{"type":"BoxZoomTool","id":"44e690beee71652b4888f26ffe81ba5a","attributes":{"id":"44e690beee71652b4888f26ffe81ba5a","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"overlay":{"type":"BoxAnnotation","id":"d44de9e0fca90f6e4d572c3396c53fa2"}}},{"type":"ResetTool","id":"eabad96ec22bf8987207a66a012df185","attributes":{"id":"eabad96ec22bf8987207a66a012df185","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"}}},{"type":"SaveTool","id":"8fb349e9fa75ce8f7ce307a5d8022d25","attributes":{"id":"8fb349e9fa75ce8f7ce307a5d8022d25","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"}}},{"type":"HelpTool","id":"2f2052d606d5d3e7ba179e8860a345bc","attributes":{"id":"2f2052d606d5d3e7ba179e8860a345bc","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"redirect":"https://hafen.github.io/rbokeh","help_tooltip":"Click to learn more about rbokeh."}},{"type":"Title","id":"57a69535938d0357f8d31e811a625bf1","attributes":{"id":"57a69535938d0357f8d31e811a625bf1","tags":[],"plot":null,"text":"Performance Markowitz"}},{"type":"ColumnDataSource","id":"f784a21a1243fc1374c6da82af4facae","attributes":{"id":"f784a21a1243fc1374c6da82af4facae","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[1,2,3,4,5,6,7,8,9,10],"y":[0.0292967867436616,0.052833426087725,0.0346400679550056,0.0530014725874382,0.0540701827648612,0.052782387282092,0.0346038431957482,0.0413485409504958,0.0438723681429841,0.0447509913887588]}}},{"type":"Circle","id":"8c2b432ac0c0a267aeecac11e87fd326","attributes":{"id":"8c2b432ac0c0a267aeecac11e87fd326","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"8ed0851151ae66c59ff6dab1e8dbdd5b","attributes":{"id":"8ed0851151ae66c59ff6dab1e8dbdd5b","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"6642e76fe0675e1ccfcdfa1410c623d6","attributes":{"id":"6642e76fe0675e1ccfcdfa1410c623d6","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"GlyphRenderer","id":"bc8f19812517af000615441b28f85848","attributes":{"id":"bc8f19812517af000615441b28f85848","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"8ed0851151ae66c59ff6dab1e8dbdd5b"},"hover_glyph":{"type":"Circle","id":"6642e76fe0675e1ccfcdfa1410c623d6"},"name":null,"data_source":{"type":"ColumnDataSource","id":"f784a21a1243fc1374c6da82af4facae"},"glyph":{"type":"Circle","id":"8c2b432ac0c0a267aeecac11e87fd326"}}},{"type":"ColumnDataSource","id":"6936834a34736e2d32f60f765f993847","attributes":{"id":"6936834a34736e2d32f60f765f993847","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[1,2,3,4,5,6,7,8,9,10],"y":[0.0572902925664751,0.060186110398904,0.0587680689438897,0.0605989234074741,0.0592754381635117,0.0574974495904665,0.0546899012933062,0.0577868590593405,0.0544064323752712,0.0595088679593848]}}},{"type":"Circle","id":"5af8f5876ae38be88b5af80620e51367","attributes":{"id":"5af8f5876ae38be88b5af80620e51367","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"3756f899f3d3626b30a6c43947c58d73","attributes":{"id":"3756f899f3d3626b30a6c43947c58d73","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"Circle","id":"8927a419de573194080d0af67d7bad46","attributes":{"id":"8927a419de573194080d0af67d7bad46","tags":[],"size":{"units":"screen","value":10},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1},"x":{"units":"data","field":"x"},"y":{"units":"data","field":"y"}}},{"type":"GlyphRenderer","id":"e38e953789564723df1cbaa65967d8a6","attributes":{"id":"e38e953789564723df1cbaa65967d8a6","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"3756f899f3d3626b30a6c43947c58d73"},"hover_glyph":{"type":"Circle","id":"8927a419de573194080d0af67d7bad46"},"name":null,"data_source":{"type":"ColumnDataSource","id":"6936834a34736e2d32f60f765f993847"},"glyph":{"type":"Circle","id":"5af8f5876ae38be88b5af80620e51367"}}},{"type":"ColumnDataSource","id":"118b452e7a26618d26441fc8e6399e2a","attributes":{"id":"118b452e7a26618d26441fc8e6399e2a","tags":[],"column_names":["x0","y0","x1","y1"],"selected":[],"data":{"x0":[0],"y0":[[[0.0630228760917511]]],"x1":[1],"y1":[[[0.0630228760917511]]]}}},{"type":"Segment","id":"13ac5ee008003af4935ee961fe6eb0a7","attributes":{"id":"13ac5ee008003af4935ee961fe6eb0a7","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"Segment","id":"81d985c5a39baad8e32654c71523e526","attributes":{"id":"81d985c5a39baad8e32654c71523e526","tags":[],"line_color":{"units":"data","value":"#e1e1e1"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"Segment","id":"efabb3a597ed28fcc073a028a6adcc2e","attributes":{"id":"efabb3a597ed28fcc073a028a6adcc2e","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1},"x0":{"units":"data","field":"x0"},"y0":{"units":"data","field":"y0"},"x1":{"units":"data","field":"x1"},"y1":{"units":"data","field":"y1"}}},{"type":"GlyphRenderer","id":"771bf8ba8d106e15f094e906346d1866","attributes":{"id":"771bf8ba8d106e15f094e906346d1866","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Segment","id":"81d985c5a39baad8e32654c71523e526"},"hover_glyph":{"type":"Segment","id":"efabb3a597ed28fcc073a028a6adcc2e"},"name":null,"data_source":{"type":"ColumnDataSource","id":"9b3e2bac936af47c1532506d06149f25"},"glyph":{"type":"Segment","id":"13ac5ee008003af4935ee961fe6eb0a7"}}},{"type":"ColumnDataSource","id":"c7997338f3310afcf3507b258748c93e","attributes":{"id":"c7997338f3310afcf3507b258748c93e","tags":[],"column_names":["x","y"],"selected":[],"data":{"x":[null,null],"y":[null,null]}}},{"type":"Circle","id":"b703f55df35c98f7e424a99595071ea3","attributes":{"id":"b703f55df35c98f7e424a99595071ea3","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"1bf9cc31d97592229433976d60e2eff9","attributes":{"id":"1bf9cc31d97592229433976d60e2eff9","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"f0aadf143eba4014ffd36dffc7d4e391","attributes":{"id":"f0aadf143eba4014ffd36dffc7d4e391","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"blue"},"fill_color":{"units":"data","value":"blue"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"c95331e02efdc238a47a9afc60e873ec","attributes":{"id":"c95331e02efdc238a47a9afc60e873ec","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"1bf9cc31d97592229433976d60e2eff9"},"hover_glyph":{"type":"Circle","id":"f0aadf143eba4014ffd36dffc7d4e391"},"name":null,"data_source":{"type":"ColumnDataSource","id":"c7997338f3310afcf3507b258748c93e"},"glyph":{"type":"Circle","id":"b703f55df35c98f7e424a99595071ea3"}}},{"type":"Circle","id":"0c611e3e00ad6340eefb64c2db016e5c","attributes":{"id":"0c611e3e00ad6340eefb64c2db016e5c","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"804ead63f19751c9df4439c918be1452","attributes":{"id":"804ead63f19751c9df4439c918be1452","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"#e1e1e1"},"fill_color":{"units":"data","value":"#e1e1e1"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":0.5}}},{"type":"Circle","id":"30070e07f26cc1f2fec9b486ebd71f61","attributes":{"id":"30070e07f26cc1f2fec9b486ebd71f61","tags":[],"size":{"units":"screen","value":0},"line_color":{"units":"data","value":"red"},"fill_color":{"units":"data","value":"red"},"line_alpha":{"units":"data","value":1},"fill_alpha":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"f52cd858977b1ee38fe57c1f2b79ae86","attributes":{"id":"f52cd858977b1ee38fe57c1f2b79ae86","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Circle","id":"804ead63f19751c9df4439c918be1452"},"hover_glyph":{"type":"Circle","id":"30070e07f26cc1f2fec9b486ebd71f61"},"name":null,"data_source":{"type":"ColumnDataSource","id":"c7997338f3310afcf3507b258748c93e"},"glyph":{"type":"Circle","id":"0c611e3e00ad6340eefb64c2db016e5c"}}},{"type":"Segment","id":"2d12c7c34076b3ee3480263c3c3a41eb","attributes":{"id":"2d12c7c34076b3ee3480263c3c3a41eb","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1}}},{"type":"Segment","id":"6c4fea3f249d61165b4b7ee7414a44d8","attributes":{"id":"6c4fea3f249d61165b4b7ee7414a44d8","tags":[],"line_color":{"units":"data","value":"#e1e1e1"},"line_width":{"units":"data","value":1}}},{"type":"Segment","id":"7c79491c82285bf254353af47daf5634","attributes":{"id":"7c79491c82285bf254353af47daf5634","tags":[],"line_color":{"units":"data","value":"black"},"line_width":{"units":"data","value":1}}},{"type":"GlyphRenderer","id":"ec81bcbb74a32464abba2124a22b9bd4","attributes":{"id":"ec81bcbb74a32464abba2124a22b9bd4","tags":[],"selection_glyph":null,"nonselection_glyph":{"type":"Segment","id":"6c4fea3f249d61165b4b7ee7414a44d8"},"hover_glyph":{"type":"Segment","id":"7c79491c82285bf254353af47daf5634"},"name":null,"data_source":{"type":"ColumnDataSource","id":"c7997338f3310afcf3507b258748c93e"},"glyph":{"type":"Segment","id":"2d12c7c34076b3ee3480263c3c3a41eb"}}},{"type":"LegendItem","id":"f8cb66bddb243e69f0ec9d21d1ad912e","attributes":{"id":"f8cb66bddb243e69f0ec9d21d1ad912e","tags":[],"label":{"value":"naive"},"renderers":[{"type":"GlyphRenderer","id":"c95331e02efdc238a47a9afc60e873ec"}]}},{"type":"LegendItem","id":"40206264077f5a1fdba0df105ab41cb5","attributes":{"id":"40206264077f5a1fdba0df105ab41cb5","tags":[],"label":{"value":"robust"},"renderers":[{"type":"GlyphRenderer","id":"f52cd858977b1ee38fe57c1f2b79ae86"}]}},{"type":"LegendItem","id":"2b12af2112b66c880e1aafe9dc0654d7","attributes":{"id":"2b12af2112b66c880e1aafe9dc0654d7","tags":[],"label":{"value":"clairvoyant"},"renderers":[{"type":"GlyphRenderer","id":"ec81bcbb74a32464abba2124a22b9bd4"}]}},{"type":"Legend","id":"0d963077f4848268b0b3c5f2ca8c8af4","attributes":{"id":"0d963077f4848268b0b3c5f2ca8c8af4","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"items":[{"type":"LegendItem","id":"f8cb66bddb243e69f0ec9d21d1ad912e"},{"type":"LegendItem","id":"40206264077f5a1fdba0df105ab41cb5"},{"type":"LegendItem","id":"2b12af2112b66c880e1aafe9dc0654d7"}],"location":"bottom_right"}},{"type":"Range1d","id":"e5f68fbf44ffce18682dcb926e507b00","attributes":{"id":"e5f68fbf44ffce18682dcb926e507b00","tags":[],"start":0.37,"end":10.63}},{"type":"Range1d","id":"5b484b69200b0cd4290a45472f522696","attributes":{"id":"5b484b69200b0cd4290a45472f522696","tags":[],"start":0.0271056371771947,"end":0.062790072973941}},{"type":"LinearAxis","id":"f565181b86557eac01031728b224c557","attributes":{"id":"f565181b86557eac01031728b224c557","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"axis_label":"realization","formatter":{"type":"BasicTickFormatter","id":"d9aa14555ef785c9f61b3c04b6f8a21c"},"ticker":{"type":"BasicTicker","id":"8e8f6be3d6d4efbd3b1128b55dba6e7c"},"visible":true,"axis_label_text_font_size":"12pt"}},{"type":"BasicTickFormatter","id":"d9aa14555ef785c9f61b3c04b6f8a21c","attributes":{"id":"d9aa14555ef785c9f61b3c04b6f8a21c","tags":[]}},{"type":"BasicTicker","id":"8e8f6be3d6d4efbd3b1128b55dba6e7c","attributes":{"id":"8e8f6be3d6d4efbd3b1128b55dba6e7c","tags":[],"num_minor_ticks":5}},{"type":"Grid","id":"82577dcfd498c8e9bb23ee2eb1a1dbea","attributes":{"id":"82577dcfd498c8e9bb23ee2eb1a1dbea","tags":[],"dimension":0,"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"ticker":{"type":"BasicTicker","id":"8e8f6be3d6d4efbd3b1128b55dba6e7c"}}},{"type":"LinearAxis","id":"84bf551505d7db9a90d5c0817a9eada9","attributes":{"id":"84bf551505d7db9a90d5c0817a9eada9","tags":[],"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"axis_label":"Sharpe-ratio","formatter":{"type":"BasicTickFormatter","id":"9314183306886952b9e2747c25521301"},"ticker":{"type":"BasicTicker","id":"32e178d854ab865a49a2d32667181feb"},"visible":true,"axis_label_text_font_size":"12pt"}},{"type":"BasicTickFormatter","id":"9314183306886952b9e2747c25521301","attributes":{"id":"9314183306886952b9e2747c25521301","tags":[]}},{"type":"BasicTicker","id":"32e178d854ab865a49a2d32667181feb","attributes":{"id":"32e178d854ab865a49a2d32667181feb","tags":[],"num_minor_ticks":5}},{"type":"Grid","id":"d4e6e2c8ae5ad46fa14892469ec9521e","attributes":{"id":"d4e6e2c8ae5ad46fa14892469ec9521e","tags":[],"dimension":1,"plot":{"type":"Plot","id":"e3c5bb410c6dbaeb938de09d7762b869","subtype":"Figure"},"ticker":{"type":"BasicTicker","id":"32e178d854ab865a49a2d32667181feb"}}},{"type":"ColumnDataSource","id":"9b3e2bac936af47c1532506d06149f25","attributes":{"id":"9b3e2bac936af47c1532506d06149f25","tags":[],"column_names":["x0","y0","x1","y1"],"selected":[],"data":{"x0":[0.37],"y0":[[[0.0630228760917511]]],"x1":[10.63],"y1":[[[0.0630228760917511]]]}}}]}}},"debug":false},"evals":[],"jsHooks":[]}</script>
+Observe that the clairvoyant solution does not present the maximum Sharpe ratio because it was not designed for that (a different formulation would be required for that). Clearly, the robust Markowitz portfolios show much higher Sharpe ratio than the naive ones. This final plot illustrates well the power of robust optimization applied to portfolio design.</p>
+</div>
+<div id="variance-uncertainty-based-on-factor-model" class="section level3">
+<h3><span class="header-section-number">6.3.4</span> Variance uncertainty based on factor model</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{minimize}} &amp; 
+\left(\left\Vert \mathbf{V}_{0}\mathbf{w}\right\Vert +\rho\left\Vert \mathbf{w}\right\Vert \right)^{2}+\mathbf{w}^{T}\overline{\mathbf{D}}\mathbf{w}\\
+\textsf{subject to} 
+&amp; \boldsymbol{\mu}_{0}^{T}\mathbf{w}-\boldsymbol{\gamma}^{T}\left|\mathbf{w}\right|\geq\beta\\
+&amp; \mathbf{1}^{T}\mathbf{w}=1.
+\end{array}\]</span></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="factor-investing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="alternative-risk-measure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["portr.pdf", "portr.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,2 @@
+"0","corrplot(cov2cor(Psi), mar = c(0,0,1,0), order = ""hclust"", addrect = 3, "
+"0","        title = ""Covariance matrix of residuals"", diag = FALSE, tl.col=""black"", tl.srt=45)"

@@ -1,0 +1,3 @@
+"0",""
+"0","chart.StackedBar(t(w_all_Markowitz), "
+"0","                 main = ""Naive Markowitz allocation"", ylab = ""w"", space = 0, border = NA)"

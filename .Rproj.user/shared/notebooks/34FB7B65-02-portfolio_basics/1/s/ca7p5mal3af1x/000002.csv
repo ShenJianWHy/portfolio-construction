@@ -1,0 +1,5 @@
+"0","from <- ""2016-01-01"""
+"0","to <- ""2020-10-30"""
+"0","ticker <- ""^GSPC"""
+"0","SP500_index <- get_data(ticker, from, to)"
+"0","X_log_sp <- CalculateReturns(SP500_index, ""log"") %>% na.omit()"

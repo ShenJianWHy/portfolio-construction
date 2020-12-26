@@ -1,0 +1,4 @@
+"0","from <- ""2016-01-01"""
+"0","to <- ""2020-10-30"""
+"0","tickers <- c(""AAPL"", ""AMD"", ""ADI"",  ""ABBV"", ""AEZS"", ""A"",  ""APD"", ""AA"",""CF"")"
+"0","assign_variable_global_env(tickers, from, to, ratio = 0.7)"

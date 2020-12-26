@@ -1,0 +1,2 @@
+"0","par(mfrow=c(2,1))"
+"0","acf(X_log_sp, main='ACF of log-returns (S&P 500 log-returns)')"

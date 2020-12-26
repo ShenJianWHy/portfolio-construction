@@ -1,0 +1,6 @@
+"0","w_Markowitz <- MVP(mu, Sigma, lmd = 0.5, long_only = TRUE)"
+"0","w_GMVP <- GMVP(Sigma, long_only = TRUE)"
+"0","w_all <- cbind(""GMVP""      = w_GMVP, "
+"0","               ""Markowitz"" = w_Markowitz)"
+"0","barplot(t(w_all), col = rainbow10equal[1:2], legend = colnames(w_all), beside = TRUE,"
+"0","        main = ""Portfolio allocation"", xlab = ""stocks"", ylab = ""dollars"")"

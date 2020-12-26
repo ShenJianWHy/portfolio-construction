@@ -1,0 +1,336 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Factor investing
+
+## Factor overview
+
+__Why factor models__:   
+
+- decompose return into explainable and unexplainable components   
+- estimate abnormal returns  
+- simplify estimate of covariance structure  
+- provide portfolio risk analysis for each factor
+
+
+__Types of factors__:  
+
+- observable (Macroeconomic factor model, Fundamental factor models)
+- unobservable (Statistical factor models)
+
+
+## Macroeconomic factor
+
+$$\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \sum_{t=1}^T\|\mathbf{x}_t - \boldsymbol{\alpha} - \boldsymbol{\beta}f_t\|^2$$
+
+$$\begin{aligned}
+\hat{\boldsymbol{\beta}} & = {\sf cov}(\mathbf{x}_t,f_t)/{\sf var}(f_t)\\
+\hat{\boldsymbol{\alpha}} & = \bar{x} - \hat{\boldsymbol{\beta}}\bar{f}\\
+\hat{\boldsymbol{\epsilon}}_i & = \mathbf{x}_i - \alpha_i\mathbf{1} - \beta_i\mathbf{f}, \quad i=1,\ldots,N\\
+\hat{\sigma}_i^2 & = \frac{1}{T-2}\hat{\boldsymbol{\epsilon}}_i^T\hat{\boldsymbol{\epsilon}}_i, \quad \hat{\boldsymbol{\Psi}} = \sf{diag}(\hat{\sigma}_1^2, \ldots, \hat{\sigma}_N^2)\\
+\hat{\boldsymbol{\Sigma}} & = {\sf var}(f_t)\hat{\boldsymbol{\beta}}\hat{\boldsymbol{\beta}}^T + \hat{\boldsymbol{\Psi}}
+\end{aligned}$$
+
+__Data preparation__:
+
+```{r message=FALSE, warning=FALSE}
+from <- "2017-01-01" # do not change time period for this chapter
+to <- "2020-09-30"
+SP500_index <- get_data("^GSPC", from, to)
+
+tickers <- c("AAPL", "AMD", "ADI",  "ABBV", "AEZS", "A",  "APD", "AA","CF")
+prices <- get_data(tickers, from, to)
+
+X <- diff(log(prices), na.pad = FALSE)
+N <- ncol(X)  # number of stocks
+T <- nrow(X)  # number of days
+f <- diff(log(SP500_index), na.pad = FALSE)
+```
+### LS fitting -- simple form
+
+```{r}
+beta <- cov(X,f)/as.numeric(var(f))
+alpha <- colMeans(X) - beta*colMeans(f)
+colnames(alpha) <- "alpha"
+colnames(beta) <- "beta"
+sigma2 <- rep(NA, N)
+for (i in 1:N) {
+  eps_i <- X[, i] - alpha[i] - beta[i]*f
+  sigma2[i] <- (1/(T-2)) * t(eps_i) %*% eps_i
+}
+Psi <- diag(sigma2)
+Sigma <- as.numeric(var(f)) * beta %*% t(beta) + Psi
+print(cbind(alpha, beta))
+```
+
+### LS fitting -- matrix form
+
+$$
+\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \|\mathbf{X}^T - \boldsymbol{\alpha}\mathbf{1}^T - \boldsymbol{\beta}\mathbf{f}^T\|^2_F. \\
+\boldsymbol{\Gamma} = [ \boldsymbol{\alpha}, \boldsymbol{\beta} ] = \mathbf{X}^T \tilde{\mathbf{F}} (\tilde{\mathbf{F}}^T \tilde{\mathbf{F}})^{-1}
+$$
+where $\tilde{\mathbf{F}} = [\mathbf{1}, \mathbf{f}]$
+
+
+```{r}
+F_ <- cbind(ones = 1, f)
+Gamma <- t(X) %*% F_ %*% solve(t(F_) %*% F_)  # better: Gamma <- t(solve(t(F_) %*% F_, t(F_) %*% X))
+colnames(Gamma) <- c("alpha", "beta")
+alpha <- Gamma[, 1]  # or alpha <- Gamma[, "alpha"]
+beta <- Gamma[, 2]   # or beta <- Gamma[, "beta"]
+print(Gamma)
+E <- xts(t(t(X) - Gamma %*% t(F_)), index(X))  # residuals
+Psi <- (1/(T-2)) * t(E) %*% E
+Sigma <- as.numeric(var(f)) * beta %o% beta + diag(diag(Psi))
+```
+
+### Estimating covriacne
+
+$$
+\boldsymbol{\Sigma} = var(f_t)\boldsymbol{\beta}\boldsymbol{\beta}^T + {\sf Diag}(\boldsymbol{\Psi})
+$$
+where $\boldsymbol{\Psi}$ is residual term
+
+```{r}
+library(corrplot)  
+corrplot(cov2cor(Sigma),  
+         type="upper", 
+         tl.col="black", tl.srt=45,     #Text label color and rotation
+         diag=FALSE)
+```
+
+```{r}
+corrplot(cov2cor(Psi), mar = c(0,0,1,0), order = "hclust", addrect = 3, 
+        title = "Covariance matrix of residuals", diag = FALSE, tl.col="black", tl.srt=45)
+```
+
+Interestingly, we can observe that the automatic clustering performed on $\boldsymbol{\Psi}$ correctly identifies the sectors of the stocks (information tech, health care and materials).
+
+### Evaluating ETFs performance
+In this section, we will use the S&P 500 as the explicit market factor and assume risk free rate equal to 0. 
+
+Consider following six ETFs:
+
+- SPY - SPDR S&P 500 ETF (index tracking)  
+- SPHB - PowerShares S&P 500 High Beta Portfolio (high beta)  
+- SPLV - PowerShares S&P 500 Low Volatility Portfolio (low beta)  
+- USMV - iShares Edge MSCI Min Vol USA ETF  
+- JKD - iShares Morningstar Large-Cap ETF
+
+```{r message=FALSE, warning=FALSE}
+index <- c("SPY","SPHB", "SPLV", "USMV", "JKD")
+ETFs <- get_data(index, from, to)
+X_ETFs <- diff(log(ETFs), na.pad = FALSE)
+
+# compute the alpha and beta of all the ETFs:
+F_ <- cbind(ones = 1, f)
+Gamma <- t(solve(t(F_) %*% F_, t(F_) %*% X_ETFs))
+colnames(Gamma) <- c("alpha", "beta")
+alpha <- Gamma[, 1]
+beta <- Gamma[, 2]
+print(Gamma)
+# visualization of Gamma
+{ par(mfrow = c(1,2))    # two plots side by side
+  barplot(rev(alpha), horiz = TRUE, main = "alpha", border = NA, col = "coral", cex.names = 0.75, las = 1)
+  barplot(rev(beta), horiz = TRUE, main = "beta", border = NA, col = "deepskyblue", cex.names = 0.75, las = 1)}  # reset to normal single plot
+```
+`TODO Explanation for the above Gamma graph for all 6 etfs`
+
+Sharpe ratio follows:
+
+$$SR = \frac{E[x_t]}{\sqrt{{\sf var}[x_t]}} = \frac{\alpha + \beta E[f_t]}{\sqrt{\beta^2 {\sf var}[f_t] + \sigma^2}} = \frac{\alpha/\beta + E[f_t]}{\sqrt{{\sf var}[f_t] + \sigma^2/\beta^2}} \approx \frac{\alpha/\beta + E[f_t]}{\sqrt{{\sf var}[f_t]}}$$
+```{r}
+idx_sorted <- sort(alpha/beta, decreasing = TRUE, index.return = TRUE)$ix
+SR <- colMeans(X)/sqrt(diag(var(X)))
+ranking <- cbind("alpha/beta" = (alpha/beta)[idx_sorted], 
+                 SR = SR[idx_sorted], 
+                 alpha = alpha[idx_sorted], 
+                 beta = beta[idx_sorted])
+print(ranking)
+```
+`TODO Explain the resul`
+
+## Fama-French
+Data preparation:
+
+```{r}
+# download Fama-French factors from website
+# url <- "http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
+# temp <- tempfile()
+# download.file(url, temp, method = "libcurl", mode = "wb")
+# unzip(temp, "F-F_Research_Data_Factors_daily.CSV")
+# unlink(temp)
+
+mydata <- read.csv("F-F_Research_Data_Factors_daily.CSV", skip = 4)
+mydata <- mydata[-nrow(mydata), ]  # remove last row
+fama_lib <- xts(x = mydata[, c(2,3,4)], order.by = as.Date(paste(mydata[, 1]), "%Y%m%d"))
+
+# compute the log-returns of the stocks and the Fama-French factors
+F <- fama_lib[index(X)]/100
+```
+
+$$\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \|\mathbf{X}^T - \boldsymbol{\Gamma}\tilde{\mathbf{F}}^T\|^2_F$$
+$$\boldsymbol{\Gamma} = \mathbf{X}^T \tilde{\mathbf{F}} (\tilde{\mathbf{F}}^T \tilde{\mathbf{F}})^{-1}$$
+```{r}
+F_ <- cbind(ones = 1, F)
+Gamma <- t(solve(t(F_) %*% F_, t(F_) %*% X))
+colnames(Gamma) <- c("alpha", "b1", "b2", "b3")
+alpha <- Gamma[, 1]
+B <- Gamma[, 2:4]
+print(Gamma)
+```
+
+## Statistical/principal factor models
+Recall the principal factor method for the model $\mathbf{X}^T = \boldsymbol{\alpha}\mathbf{1}^T + \mathbf{B}\mathbf{F}^T + \mathbf{E}^T$ with K factors:
+
+1. PCA:
+
+- sample mean: $\hat{\boldsymbol{\alpha}} = \bar{\mathbf{x}} = \frac{1}{T}\mathbf{X}^T\mathbf{1}_T$
+- demeaned matrix: $\bar{\mathbf{X}} = \mathbf{X} - \mathbf{1}_T\bar{\mathbf{x}}^T$
+- eigen-decomposition: $\hat{\boldsymbol{\Sigma}} = \hat{\boldsymbol{\Gamma}} \hat{\boldsymbol{\Lambda}} \hat{\boldsymbol{\Gamma}}^T$
+
+2. Estimates:
+
+- $\hat{\mathbf{B}} = \hat{\boldsymbol{\Gamma}_1} \hat{\boldsymbol{\Lambda}}_1^{1/2}$
+- $\hat{\boldsymbol{\Psi}} = {\sf Diag}\left(\hat{\boldsymbol{\Sigma}} - \hat{\mathbf{B}} \hat{\mathbf{B}}^T\right)$
+- $\hat{\boldsymbol{\Sigma}} = \hat{\mathbf{B}} \hat{\mathbf{B}}^T + \hat{\boldsymbol{\Psi}}$
+
+3. Update the eigen-decomposition: $\hat{\boldsymbol{\Sigma}} - \hat{\boldsymbol{\Psi}} = \hat{\boldsymbol{\Gamma}} \hat{\boldsymbol{\Lambda}} \hat{\boldsymbol{\Gamma}}^T$
+
+4. Repeat Steps 2-3 until convergence.
+
+```{r}
+K <- 3
+alpha <- colMeans(X)
+X_ <- X - matrix(alpha, T, N, byrow = TRUE)
+Sigma_prev <- matrix(0, N, N)
+Sigma <- (1/(T-1)) * t(X_) %*% X_
+eigSigma <- eigen(Sigma)
+while (norm(Sigma - Sigma_prev, "F")/norm(Sigma, "F") > 1e-3) {
+  B <- eigSigma$vectors[, 1:K, drop = FALSE] %*% diag(sqrt(eigSigma$values[1:K]), K, K)
+  Psi <- diag(diag(Sigma - B %*% t(B)))
+  Sigma_prev <- Sigma
+  Sigma <- B %*% t(B) + Psi
+  eigSigma <- eigen(Sigma - Psi)
+}
+cbind(alpha, B)
+```
+## Comparison of covariance matrix estimations
+
+```{r}
+# prepare Fama-French factors
+F_FamaFrench <- F # rename for easily knowing the meaning of variable
+# prepare index
+f_SP500 <- f # rename for easily knowing the meaning of variable
+
+# split data into training and set data
+T_trn <- round(0.45*T)
+X_trn <- X[1:T_trn, ]
+X_tst <- X[(T_trn+1):T, ]
+F_FamaFrench_trn <- F_FamaFrench[1:T_trn, ]
+F_FamaFrench_tst <- F_FamaFrench[(T_trn+1):T, ]
+f_SP500_trn <- f_SP500[1:T_trn, ]
+f_SP500_tst <- f_SP500[(T_trn+1):T, ]
+```
+
+
+```{r}
+# sample covariance matrix
+Sigma_SCM <- cov(X_trn)
+
+# 1-factor model
+F_ <- cbind(ones = 1, f_SP500_trn)
+Gamma <- t(solve(t(F_) %*% F_, t(F_) %*% X_trn))
+colnames(Gamma) <- c("alpha", "beta")
+alpha <- Gamma[, 1]
+beta <- Gamma[, 2]
+E <- xts(t(t(X_trn) - Gamma %*% t(F_)), index(X_trn))
+Psi <- (1/(T_trn-2)) * t(E) %*% E
+Sigma_SP500 <- as.numeric(var(f_SP500_trn)) * beta %o% beta + diag(diag(Psi))
+
+# Fama-French 3-factor model
+F_ <- cbind(ones = 1, F_FamaFrench_trn)
+Gamma <- t(solve(t(F_) %*% F_, t(F_) %*% X_trn))
+colnames(Gamma) <- c("alpha", "beta1", "beta2", "beta3")
+alpha <- Gamma[, 1]
+B <- Gamma[, 2:4]
+E <- xts(t(t(X_trn) - Gamma %*% t(F_)), index(X_trn))
+Psi <- (1/(T_trn-4)) * t(E) %*% E
+Sigma_FamaFrench <- B %*% cov(F_FamaFrench_trn) %*% t(B) + diag(diag(Psi))
+
+# Statistical 1-factor model
+K <- 1
+alpha <- colMeans(X_trn)
+X_trn_ <- X_trn - matrix(alpha, T_trn, N, byrow = TRUE)
+Sigma_prev <- matrix(0, N, N)
+Sigma <- (1/(T_trn-1)) * t(X_trn_) %*% X_trn_
+eigSigma <- eigen(Sigma)
+while (norm(Sigma - Sigma_prev, "F")/norm(Sigma, "F") > 1e-3) {
+  B <- eigSigma$vectors[, 1:K, drop = FALSE] %*% diag(sqrt(eigSigma$values[1:K]), K, K)
+  Psi <- diag(diag(Sigma - B %*% t(B)))
+  Sigma_prev <- Sigma
+  Sigma <- B %*% t(B) + Psi
+  eigSigma <- eigen(Sigma - Psi)
+}
+Sigma_PCA1 <- Sigma
+
+# Statistical 3-factor model
+K <- 3
+alpha <- colMeans(X_trn)
+X_trn_ <- X_trn - matrix(alpha, T_trn, N, byrow = TRUE)
+Sigma_prev <- matrix(0, N, N)
+Sigma <- (1/(T_trn-1)) * t(X_trn_) %*% X_trn_
+eigSigma <- eigen(Sigma)
+while (norm(Sigma - Sigma_prev, "F")/norm(Sigma, "F") > 1e-3) {
+  B <- eigSigma$vectors[, 1:K] %*% diag(sqrt(eigSigma$values[1:K]), K, K)
+  Psi <- diag(diag(Sigma - B %*% t(B)))
+  Sigma_prev <- Sigma
+  Sigma <- B %*% t(B) + Psi
+  eigSigma <- eigen(Sigma - Psi)
+}
+Sigma_PCA3 <- Sigma
+
+# Statistical 5-factor model
+K <- 5
+alpha <- colMeans(X_trn)
+X_trn_ <- X_trn - matrix(alpha, T_trn, N, byrow = TRUE)
+Sigma_prev <- matrix(0, N, N)
+Sigma <- (1/(T_trn-1)) * t(X_trn_) %*% X_trn_
+eigSigma <- eigen(Sigma)
+while (norm(Sigma - Sigma_prev, "F")/norm(Sigma, "F") > 1e-3) {
+  B <- eigSigma$vectors[, 1:K] %*% diag(sqrt(eigSigma$values[1:K]), K, K)
+  Psi <- diag(diag(Sigma - B %*% t(B)))
+  Sigma_prev <- Sigma
+  Sigma <- B %*% t(B) + Psi
+  eigSigma <- eigen(Sigma - Psi)
+}
+Sigma_PCA5 <- Sigma
+```
+
+```{r}
+Sigma_true <- cov(X_tst)
+error <- c(SCM = norm(Sigma_SCM - Sigma_true, "F"),
+           SP500 = norm(Sigma_SP500 - Sigma_true, "F"),
+           FamaFrench = norm(Sigma_FamaFrench - Sigma_true, "F"),
+           PCA1 = norm(Sigma_PCA1 - Sigma_true, "F"),
+           PCA3 = norm(Sigma_PCA3 - Sigma_true, "F"),
+           PCA5 = norm(Sigma_PCA5 - Sigma_true, "F"))
+print(error)
+barplot(error, main = "Error in estimation of covariance matrix (Frobenius norm)", 
+        col = "aquamarine3", cex.names = 0.75, las = 1)
+```
+
+$${\sf PRIAL} = 100\times \frac{\|\boldsymbol{\Sigma}_{\sf scm} - \boldsymbol{\Sigma}_{\sf true}\|_F^2 - \|\hat{\boldsymbol{\Sigma}} - \boldsymbol{\Sigma}_{\sf true}\|_F^2}{\|\boldsymbol{\Sigma}_{\sf scm} - \boldsymbol{\Sigma}_{\sf true}\|_F^2}$$
+```{r}
+ref <- norm(Sigma_SCM - Sigma_true, "F")^2
+PRIAL <- 100*(ref - error^2)/ref
+print(PRIAL)
+barplot(PRIAL, main = "PRIAL for estimation of covariance matrix", 
+        col = "bisque3", cex.names = 0.75, las = 1)
+```
+The final conclusion is that using factor models for covariance matrix estimation may help. In addition, it is not clear that using explicit factors helps as compared to the statistical factor modeling.
+
+
+## Edhec smart beta

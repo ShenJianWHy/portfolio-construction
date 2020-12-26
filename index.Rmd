@@ -1,0 +1,57 @@
+--- 
+title: "Portfolio Construction"
+author: "Jian SHEN"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Portfolio construction with R"
+---
+
+
+
+# Preface {-}
+
+
+## Structure of the book {-}
+
+outline:
+
+portfolio:
+  basic portfolio concepts
+  
+  portfolio construction:
+  
+  
+  back-testing
+  
+
+machine learning:
+  data clean, transform, viz, exploratory
+  ts modeling
+  model
+  model evaluation
+
+math:
+  convex optimization
+  
+
+## Software information and conventions {-}
+
+The R session information when compiling this book is shown below:
+
+```{r}
+sessionInfo()
+```
+
+
+## Acknowledgments {-}
+
+## Prerequisites {-}
+
+Some basic knowledge about finance, time series analysis, optimization (linear and convex), programming (python^[Later I will add corresponding python code] or R) would be preferred. 
+
+
+

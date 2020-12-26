@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Alternative risk measure | Portfolio Construction</title>
+  <meta name="description" content="Portfolio construction with R" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Alternative risk measure | Portfolio Construction" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Portfolio construction with R" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Alternative risk measure | Portfolio Construction" />
+  
+  <meta name="twitter:description" content="Portfolio construction with R" />
+  
+
+<meta name="author" content="Jian SHEN" />
+
+
+<meta name="date" content="2020-11-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="robust-portfolio-design.html"/>
+<link rel="next" href="risk-parity-portfolio.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Portfolio Construction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#structure-of-the-book"><i class="fa fa-check"></i>Structure of the book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-information-and-conventions"><i class="fa fa-check"></i>Software information and conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#get-started"><i class="fa fa-check"></i><b>1.2</b> Get started</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#some-tips"><i class="fa fa-check"></i><b>1.3</b> Some tips</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="portfolio-basics.html"><a href="portfolio-basics.html"><i class="fa fa-check"></i><b>2</b> Portfolio basics</a><ul>
+<li class="chapter" data-level="2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#return"><i class="fa fa-check"></i><b>2.1</b> Return</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#stylized-facts"><i class="fa fa-check"></i><b>2.1.1</b> Stylized facts</a></li>
+<li class="chapter" data-level="2.1.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#portfolio-return"><i class="fa fa-check"></i><b>2.1.2</b> Portfolio return</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#heuristic-portfolios"><i class="fa fa-check"></i><b>2.2</b> Heuristic portfolios</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#buy-hold-buy-rebalance"><i class="fa fa-check"></i><b>2.2.1</b> Buy &amp; Hold | Buy &amp; Rebalance</a></li>
+<li class="chapter" data-level="2.2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#equally-weighted-portfolio-ewp"><i class="fa fa-check"></i><b>2.2.2</b> Equally weighted portfolio (EWP)</a></li>
+<li class="chapter" data-level="2.2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#quintile-portfolio"><i class="fa fa-check"></i><b>2.2.3</b> Quintile portfolio</a></li>
+<li class="chapter" data-level="2.2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>2.2.4</b> Global maximum return portfolio (GMRP)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comparison"><i class="fa fa-check"></i><b>2.3</b> Comparison</a></li>
+<li class="chapter" data-level="2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#model"><i class="fa fa-check"></i><b>2.4</b> Model</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#markowitz-1952-model-i.i.d.-model"><i class="fa fa-check"></i><b>2.4.1</b> Markowitz 1952 model (i.i.d. model)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#factor-model"><i class="fa fa-check"></i><b>2.4.2</b> Factor model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#time-series-models"><i class="fa fa-check"></i><b>2.4.3</b> Time-series models:</a></li>
+<li class="chapter" data-level="2.4.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#fitting-method"><i class="fa fa-check"></i><b>2.4.4</b> Fitting method</a></li>
+<li class="chapter" data-level="2.4.5" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comment"><i class="fa fa-check"></i><b>2.4.5</b> Comment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="machine-learning-basics.html"><a href="machine-learning-basics.html"><i class="fa fa-check"></i><b>3</b> Machine learning basics</a></li>
+<li class="chapter" data-level="4" data-path="port-opt.html"><a href="port-opt.html"><i class="fa fa-check"></i><b>4</b> Portfolio optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="port-opt.html"><a href="port-opt.html#mean-variance-portfolio"><i class="fa fa-check"></i><b>4.1</b> Mean-variance portfolio</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="port-opt.html"><a href="port-opt.html#practical-constraints"><i class="fa fa-check"></i><b>4.1.1</b> Practical constraints</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="port-opt.html"><a href="port-opt.html#maximum-sharpe-ratio-portfolio-msrp"><i class="fa fa-check"></i><b>4.2</b> Maximum Sharpe ratio portfolio (MSRP)</a></li>
+<li class="chapter" data-level="4.3" data-path="port-opt.html"><a href="port-opt.html#risk-based-portfolio"><i class="fa fa-check"></i><b>4.3</b> Risk based portfolio</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>4.3.1</b> Global minimum variance portfolio (GMVP)</a></li>
+<li class="chapter" data-level="4.3.2" data-path="port-opt.html"><a href="port-opt.html#inverse-volatility-portfolio-ivp"><i class="fa fa-check"></i><b>4.3.2</b> Inverse volatility portfolio (IVP)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="port-opt.html"><a href="port-opt.html#risk-parity-portfolio-rpp-or-equal-risk-portfolio-erp"><i class="fa fa-check"></i><b>4.3.3</b> Risk parity portfolio (RPP) or equal risk portfolio (ERP)</a></li>
+<li class="chapter" data-level="4.3.4" data-path="port-opt.html"><a href="port-opt.html#most-diversified-portfolio-mdp"><i class="fa fa-check"></i><b>4.3.4</b> Most diversified portfolio (MDP)</a></li>
+<li class="chapter" data-level="4.3.5" data-path="port-opt.html"><a href="port-opt.html#maximum-decorrelation-portfolio-mdcp"><i class="fa fa-check"></i><b>4.3.5</b> Maximum decorrelation portfolio (MDCP)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="port-opt.html"><a href="port-opt.html#comparison_chap4"><i class="fa fa-check"></i><b>4.4</b> Comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="port-opt.html"><a href="port-opt.html#rebalancing-frequencies"><i class="fa fa-check"></i><b>4.5</b> Rebalancing frequencies</a></li>
+<li class="chapter" data-level="4.6" data-path="port-opt.html"><a href="port-opt.html#rolling-window-portfolios"><i class="fa fa-check"></i><b>4.6</b> Rolling window portfolios</a></li>
+<li class="chapter" data-level="4.7" data-path="port-opt.html"><a href="port-opt.html#todo"><i class="fa fa-check"></i><b>4.7</b> TODO</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="factor-investing.html"><a href="factor-investing.html"><i class="fa fa-check"></i><b>5</b> Factor investing</a><ul>
+<li class="chapter" data-level="5.1" data-path="factor-investing.html"><a href="factor-investing.html#factor-overview"><i class="fa fa-check"></i><b>5.1</b> Factor overview</a></li>
+<li class="chapter" data-level="5.2" data-path="factor-investing.html"><a href="factor-investing.html#macroeconomic-factor"><i class="fa fa-check"></i><b>5.2</b> Macroeconomic factor</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-simple-form"><i class="fa fa-check"></i><b>5.2.1</b> LS fitting – simple form</a></li>
+<li class="chapter" data-level="5.2.2" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-matrix-form"><i class="fa fa-check"></i><b>5.2.2</b> LS fitting – matrix form</a></li>
+<li class="chapter" data-level="5.2.3" data-path="factor-investing.html"><a href="factor-investing.html#estimating-covriacne"><i class="fa fa-check"></i><b>5.2.3</b> Estimating covriacne</a></li>
+<li class="chapter" data-level="5.2.4" data-path="factor-investing.html"><a href="factor-investing.html#evaluating-etfs-performance"><i class="fa fa-check"></i><b>5.2.4</b> Evaluating ETFs performance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="factor-investing.html"><a href="factor-investing.html#fama-french"><i class="fa fa-check"></i><b>5.3</b> Fama-French</a></li>
+<li class="chapter" data-level="5.4" data-path="factor-investing.html"><a href="factor-investing.html#statisticalprincipal-factor-models"><i class="fa fa-check"></i><b>5.4</b> Statistical/principal factor models</a></li>
+<li class="chapter" data-level="5.5" data-path="factor-investing.html"><a href="factor-investing.html#comparison-of-covariance-matrix-estimations"><i class="fa fa-check"></i><b>5.5</b> Comparison of covariance matrix estimations</a></li>
+<li class="chapter" data-level="5.6" data-path="factor-investing.html"><a href="factor-investing.html#edhec-smart-beta"><i class="fa fa-check"></i><b>5.6</b> Edhec smart beta</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html"><i class="fa fa-check"></i><b>6</b> Robust portfolio design</a><ul>
+<li class="chapter" data-level="6.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#motivationChapt6"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#sensitivity-of-different-portfolio-design"><i class="fa fa-check"></i><b>6.2</b> Sensitivity of different portfolio design</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#global-maximum-return-portfolio"><i class="fa fa-check"></i><b>6.2.1</b> Global Maximum Return Portfolio</a></li>
+<li class="chapter" data-level="6.2.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#global-minimum-variance-portfolio"><i class="fa fa-check"></i><b>6.2.2</b> Global Minimum Variance Portfolio</a></li>
+<li class="chapter" data-level="6.2.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#markowitzs-mean-variance-portfolio"><i class="fa fa-check"></i><b>6.2.3</b> Markowitz’s mean-variance portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#robust-portfolio-optimization"><i class="fa fa-check"></i><b>6.3</b> Robust portfolio optimization</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmrp"><i class="fa fa-check"></i><b>6.3.1</b> Worst-case robust GMRP</a></li>
+<li class="chapter" data-level="6.3.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmvp"><i class="fa fa-check"></i><b>6.3.2</b> Worst-case robust GMVP</a></li>
+<li class="chapter" data-level="6.3.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-markowitzs-portfolio"><i class="fa fa-check"></i><b>6.3.3</b> Worst-case Markowitz’s portfolio</a></li>
+<li class="chapter" data-level="6.3.4" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#variance-uncertainty-based-on-factor-model"><i class="fa fa-check"></i><b>6.3.4</b> Variance uncertainty based on factor model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html"><i class="fa fa-check"></i><b>7</b> Alternative risk measure</a><ul>
+<li class="chapter" data-level="7.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#motivation_alter_risk_measure"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#risk-measure"><i class="fa fa-check"></i><b>7.2</b> Risk measure</a></li>
+<li class="chapter" data-level="7.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#alternative-risk-measure-beased-portfolio"><i class="fa fa-check"></i><b>7.3</b> Alternative risk measure beased portfolio</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-downside-risk-portfolio"><i class="fa fa-check"></i><b>7.3.1</b> Mean-downside risk portfolio</a></li>
+<li class="chapter" data-level="7.3.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cvar-portfolio"><i class="fa fa-check"></i><b>7.3.2</b> Mean-CVaR portfolio</a></li>
+<li class="chapter" data-level="7.3.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean---max-dd-portfolio"><i class="fa fa-check"></i><b>7.3.3</b> Mean - Max-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean---ave-dd-portfolio"><i class="fa fa-check"></i><b>7.3.4</b> Mean - Ave-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cdar-portfolio"><i class="fa fa-check"></i><b>7.3.5</b> Mean-CDaR portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#comparison-of-dr-cvar-and-dd-portfolios"><i class="fa fa-check"></i><b>7.4</b> Comparison of DR, CVaR, and DD portfolios</a></li>
+<li class="chapter" data-level="7.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#alter_con"><i class="fa fa-check"></i><b>7.5</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html"><i class="fa fa-check"></i><b>8</b> Risk parity portfolio</a><ul>
+<li class="chapter" data-level="8.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#motiv_risk_parity"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#formulation"><i class="fa fa-check"></i><b>8.2</b> Formulation</a></li>
+<li class="chapter" data-level="8.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#risk-budgeting-portfolio-rbp"><i class="fa fa-check"></i><b>8.3</b> Risk budgeting portfolio (RBP)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#naive-risk-budgeting-portfolio"><i class="fa fa-check"></i><b>8.3.1</b> Naive risk budgeting portfolio</a></li>
+<li class="chapter" data-level="8.3.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#inverse-volatility-portfolio"><i class="fa fa-check"></i><b>8.3.2</b> Inverse volatility portfolio</a></li>
+<li class="chapter" data-level="8.3.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#pnl-comparison"><i class="fa fa-check"></i><b>8.3.3</b> PnL comparison</a></li>
+<li class="chapter" data-level="8.3.4" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#vanilla-rpp"><i class="fa fa-check"></i><b>8.3.4</b> vanilla RPP</a></li>
+<li class="chapter" data-level="8.3.5" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rpp-general-formulation"><i class="fa fa-check"></i><b>8.3.5</b> RPP: General formulation</a></li>
+<li class="chapter" data-level="8.3.6" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rbp-formulations"><i class="fa fa-check"></i><b>8.3.6</b> RBP formulations</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i><b>A</b> Appendix A</a></li>
+<li class="chapter" data-level="B" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i><b>B</b> Appendix B</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Portfolio Construction</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="alternative-risk-measure" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Alternative risk measure</h1>
+<div id="motivation_alter_risk_measure" class="section level2">
+<h2><span class="header-section-number">7.1</span> Motivation</h2>
+<p>One of main objective of this book is improving the 3 limits (risk measure, sensitivity to estimation errors and lacks of risk diversification) of Markowitz’s model <code>TODO REF FORMER CHARPTER</code>.</p>
+<p>Variance is not a good measure of risk in practice since it penalizes both the unwanted high losses and the desired low losses (or gains)</p>
+<p>We will here consider more meaningful measures for risk than the variance, like the downside risk (DR), Value-at-Risk (VaR), Conditional VaR (CVaR) or Expected Shortfall (ES), and drawdown (DD).</p>
+</div>
+<div id="risk-measure" class="section level2">
+<h2><span class="header-section-number">7.2</span> Risk measure</h2>
+<p>The mean return is not good enough and one needs to control the probability of going bankrupt. To overcome the limitations of the variance as risk measure, a number of alternative risk measures have been proposed, for example:</p>
+<ul>
+<li>Downside Risk (DR)<br />
+</li>
+<li>Value-at-Risk (VaR)<br />
+</li>
+<li>Conditional Value-at-Risk (CVaR)<br />
+</li>
+<li>Drawdown (DD):
+<ul>
+<li>maximum DD<br />
+</li>
+<li>average DD<br />
+</li>
+<li>Conditional Drawdown at Risk (CDaR)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="alternative-risk-measure.html#cb1-1"></a>from =<span class="st"> &quot;2013-01-01&quot;</span></span>
+<span id="cb1-2"><a href="alternative-risk-measure.html#cb1-2"></a>to =<span class="st"> &quot;2016-12-31&quot;</span></span>
+<span id="cb1-3"><a href="alternative-risk-measure.html#cb1-3"></a>tickers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AAPL&quot;</span>, <span class="st">&quot;AMD&quot;</span>, <span class="st">&quot;ADI&quot;</span>,  <span class="st">&quot;ABBV&quot;</span>, <span class="st">&quot;AEZS&quot;</span>, <span class="st">&quot;A&quot;</span>,  <span class="st">&quot;APD&quot;</span>, <span class="st">&quot;AA&quot;</span>,<span class="st">&quot;CF&quot;</span>)</span>
+<span id="cb1-4"><a href="alternative-risk-measure.html#cb1-4"></a><span class="kw">assign_variable_global_env</span>(tickers, from, to, <span class="dt">ratio =</span> <span class="fl">0.7</span>)</span>
+<span id="cb1-5"><a href="alternative-risk-measure.html#cb1-5"></a></span>
+<span id="cb1-6"><a href="alternative-risk-measure.html#cb1-6"></a>N &lt;-<span class="st"> </span><span class="kw">ncol</span>(prices)</span>
+<span id="cb1-7"><a href="alternative-risk-measure.html#cb1-7"></a>T &lt;-<span class="st"> </span><span class="kw">nrow</span>(prices)</span>
+<span id="cb1-8"><a href="alternative-risk-measure.html#cb1-8"></a>T_trn &lt;-<span class="st"> </span><span class="kw">round</span>(T<span class="op">*</span><span class="fl">0.7</span>)</span>
+<span id="cb1-9"><a href="alternative-risk-measure.html#cb1-9"></a>X &lt;-<span class="st"> </span>X_log</span>
+<span id="cb1-10"><a href="alternative-risk-measure.html#cb1-10"></a></span>
+<span id="cb1-11"><a href="alternative-risk-measure.html#cb1-11"></a>mu &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X)</span>
+<span id="cb1-12"><a href="alternative-risk-measure.html#cb1-12"></a>Sigma &lt;-<span class="st"> </span><span class="kw">cov</span>(X)</span>
+<span id="cb1-13"><a href="alternative-risk-measure.html#cb1-13"></a><span class="kw">plot</span>(prices<span class="op">/</span><span class="kw">rep</span>(prices[<span class="dv">1</span>, ], <span class="dt">each =</span> <span class="kw">nrow</span>(prices)), <span class="dt">col =</span> rainbow10equal, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>,<span class="dt">main =</span> <span class="st">&quot;Normalized prices&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="alternative-risk-measure.html#cb2-1"></a>w_Markowitz &lt;-<span class="st"> </span><span class="kw">MVP</span>(mu, Sigma, <span class="dt">lmd =</span> <span class="fl">0.5</span>, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-2"><a href="alternative-risk-measure.html#cb2-2"></a>w_GMVP &lt;-<span class="st"> </span><span class="kw">GMVP</span>(Sigma, <span class="dt">long_only =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-3"><a href="alternative-risk-measure.html#cb2-3"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="st">&quot;GMVP&quot;</span>      =<span class="st"> </span>w_GMVP, </span>
+<span id="cb2-4"><a href="alternative-risk-measure.html#cb2-4"></a>               <span class="st">&quot;Markowitz&quot;</span> =<span class="st"> </span>w_Markowitz)</span>
+<span id="cb2-5"><a href="alternative-risk-measure.html#cb2-5"></a><span class="kw">barplot</span>(<span class="kw">t</span>(w_all), <span class="dt">col =</span> rainbow10equal[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">legend =</span> <span class="kw">colnames</span>(w_all), <span class="dt">beside =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb2-6"><a href="alternative-risk-measure.html#cb2-6"></a>        <span class="dt">main =</span> <span class="st">&quot;Portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;stocks&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;dollars&quot;</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="alternative-risk-measure.html#cb3-1"></a></span>
+<span id="cb3-2"><a href="alternative-risk-measure.html#cb3-2"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb3-3"><a href="alternative-risk-measure.html#cb3-3"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb3-4"><a href="alternative-risk-measure.html#cb3-4"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb3-5"><a href="alternative-risk-measure.html#cb3-5"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb3-6"><a href="alternative-risk-measure.html#cb3-6"></a></span>
+<span id="cb3-7"><a href="alternative-risk-measure.html#cb3-7"></a><span class="co"># performance</span></span>
+<span id="cb3-8"><a href="alternative-risk-measure.html#cb3-8"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_trn))</span>
+<span id="cb3-9"><a href="alternative-risk-measure.html#cb3-9"></a><span class="co">#&gt;           Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb3-10"><a href="alternative-risk-measure.html#cb3-10"></a><span class="co">#&gt; GMVP                 0.1794             0.1585                    1.1324</span></span>
+<span id="cb3-11"><a href="alternative-risk-measure.html#cb3-11"></a><span class="co">#&gt; Markowitz            0.0600             0.3343                    0.1794</span></span>
+<span id="cb3-12"><a href="alternative-risk-measure.html#cb3-12"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst))</span>
+<span id="cb3-13"><a href="alternative-risk-measure.html#cb3-13"></a><span class="co">#&gt;           Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb3-14"><a href="alternative-risk-measure.html#cb3-14"></a><span class="co">#&gt; GMVP                 0.1380             0.1656                    0.8331</span></span>
+<span id="cb3-15"><a href="alternative-risk-measure.html#cb3-15"></a><span class="co">#&gt; Markowitz            1.7712             0.5280                    3.3546</span></span>
+<span id="cb3-16"><a href="alternative-risk-measure.html#cb3-16"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>, </span>
+<span id="cb3-17"><a href="alternative-risk-measure.html#cb3-17"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich10equal)</span>
+<span id="cb3-18"><a href="alternative-risk-measure.html#cb3-18"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-5-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="alternative-risk-measure.html#cb4-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>,</span>
+<span id="cb4-2"><a href="alternative-risk-measure.html#cb4-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich10equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-5-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="alternative-risk-measure.html#cb5-1"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>, </span>
+<span id="cb5-2"><a href="alternative-risk-measure.html#cb5-2"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span>
+<span id="cb5-3"><a href="alternative-risk-measure.html#cb5-3"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-5-4.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="alternative-risk-measure-beased-portfolio" class="section level2">
+<h2><span class="header-section-number">7.3</span> Alternative risk measure beased portfolio</h2>
+<div id="mean-downside-risk-portfolio" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Mean-downside risk portfolio</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} &amp; \mathbf{w}^T\boldsymbol{\mu}-\lambda \frac{1}{T}\sum_{t=1}^T\left(\left(\tau - \mathbf{w}^T\mathbf{r}_t\right)^+\right)^\alpha\\
+\textsf{subject to} &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<p>The semi-variance is a special case of the more general lower partial moments (LPM)
+<span class="math display">\[\textsf{LPM} = \mathsf{E}\left[\left((\tau - R)^+\right)^\alpha\right]\]</span>
+where <span class="math inline">\((\cdot)^+=\max(0, \cdot)\)</span></p>
+<p>The parameter α reflects the investor’s feeling about the relative consequences of falling short of τ by various amounts: the value α = 1 (which suits a neutral investor) separates risk-seeking ( 0 &lt; α &lt; 1 ) from risk-averse ( α &gt; 1 ) behavior with regard to returns below the target τ.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="alternative-risk-measure.html#cb6-1"></a>w_DR_alpha1 &lt;-<span class="st"> </span><span class="kw">portfolioDR</span>(X_log_trn, <span class="dt">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="alternative-risk-measure.html#cb6-2"></a>w_DR_alpha2 &lt;-<span class="st"> </span><span class="kw">portfolioDR</span>(X_log_trn, <span class="dt">alpha =</span> <span class="dv">2</span>)</span>
+<span id="cb6-3"><a href="alternative-risk-measure.html#cb6-3"></a>w_DR_alpha3 &lt;-<span class="st"> </span><span class="kw">portfolioDR</span>(X_log_trn, <span class="dt">alpha =</span> <span class="dv">3</span>)</span>
+<span id="cb6-4"><a href="alternative-risk-measure.html#cb6-4"></a></span>
+<span id="cb6-5"><a href="alternative-risk-measure.html#cb6-5"></a><span class="co"># combine portfolios</span></span>
+<span id="cb6-6"><a href="alternative-risk-measure.html#cb6-6"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb6-7"><a href="alternative-risk-measure.html#cb6-7"></a>  w_all,</span>
+<span id="cb6-8"><a href="alternative-risk-measure.html#cb6-8"></a>  <span class="st">&quot;DR-alpha-1&quot;</span> =<span class="st"> </span>w_DR_alpha1,</span>
+<span id="cb6-9"><a href="alternative-risk-measure.html#cb6-9"></a>  <span class="st">&quot;DR-alpha-2&quot;</span> =<span class="st"> </span>w_DR_alpha2,</span>
+<span id="cb6-10"><a href="alternative-risk-measure.html#cb6-10"></a>  <span class="st">&quot;DR-alpha-3&quot;</span> =<span class="st"> </span>w_DR_alpha3</span>
+<span id="cb6-11"><a href="alternative-risk-measure.html#cb6-11"></a>)</span>
+<span id="cb6-12"><a href="alternative-risk-measure.html#cb6-12"></a></span>
+<span id="cb6-13"><a href="alternative-risk-measure.html#cb6-13"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb6-14"><a href="alternative-risk-measure.html#cb6-14"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb6-15"><a href="alternative-risk-measure.html#cb6-15"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb6-16"><a href="alternative-risk-measure.html#cb6-16"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb6-17"><a href="alternative-risk-measure.html#cb6-17"></a></span>
+<span id="cb6-18"><a href="alternative-risk-measure.html#cb6-18"></a><span class="co"># performance</span></span>
+<span id="cb6-19"><a href="alternative-risk-measure.html#cb6-19"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_trn))</span>
+<span id="cb6-20"><a href="alternative-risk-measure.html#cb6-20"></a><span class="co">#&gt;            Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb6-21"><a href="alternative-risk-measure.html#cb6-21"></a><span class="co">#&gt; GMVP                  0.1794             0.1585                    1.1324</span></span>
+<span id="cb6-22"><a href="alternative-risk-measure.html#cb6-22"></a><span class="co">#&gt; Markowitz             0.0600             0.3343                    0.1794</span></span>
+<span id="cb6-23"><a href="alternative-risk-measure.html#cb6-23"></a><span class="co">#&gt; DR-alpha-1            0.2008             0.1616                    1.2427</span></span>
+<span id="cb6-24"><a href="alternative-risk-measure.html#cb6-24"></a><span class="co">#&gt; DR-alpha-2            0.1800             0.1582                    1.1377</span></span>
+<span id="cb6-25"><a href="alternative-risk-measure.html#cb6-25"></a><span class="co">#&gt; DR-alpha-3            0.1654             0.1571                    1.0532</span></span>
+<span id="cb6-26"><a href="alternative-risk-measure.html#cb6-26"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst))</span>
+<span id="cb6-27"><a href="alternative-risk-measure.html#cb6-27"></a><span class="co">#&gt;            Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb6-28"><a href="alternative-risk-measure.html#cb6-28"></a><span class="co">#&gt; GMVP                  0.1380             0.1656                    0.8331</span></span>
+<span id="cb6-29"><a href="alternative-risk-measure.html#cb6-29"></a><span class="co">#&gt; Markowitz             1.7712             0.5280                    3.3546</span></span>
+<span id="cb6-30"><a href="alternative-risk-measure.html#cb6-30"></a><span class="co">#&gt; DR-alpha-1            0.1197             0.1645                    0.7276</span></span>
+<span id="cb6-31"><a href="alternative-risk-measure.html#cb6-31"></a><span class="co">#&gt; DR-alpha-2            0.1127             0.1735                    0.6495</span></span>
+<span id="cb6-32"><a href="alternative-risk-measure.html#cb6-32"></a><span class="co">#&gt; DR-alpha-3            0.1164             0.1761                    0.6611</span></span>
+<span id="cb6-33"><a href="alternative-risk-measure.html#cb6-33"></a><span class="kw">table.DownsideRisk</span>(ret_all_tst)</span>
+<span id="cb6-34"><a href="alternative-risk-measure.html#cb6-34"></a><span class="co">#&gt; VaR calculation produces unreliable result (inverse risk) for column: 1 : -0.00755268710115424</span></span>
+<span id="cb6-35"><a href="alternative-risk-measure.html#cb6-35"></a><span class="co">#&gt;                                  GMVP Markowitz DR-alpha-1 DR-alpha-2</span></span>
+<span id="cb6-36"><a href="alternative-risk-measure.html#cb6-36"></a><span class="co">#&gt; Semi Deviation                 0.0076    0.0194     0.0075     0.0079</span></span>
+<span id="cb6-37"><a href="alternative-risk-measure.html#cb6-37"></a><span class="co">#&gt; Gain Deviation                 0.0066    0.0311     0.0066     0.0066</span></span>
+<span id="cb6-38"><a href="alternative-risk-measure.html#cb6-38"></a><span class="co">#&gt; Loss Deviation                 0.0073    0.0167     0.0071     0.0075</span></span>
+<span id="cb6-39"><a href="alternative-risk-measure.html#cb6-39"></a><span class="co">#&gt; Downside Deviation (MAR=210%)  0.0124    0.0215     0.0124     0.0129</span></span>
+<span id="cb6-40"><a href="alternative-risk-measure.html#cb6-40"></a><span class="co">#&gt; Downside Deviation (Rf=0%)     0.0073    0.0169     0.0072     0.0077</span></span>
+<span id="cb6-41"><a href="alternative-risk-measure.html#cb6-41"></a><span class="co">#&gt; Downside Deviation (0%)        0.0073    0.0169     0.0072     0.0077</span></span>
+<span id="cb6-42"><a href="alternative-risk-measure.html#cb6-42"></a><span class="co">#&gt; Maximum Drawdown               0.1619    0.2924     0.1746     0.1773</span></span>
+<span id="cb6-43"><a href="alternative-risk-measure.html#cb6-43"></a><span class="co">#&gt; Historical VaR (95%)          -0.0165   -0.0423    -0.0165    -0.0172</span></span>
+<span id="cb6-44"><a href="alternative-risk-measure.html#cb6-44"></a><span class="co">#&gt; Historical ES (95%)           -0.0239   -0.0542    -0.0230    -0.0248</span></span>
+<span id="cb6-45"><a href="alternative-risk-measure.html#cb6-45"></a><span class="co">#&gt; Modified VaR (95%)            -0.0171        NA    -0.0169    -0.0182</span></span>
+<span id="cb6-46"><a href="alternative-risk-measure.html#cb6-46"></a><span class="co">#&gt; Modified ES (95%)             -0.0250   -0.0397    -0.0243    -0.0263</span></span>
+<span id="cb6-47"><a href="alternative-risk-measure.html#cb6-47"></a><span class="co">#&gt;                               DR-alpha-3</span></span>
+<span id="cb6-48"><a href="alternative-risk-measure.html#cb6-48"></a><span class="co">#&gt; Semi Deviation                    0.0081</span></span>
+<span id="cb6-49"><a href="alternative-risk-measure.html#cb6-49"></a><span class="co">#&gt; Gain Deviation                    0.0066</span></span>
+<span id="cb6-50"><a href="alternative-risk-measure.html#cb6-50"></a><span class="co">#&gt; Loss Deviation                    0.0077</span></span>
+<span id="cb6-51"><a href="alternative-risk-measure.html#cb6-51"></a><span class="co">#&gt; Downside Deviation (MAR=210%)     0.0130</span></span>
+<span id="cb6-52"><a href="alternative-risk-measure.html#cb6-52"></a><span class="co">#&gt; Downside Deviation (Rf=0%)        0.0079</span></span>
+<span id="cb6-53"><a href="alternative-risk-measure.html#cb6-53"></a><span class="co">#&gt; Downside Deviation (0%)           0.0079</span></span>
+<span id="cb6-54"><a href="alternative-risk-measure.html#cb6-54"></a><span class="co">#&gt; Maximum Drawdown                  0.1761</span></span>
+<span id="cb6-55"><a href="alternative-risk-measure.html#cb6-55"></a><span class="co">#&gt; Historical VaR (95%)             -0.0165</span></span>
+<span id="cb6-56"><a href="alternative-risk-measure.html#cb6-56"></a><span class="co">#&gt; Historical ES (95%)              -0.0258</span></span>
+<span id="cb6-57"><a href="alternative-risk-measure.html#cb6-57"></a><span class="co">#&gt; Modified VaR (95%)               -0.0186</span></span>
+<span id="cb6-58"><a href="alternative-risk-measure.html#cb6-58"></a><span class="co">#&gt; Modified ES (95%)                -0.0269</span></span>
+<span id="cb6-59"><a href="alternative-risk-measure.html#cb6-59"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>, </span>
+<span id="cb6-60"><a href="alternative-risk-measure.html#cb6-60"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span>
+<span id="cb6-61"><a href="alternative-risk-measure.html#cb6-61"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="alternative-risk-measure.html#cb7-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>, </span>
+<span id="cb7-2"><a href="alternative-risk-measure.html#cb7-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-6-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="alternative-risk-measure.html#cb8-1"></a></span>
+<span id="cb8-2"><a href="alternative-risk-measure.html#cb8-2"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>, </span>
+<span id="cb8-3"><a href="alternative-risk-measure.html#cb8-3"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span>
+<span id="cb8-4"><a href="alternative-risk-measure.html#cb8-4"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-6-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="alternative-risk-measure.html#cb9-1"></a>w_all &lt;-<span class="st"> </span>w_all[, <span class="op">!</span><span class="st"> </span><span class="kw">colnames</span>(w_all) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;DR-alpha-1&quot;</span>, <span class="st">&quot;DR-alpha-2&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="mean-cvar-portfolio" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Mean-CVaR portfolio</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{maximize}} &amp; \mathbf{w}^{T}\boldsymbol{\mu}\\
+\textsf{subject to} 
+ &amp; \mathsf{CVaR}_{\alpha}\left(f\left(\mathbf{w},\mathbf{r}\right)\right)\leq c\\
+ &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}
+\end{array}\]</span></p>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}, \mathbf{z}, \zeta}{\textsf{maximize}} &amp; \mathbf{w}^T\boldsymbol{\mu} - \lambda\left(\zeta+\frac{1}{1-\alpha}\frac{1}{T}\sum_{t=1}^{T}z_{t}\right)\\
+\textsf{subject to} 
+ &amp; 0\leq z_{t}\geq-\mathbf{w}^{T}\mathbf{r}_{t}-\zeta,\quad t=1,\dots,T\\
+ &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="alternative-risk-measure.html#cb10-1"></a>w_CVaR095 &lt;-<span class="st"> </span><span class="kw">portolioCVaR</span>(X_log_trn, <span class="dt">alpha =</span> <span class="fl">0.95</span>)</span>
+<span id="cb10-2"><a href="alternative-risk-measure.html#cb10-2"></a>w_CVaR099 &lt;-<span class="st"> </span><span class="kw">portolioCVaR</span>(X_log_trn, <span class="dt">alpha =</span> <span class="fl">0.99</span>)</span>
+<span id="cb10-3"><a href="alternative-risk-measure.html#cb10-3"></a></span>
+<span id="cb10-4"><a href="alternative-risk-measure.html#cb10-4"></a><span class="co"># combine portfolios</span></span>
+<span id="cb10-5"><a href="alternative-risk-measure.html#cb10-5"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all, </span>
+<span id="cb10-6"><a href="alternative-risk-measure.html#cb10-6"></a>               <span class="st">&quot;CVaR-alpha-0.95&quot;</span> =<span class="st"> </span>w_CVaR095,</span>
+<span id="cb10-7"><a href="alternative-risk-measure.html#cb10-7"></a>               <span class="st">&quot;CVaR-alpha-0.99&quot;</span> =<span class="st"> </span>w_CVaR099)</span>
+<span id="cb10-8"><a href="alternative-risk-measure.html#cb10-8"></a></span>
+<span id="cb10-9"><a href="alternative-risk-measure.html#cb10-9"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb10-10"><a href="alternative-risk-measure.html#cb10-10"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb10-11"><a href="alternative-risk-measure.html#cb10-11"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb10-12"><a href="alternative-risk-measure.html#cb10-12"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb10-13"><a href="alternative-risk-measure.html#cb10-13"></a></span>
+<span id="cb10-14"><a href="alternative-risk-measure.html#cb10-14"></a><span class="co"># performance</span></span>
+<span id="cb10-15"><a href="alternative-risk-measure.html#cb10-15"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_trn))</span>
+<span id="cb10-16"><a href="alternative-risk-measure.html#cb10-16"></a><span class="co">#&gt;                 Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb10-17"><a href="alternative-risk-measure.html#cb10-17"></a><span class="co">#&gt; GMVP                       0.1794             0.1585                    1.1324</span></span>
+<span id="cb10-18"><a href="alternative-risk-measure.html#cb10-18"></a><span class="co">#&gt; Markowitz                  0.0600             0.3343                    0.1794</span></span>
+<span id="cb10-19"><a href="alternative-risk-measure.html#cb10-19"></a><span class="co">#&gt; DR-alpha-3                 0.1654             0.1571                    1.0532</span></span>
+<span id="cb10-20"><a href="alternative-risk-measure.html#cb10-20"></a><span class="co">#&gt; CVaR-alpha-0.95            0.1936             0.1718                    1.1266</span></span>
+<span id="cb10-21"><a href="alternative-risk-measure.html#cb10-21"></a><span class="co">#&gt; CVaR-alpha-0.99            0.1702             0.1610                    1.0571</span></span>
+<span id="cb10-22"><a href="alternative-risk-measure.html#cb10-22"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst))</span>
+<span id="cb10-23"><a href="alternative-risk-measure.html#cb10-23"></a><span class="co">#&gt;                 Annualized Return Annualized Std Dev Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb10-24"><a href="alternative-risk-measure.html#cb10-24"></a><span class="co">#&gt; GMVP                       0.1380             0.1656                    0.8331</span></span>
+<span id="cb10-25"><a href="alternative-risk-measure.html#cb10-25"></a><span class="co">#&gt; Markowitz                  1.7712             0.5280                    3.3546</span></span>
+<span id="cb10-26"><a href="alternative-risk-measure.html#cb10-26"></a><span class="co">#&gt; DR-alpha-3                 0.1164             0.1761                    0.6611</span></span>
+<span id="cb10-27"><a href="alternative-risk-measure.html#cb10-27"></a><span class="co">#&gt; CVaR-alpha-0.95            0.1643             0.1704                    0.9645</span></span>
+<span id="cb10-28"><a href="alternative-risk-measure.html#cb10-28"></a><span class="co">#&gt; CVaR-alpha-0.99            0.2636             0.1776                    1.4844</span></span>
+<span id="cb10-29"><a href="alternative-risk-measure.html#cb10-29"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>, </span>
+<span id="cb10-30"><a href="alternative-risk-measure.html#cb10-30"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span>
+<span id="cb10-31"><a href="alternative-risk-measure.html#cb10-31"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="alternative-risk-measure.html#cb11-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>, </span>
+<span id="cb11-2"><a href="alternative-risk-measure.html#cb11-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-7-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="alternative-risk-measure.html#cb12-1"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>, </span>
+<span id="cb12-2"><a href="alternative-risk-measure.html#cb12-2"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich6equal)</span>
+<span id="cb12-3"><a href="alternative-risk-measure.html#cb12-3"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-7-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="alternative-risk-measure.html#cb13-1"></a>w_all &lt;-<span class="st"> </span>w_all[, <span class="op">!</span><span class="st"> </span><span class="kw">colnames</span>(w_all) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CVaR-alpha-0.95&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="mean---max-dd-portfolio" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> Mean - Max-DD portfolio</h3>
+<p><span class="math display">\[D(t)=\max_{1\le\tau\le t}r_p^{\sf cum}(\tau) - r_p^{\sf cum}(t)\]</span></p>
+<ul>
+<li>maximum DD (Max-DD)</li>
+<li>average DD (Ave-DD)</li>
+<li>Conditional Drawdown at Risk (CDaR)</li>
+</ul>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}, \{u_t\}}{\textsf{maximize}} &amp; \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ &amp; \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t \le \mathbf{w}^T\mathbf{r}_t^{\sf cum} + c, \quad\forall 1\le t\le T\\
+ &amp; u_{t-1} \le u_t\\
+ &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="alternative-risk-measure.html#cb14-1"></a><span class="co"># solver may not find a solution for some c if c is too low</span></span>
+<span id="cb14-2"><a href="alternative-risk-measure.html#cb14-2"></a>w_MaxDD_c018 &lt;-<span class="st"> </span><span class="kw">portfolioMaxDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.18</span>)</span>
+<span id="cb14-3"><a href="alternative-risk-measure.html#cb14-3"></a><span class="co">#&gt; Warning in unpack_problem(object, solution): Solver returned with status</span></span>
+<span id="cb14-4"><a href="alternative-risk-measure.html#cb14-4"></a><span class="co">#&gt; solver_error</span></span>
+<span id="cb14-5"><a href="alternative-risk-measure.html#cb14-5"></a><span class="co">#&gt; argument c might be too low so solver can not find solution</span></span>
+<span id="cb14-6"><a href="alternative-risk-measure.html#cb14-6"></a>w_MaxDD_c021 &lt;-<span class="st"> </span><span class="kw">portfolioMaxDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.21</span>)</span>
+<span id="cb14-7"><a href="alternative-risk-measure.html#cb14-7"></a>w_MaxDD_c024 &lt;-<span class="st"> </span><span class="kw">portfolioMaxDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.24</span>)</span>
+<span id="cb14-8"><a href="alternative-risk-measure.html#cb14-8"></a></span>
+<span id="cb14-9"><a href="alternative-risk-measure.html#cb14-9"></a><span class="co"># combine portfolios</span></span>
+<span id="cb14-10"><a href="alternative-risk-measure.html#cb14-10"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all,</span>
+<span id="cb14-11"><a href="alternative-risk-measure.html#cb14-11"></a>               <span class="st">&quot;Max-DD-c-018&quot;</span> =<span class="st"> </span>w_MaxDD_c018,</span>
+<span id="cb14-12"><a href="alternative-risk-measure.html#cb14-12"></a>               <span class="st">&quot;Max-DD-c-021&quot;</span> =<span class="st"> </span>w_MaxDD_c021,</span>
+<span id="cb14-13"><a href="alternative-risk-measure.html#cb14-13"></a>               <span class="st">&quot;Max-DD-c-024&quot;</span> =<span class="st"> </span>w_MaxDD_c024)</span>
+<span id="cb14-14"><a href="alternative-risk-measure.html#cb14-14"></a></span>
+<span id="cb14-15"><a href="alternative-risk-measure.html#cb14-15"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb14-16"><a href="alternative-risk-measure.html#cb14-16"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb14-17"><a href="alternative-risk-measure.html#cb14-17"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb14-18"><a href="alternative-risk-measure.html#cb14-18"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb14-19"><a href="alternative-risk-measure.html#cb14-19"></a></span>
+<span id="cb14-20"><a href="alternative-risk-measure.html#cb14-20"></a><span class="co"># performance</span></span>
+<span id="cb14-21"><a href="alternative-risk-measure.html#cb14-21"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst)[<span class="dv">3</span>, ])</span>
+<span id="cb14-22"><a href="alternative-risk-measure.html#cb14-22"></a><span class="co">#&gt;                 Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb14-23"><a href="alternative-risk-measure.html#cb14-23"></a><span class="co">#&gt; GMVP                               0.8331</span></span>
+<span id="cb14-24"><a href="alternative-risk-measure.html#cb14-24"></a><span class="co">#&gt; Markowitz                          3.3546</span></span>
+<span id="cb14-25"><a href="alternative-risk-measure.html#cb14-25"></a><span class="co">#&gt; DR-alpha-3                         0.6611</span></span>
+<span id="cb14-26"><a href="alternative-risk-measure.html#cb14-26"></a><span class="co">#&gt; CVaR-alpha-0.99                    1.4844</span></span>
+<span id="cb14-27"><a href="alternative-risk-measure.html#cb14-27"></a><span class="co">#&gt; Max-DD-c-021                       0.9763</span></span>
+<span id="cb14-28"><a href="alternative-risk-measure.html#cb14-28"></a><span class="co">#&gt; Max-DD-c-024                       0.8488</span></span>
+<span id="cb14-29"><a href="alternative-risk-measure.html#cb14-29"></a><span class="kw">t</span>(<span class="kw">maxDrawdown</span>(ret_all_trn))</span>
+<span id="cb14-30"><a href="alternative-risk-measure.html#cb14-30"></a><span class="co">#&gt;                 Worst Drawdown</span></span>
+<span id="cb14-31"><a href="alternative-risk-measure.html#cb14-31"></a><span class="co">#&gt; GMVP                 0.1763478</span></span>
+<span id="cb14-32"><a href="alternative-risk-measure.html#cb14-32"></a><span class="co">#&gt; Markowitz            0.4600146</span></span>
+<span id="cb14-33"><a href="alternative-risk-measure.html#cb14-33"></a><span class="co">#&gt; DR-alpha-3           0.1884951</span></span>
+<span id="cb14-34"><a href="alternative-risk-measure.html#cb14-34"></a><span class="co">#&gt; CVaR-alpha-0.99      0.1808798</span></span>
+<span id="cb14-35"><a href="alternative-risk-measure.html#cb14-35"></a><span class="co">#&gt; Max-DD-c-021         0.1881950</span></span>
+<span id="cb14-36"><a href="alternative-risk-measure.html#cb14-36"></a><span class="co">#&gt; Max-DD-c-024         0.2122010</span></span>
+<span id="cb14-37"><a href="alternative-risk-measure.html#cb14-37"></a><span class="kw">t</span>(<span class="kw">maxDrawdown</span>(ret_all_tst))</span>
+<span id="cb14-38"><a href="alternative-risk-measure.html#cb14-38"></a><span class="co">#&gt;                 Worst Drawdown</span></span>
+<span id="cb14-39"><a href="alternative-risk-measure.html#cb14-39"></a><span class="co">#&gt; GMVP                 0.1618798</span></span>
+<span id="cb14-40"><a href="alternative-risk-measure.html#cb14-40"></a><span class="co">#&gt; Markowitz            0.2924094</span></span>
+<span id="cb14-41"><a href="alternative-risk-measure.html#cb14-41"></a><span class="co">#&gt; DR-alpha-3           0.1761356</span></span>
+<span id="cb14-42"><a href="alternative-risk-measure.html#cb14-42"></a><span class="co">#&gt; CVaR-alpha-0.99      0.1396687</span></span>
+<span id="cb14-43"><a href="alternative-risk-measure.html#cb14-43"></a><span class="co">#&gt; Max-DD-c-021         0.1580033</span></span>
+<span id="cb14-44"><a href="alternative-risk-measure.html#cb14-44"></a><span class="co">#&gt; Max-DD-c-024         0.1706969</span></span>
+<span id="cb14-45"><a href="alternative-risk-measure.html#cb14-45"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>,</span>
+<span id="cb14-46"><a href="alternative-risk-measure.html#cb14-46"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span>
+<span id="cb14-47"><a href="alternative-risk-measure.html#cb14-47"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="alternative-risk-measure.html#cb15-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>,</span>
+<span id="cb15-2"><a href="alternative-risk-measure.html#cb15-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-8-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="alternative-risk-measure.html#cb16-1"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>,</span>
+<span id="cb16-2"><a href="alternative-risk-measure.html#cb16-2"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span>
+<span id="cb16-3"><a href="alternative-risk-measure.html#cb16-3"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-8-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="alternative-risk-measure.html#cb17-1"></a>w_all &lt;-<span class="st"> </span>w_all[, <span class="op">!</span><span class="st"> </span><span class="kw">colnames</span>(w_all) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Max-DD-c-018&quot;</span>, <span class="st">&quot;Max-DD-c-024&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="mean---ave-dd-portfolio" class="section level3">
+<h3><span class="header-section-number">7.3.4</span> Mean - Ave-DD portfolio</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}, \{u_t\}}{\textsf{maximize}} &amp; \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ &amp; \frac{1}{T}\sum_{t=1}^T u_t \le \sum_{t=1}^T\mathbf{w}^T\mathbf{r}_t^{\sf cum} + c\\
+ &amp; \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t\\
+ &amp; u_{t-1} \le u_t\\
+ &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="alternative-risk-measure.html#cb18-1"></a>w_AveDD_c004 &lt;-<span class="st"> </span><span class="kw">portfolioAveDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.04</span>)</span>
+<span id="cb18-2"><a href="alternative-risk-measure.html#cb18-2"></a>w_AveDD_c006 &lt;-<span class="st"> </span><span class="kw">portfolioAveDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.06</span>)</span>
+<span id="cb18-3"><a href="alternative-risk-measure.html#cb18-3"></a>w_AveDD_c008 &lt;-<span class="st"> </span><span class="kw">portfolioAveDD</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.08</span>)</span>
+<span id="cb18-4"><a href="alternative-risk-measure.html#cb18-4"></a></span>
+<span id="cb18-5"><a href="alternative-risk-measure.html#cb18-5"></a><span class="co"># combine portfolios</span></span>
+<span id="cb18-6"><a href="alternative-risk-measure.html#cb18-6"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all, </span>
+<span id="cb18-7"><a href="alternative-risk-measure.html#cb18-7"></a>               <span class="st">&quot;Ave-DD-c-004&quot;</span> =<span class="st"> </span>w_AveDD_c004, </span>
+<span id="cb18-8"><a href="alternative-risk-measure.html#cb18-8"></a>               <span class="st">&quot;Ave-DD-c-006&quot;</span> =<span class="st"> </span>w_AveDD_c006, </span>
+<span id="cb18-9"><a href="alternative-risk-measure.html#cb18-9"></a>               <span class="st">&quot;Ave-DD-c-008&quot;</span> =<span class="st"> </span>w_AveDD_c008)</span>
+<span id="cb18-10"><a href="alternative-risk-measure.html#cb18-10"></a></span>
+<span id="cb18-11"><a href="alternative-risk-measure.html#cb18-11"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb18-12"><a href="alternative-risk-measure.html#cb18-12"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb18-13"><a href="alternative-risk-measure.html#cb18-13"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb18-14"><a href="alternative-risk-measure.html#cb18-14"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb18-15"><a href="alternative-risk-measure.html#cb18-15"></a></span>
+<span id="cb18-16"><a href="alternative-risk-measure.html#cb18-16"></a><span class="co"># performance</span></span>
+<span id="cb18-17"><a href="alternative-risk-measure.html#cb18-17"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst)[<span class="dv">3</span>, ])</span>
+<span id="cb18-18"><a href="alternative-risk-measure.html#cb18-18"></a><span class="co">#&gt;                 Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb18-19"><a href="alternative-risk-measure.html#cb18-19"></a><span class="co">#&gt; GMVP                               0.8331</span></span>
+<span id="cb18-20"><a href="alternative-risk-measure.html#cb18-20"></a><span class="co">#&gt; Markowitz                          3.3546</span></span>
+<span id="cb18-21"><a href="alternative-risk-measure.html#cb18-21"></a><span class="co">#&gt; DR-alpha-3                         0.6611</span></span>
+<span id="cb18-22"><a href="alternative-risk-measure.html#cb18-22"></a><span class="co">#&gt; CVaR-alpha-0.99                    1.4844</span></span>
+<span id="cb18-23"><a href="alternative-risk-measure.html#cb18-23"></a><span class="co">#&gt; Max-DD-c-021                       0.9763</span></span>
+<span id="cb18-24"><a href="alternative-risk-measure.html#cb18-24"></a><span class="co">#&gt; Ave-DD-c-004                       0.7577</span></span>
+<span id="cb18-25"><a href="alternative-risk-measure.html#cb18-25"></a><span class="co">#&gt; Ave-DD-c-006                       0.5573</span></span>
+<span id="cb18-26"><a href="alternative-risk-measure.html#cb18-26"></a><span class="co">#&gt; Ave-DD-c-008                       0.5571</span></span>
+<span id="cb18-27"><a href="alternative-risk-measure.html#cb18-27"></a><span class="kw">t</span>(<span class="kw">maxDrawdown</span>(ret_all_tst))</span>
+<span id="cb18-28"><a href="alternative-risk-measure.html#cb18-28"></a><span class="co">#&gt;                 Worst Drawdown</span></span>
+<span id="cb18-29"><a href="alternative-risk-measure.html#cb18-29"></a><span class="co">#&gt; GMVP                 0.1618798</span></span>
+<span id="cb18-30"><a href="alternative-risk-measure.html#cb18-30"></a><span class="co">#&gt; Markowitz            0.2924094</span></span>
+<span id="cb18-31"><a href="alternative-risk-measure.html#cb18-31"></a><span class="co">#&gt; DR-alpha-3           0.1761356</span></span>
+<span id="cb18-32"><a href="alternative-risk-measure.html#cb18-32"></a><span class="co">#&gt; CVaR-alpha-0.99      0.1396687</span></span>
+<span id="cb18-33"><a href="alternative-risk-measure.html#cb18-33"></a><span class="co">#&gt; Max-DD-c-021         0.1580033</span></span>
+<span id="cb18-34"><a href="alternative-risk-measure.html#cb18-34"></a><span class="co">#&gt; Ave-DD-c-004         0.1774612</span></span>
+<span id="cb18-35"><a href="alternative-risk-measure.html#cb18-35"></a><span class="co">#&gt; Ave-DD-c-006         0.1935514</span></span>
+<span id="cb18-36"><a href="alternative-risk-measure.html#cb18-36"></a><span class="co">#&gt; Ave-DD-c-008         0.1935575</span></span>
+<span id="cb18-37"><a href="alternative-risk-measure.html#cb18-37"></a><span class="kw">t</span>(<span class="kw">AverageDrawdown</span>(ret_all_trn))</span>
+<span id="cb18-38"><a href="alternative-risk-measure.html#cb18-38"></a><span class="co">#&gt;                 Average Drawdown</span></span>
+<span id="cb18-39"><a href="alternative-risk-measure.html#cb18-39"></a><span class="co">#&gt; GMVP                  0.02524249</span></span>
+<span id="cb18-40"><a href="alternative-risk-measure.html#cb18-40"></a><span class="co">#&gt; Markowitz             0.09056694</span></span>
+<span id="cb18-41"><a href="alternative-risk-measure.html#cb18-41"></a><span class="co">#&gt; DR-alpha-3            0.02453672</span></span>
+<span id="cb18-42"><a href="alternative-risk-measure.html#cb18-42"></a><span class="co">#&gt; CVaR-alpha-0.99       0.02443229</span></span>
+<span id="cb18-43"><a href="alternative-risk-measure.html#cb18-43"></a><span class="co">#&gt; Max-DD-c-021          0.02651552</span></span>
+<span id="cb18-44"><a href="alternative-risk-measure.html#cb18-44"></a><span class="co">#&gt; Ave-DD-c-004          0.03291538</span></span>
+<span id="cb18-45"><a href="alternative-risk-measure.html#cb18-45"></a><span class="co">#&gt; Ave-DD-c-006          0.04524925</span></span>
+<span id="cb18-46"><a href="alternative-risk-measure.html#cb18-46"></a><span class="co">#&gt; Ave-DD-c-008          0.04406289</span></span>
+<span id="cb18-47"><a href="alternative-risk-measure.html#cb18-47"></a><span class="kw">t</span>(<span class="kw">AverageDrawdown</span>(ret_all_tst))</span>
+<span id="cb18-48"><a href="alternative-risk-measure.html#cb18-48"></a><span class="co">#&gt;                 Average Drawdown</span></span>
+<span id="cb18-49"><a href="alternative-risk-measure.html#cb18-49"></a><span class="co">#&gt; GMVP                  0.02412443</span></span>
+<span id="cb18-50"><a href="alternative-risk-measure.html#cb18-50"></a><span class="co">#&gt; Markowitz             0.05260494</span></span>
+<span id="cb18-51"><a href="alternative-risk-measure.html#cb18-51"></a><span class="co">#&gt; DR-alpha-3            0.02524018</span></span>
+<span id="cb18-52"><a href="alternative-risk-measure.html#cb18-52"></a><span class="co">#&gt; CVaR-alpha-0.99       0.01909016</span></span>
+<span id="cb18-53"><a href="alternative-risk-measure.html#cb18-53"></a><span class="co">#&gt; Max-DD-c-021          0.03006926</span></span>
+<span id="cb18-54"><a href="alternative-risk-measure.html#cb18-54"></a><span class="co">#&gt; Ave-DD-c-004          0.04892681</span></span>
+<span id="cb18-55"><a href="alternative-risk-measure.html#cb18-55"></a><span class="co">#&gt; Ave-DD-c-006          0.07760189</span></span>
+<span id="cb18-56"><a href="alternative-risk-measure.html#cb18-56"></a><span class="co">#&gt; Ave-DD-c-008          0.07760833</span></span>
+<span id="cb18-57"><a href="alternative-risk-measure.html#cb18-57"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>, </span>
+<span id="cb18-58"><a href="alternative-risk-measure.html#cb18-58"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span>
+<span id="cb18-59"><a href="alternative-risk-measure.html#cb18-59"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="alternative-risk-measure.html#cb19-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>, </span>
+<span id="cb19-2"><a href="alternative-risk-measure.html#cb19-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="alternative-risk-measure.html#cb20-1"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>, </span>
+<span id="cb20-2"><a href="alternative-risk-measure.html#cb20-2"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich8equal)</span>
+<span id="cb20-3"><a href="alternative-risk-measure.html#cb20-3"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="alternative-risk-measure.html#cb21-1"></a>w_all &lt;-<span class="st"> </span>w_all[, <span class="op">!</span><span class="st"> </span><span class="kw">colnames</span>(w_all) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Ave-DD-c-006&quot;</span>, <span class="st">&quot;Ave-DD-c-008&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="mean-cdar-portfolio" class="section level3">
+<h3><span class="header-section-number">7.3.5</span> Mean-CDaR portfolio</h3>
+<p><span class="math display">\[\begin{array}{ll}
+\underset{\mathbf{w}, \{z_t\}, \zeta, \{u_t\}}{\textsf{maximize}} &amp; \mathbf{w}^T\boldsymbol{\mu}\\
+\textsf{subject to} 
+ &amp; \zeta+\frac{1}{1-\alpha}\frac{1}{T}\sum_{t=1}^{T}z_{t} \le c\\
+ &amp; 0\leq z_{t}\geq u_t - \mathbf{w}^T\mathbf{r}_t^{\sf cum} - \zeta, \quad t=1,\dots,T\\
+ &amp; \mathbf{w}^T\mathbf{r}_{t}^{\sf cum} \le u_t\\
+ &amp; u_{t-1} \le u_t\\
+ &amp; \mathbf{1}^T\mathbf{w}=1,\quad \mathbf{w}\ge\mathbf{0}.
+\end{array}\]</span></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="alternative-risk-measure.html#cb22-1"></a>w_CDaR095_c014 &lt;-<span class="st"> </span><span class="kw">portfolioCDaR</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.14</span>, <span class="dt">alpha =</span> <span class="fl">0.95</span>)</span>
+<span id="cb22-2"><a href="alternative-risk-measure.html#cb22-2"></a>w_CDaR095_c016 &lt;-<span class="st"> </span><span class="kw">portfolioCDaR</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.16</span>, <span class="dt">alpha =</span> <span class="fl">0.95</span>)</span>
+<span id="cb22-3"><a href="alternative-risk-measure.html#cb22-3"></a>w_CDaR099_c017 &lt;-<span class="st"> </span><span class="kw">portfolioCDaR</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.17</span>, <span class="dt">alpha =</span> <span class="fl">0.99</span>)</span>
+<span id="cb22-4"><a href="alternative-risk-measure.html#cb22-4"></a>w_CDaR099_c019 &lt;-<span class="st"> </span><span class="kw">portfolioCDaR</span>(X_log_trn, <span class="dt">c =</span> <span class="fl">0.19</span>, <span class="dt">alpha =</span> <span class="fl">0.99</span>)</span>
+<span id="cb22-5"><a href="alternative-risk-measure.html#cb22-5"></a></span>
+<span id="cb22-6"><a href="alternative-risk-measure.html#cb22-6"></a><span class="co"># combine portfolios</span></span>
+<span id="cb22-7"><a href="alternative-risk-measure.html#cb22-7"></a>w_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(w_all, </span>
+<span id="cb22-8"><a href="alternative-risk-measure.html#cb22-8"></a>               <span class="st">&quot;CDaR095-c-014&quot;</span> =<span class="st"> </span>w_CDaR095_c014, </span>
+<span id="cb22-9"><a href="alternative-risk-measure.html#cb22-9"></a>               <span class="st">&quot;CDaR095-c-016&quot;</span> =<span class="st"> </span>w_CDaR095_c016, </span>
+<span id="cb22-10"><a href="alternative-risk-measure.html#cb22-10"></a>               <span class="st">&quot;CDaR099-c-017&quot;</span> =<span class="st"> </span>w_CDaR099_c017, </span>
+<span id="cb22-11"><a href="alternative-risk-measure.html#cb22-11"></a>               <span class="st">&quot;CDaR099-c-019&quot;</span> =<span class="st"> </span>w_CDaR099_c019)</span>
+<span id="cb22-12"><a href="alternative-risk-measure.html#cb22-12"></a></span>
+<span id="cb22-13"><a href="alternative-risk-measure.html#cb22-13"></a><span class="co"># compute returns of all portfolios</span></span>
+<span id="cb22-14"><a href="alternative-risk-measure.html#cb22-14"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb22-15"><a href="alternative-risk-measure.html#cb22-15"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb22-16"><a href="alternative-risk-measure.html#cb22-16"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb22-17"><a href="alternative-risk-measure.html#cb22-17"></a></span>
+<span id="cb22-18"><a href="alternative-risk-measure.html#cb22-18"></a><span class="co"># performance</span></span>
+<span id="cb22-19"><a href="alternative-risk-measure.html#cb22-19"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst)[<span class="dv">3</span>, ])</span>
+<span id="cb22-20"><a href="alternative-risk-measure.html#cb22-20"></a><span class="co">#&gt;                 Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb22-21"><a href="alternative-risk-measure.html#cb22-21"></a><span class="co">#&gt; GMVP                               0.8331</span></span>
+<span id="cb22-22"><a href="alternative-risk-measure.html#cb22-22"></a><span class="co">#&gt; Markowitz                          3.3546</span></span>
+<span id="cb22-23"><a href="alternative-risk-measure.html#cb22-23"></a><span class="co">#&gt; DR-alpha-3                         0.6611</span></span>
+<span id="cb22-24"><a href="alternative-risk-measure.html#cb22-24"></a><span class="co">#&gt; CVaR-alpha-0.99                    1.4844</span></span>
+<span id="cb22-25"><a href="alternative-risk-measure.html#cb22-25"></a><span class="co">#&gt; Max-DD-c-021                       0.9763</span></span>
+<span id="cb22-26"><a href="alternative-risk-measure.html#cb22-26"></a><span class="co">#&gt; Ave-DD-c-004                       0.7577</span></span>
+<span id="cb22-27"><a href="alternative-risk-measure.html#cb22-27"></a><span class="co">#&gt; CDaR095-c-014                      0.9438</span></span>
+<span id="cb22-28"><a href="alternative-risk-measure.html#cb22-28"></a><span class="co">#&gt; CDaR095-c-016                      0.8328</span></span>
+<span id="cb22-29"><a href="alternative-risk-measure.html#cb22-29"></a><span class="co">#&gt; CDaR099-c-017                      0.9851</span></span>
+<span id="cb22-30"><a href="alternative-risk-measure.html#cb22-30"></a><span class="co">#&gt; CDaR099-c-019                      0.9355</span></span>
+<span id="cb22-31"><a href="alternative-risk-measure.html#cb22-31"></a><span class="kw">t</span>(<span class="kw">maxDrawdown</span>(ret_all_tst))</span>
+<span id="cb22-32"><a href="alternative-risk-measure.html#cb22-32"></a><span class="co">#&gt;                 Worst Drawdown</span></span>
+<span id="cb22-33"><a href="alternative-risk-measure.html#cb22-33"></a><span class="co">#&gt; GMVP                 0.1618798</span></span>
+<span id="cb22-34"><a href="alternative-risk-measure.html#cb22-34"></a><span class="co">#&gt; Markowitz            0.2924094</span></span>
+<span id="cb22-35"><a href="alternative-risk-measure.html#cb22-35"></a><span class="co">#&gt; DR-alpha-3           0.1761356</span></span>
+<span id="cb22-36"><a href="alternative-risk-measure.html#cb22-36"></a><span class="co">#&gt; CVaR-alpha-0.99      0.1396687</span></span>
+<span id="cb22-37"><a href="alternative-risk-measure.html#cb22-37"></a><span class="co">#&gt; Max-DD-c-021         0.1580033</span></span>
+<span id="cb22-38"><a href="alternative-risk-measure.html#cb22-38"></a><span class="co">#&gt; Ave-DD-c-004         0.1774612</span></span>
+<span id="cb22-39"><a href="alternative-risk-measure.html#cb22-39"></a><span class="co">#&gt; CDaR095-c-014        0.1625203</span></span>
+<span id="cb22-40"><a href="alternative-risk-measure.html#cb22-40"></a><span class="co">#&gt; CDaR095-c-016        0.1719010</span></span>
+<span id="cb22-41"><a href="alternative-risk-measure.html#cb22-41"></a><span class="co">#&gt; CDaR099-c-017        0.1546998</span></span>
+<span id="cb22-42"><a href="alternative-risk-measure.html#cb22-42"></a><span class="co">#&gt; CDaR099-c-019        0.1633803</span></span>
+<span id="cb22-43"><a href="alternative-risk-measure.html#cb22-43"></a><span class="kw">t</span>(<span class="kw">AverageDrawdown</span>(ret_all_tst))</span>
+<span id="cb22-44"><a href="alternative-risk-measure.html#cb22-44"></a><span class="co">#&gt;                 Average Drawdown</span></span>
+<span id="cb22-45"><a href="alternative-risk-measure.html#cb22-45"></a><span class="co">#&gt; GMVP                  0.02412443</span></span>
+<span id="cb22-46"><a href="alternative-risk-measure.html#cb22-46"></a><span class="co">#&gt; Markowitz             0.05260494</span></span>
+<span id="cb22-47"><a href="alternative-risk-measure.html#cb22-47"></a><span class="co">#&gt; DR-alpha-3            0.02524018</span></span>
+<span id="cb22-48"><a href="alternative-risk-measure.html#cb22-48"></a><span class="co">#&gt; CVaR-alpha-0.99       0.01909016</span></span>
+<span id="cb22-49"><a href="alternative-risk-measure.html#cb22-49"></a><span class="co">#&gt; Max-DD-c-021          0.03006926</span></span>
+<span id="cb22-50"><a href="alternative-risk-measure.html#cb22-50"></a><span class="co">#&gt; Ave-DD-c-004          0.04892681</span></span>
+<span id="cb22-51"><a href="alternative-risk-measure.html#cb22-51"></a><span class="co">#&gt; CDaR095-c-014         0.03583177</span></span>
+<span id="cb22-52"><a href="alternative-risk-measure.html#cb22-52"></a><span class="co">#&gt; CDaR095-c-016         0.04215747</span></span>
+<span id="cb22-53"><a href="alternative-risk-measure.html#cb22-53"></a><span class="co">#&gt; CDaR099-c-017         0.02268762</span></span>
+<span id="cb22-54"><a href="alternative-risk-measure.html#cb22-54"></a><span class="co">#&gt; CDaR099-c-019         0.03383564</span></span>
+<span id="cb22-55"><a href="alternative-risk-measure.html#cb22-55"></a><span class="kw">t</span>(<span class="kw">CDD</span>(ret_all_trn))</span>
+<span id="cb22-56"><a href="alternative-risk-measure.html#cb22-56"></a><span class="co">#&gt;                 Conditional Drawdown 5%</span></span>
+<span id="cb22-57"><a href="alternative-risk-measure.html#cb22-57"></a><span class="co">#&gt; GMVP                         0.06626555</span></span>
+<span id="cb22-58"><a href="alternative-risk-measure.html#cb22-58"></a><span class="co">#&gt; Markowitz                    0.19151542</span></span>
+<span id="cb22-59"><a href="alternative-risk-measure.html#cb22-59"></a><span class="co">#&gt; DR-alpha-3                   0.07137488</span></span>
+<span id="cb22-60"><a href="alternative-risk-measure.html#cb22-60"></a><span class="co">#&gt; CVaR-alpha-0.99              0.06565987</span></span>
+<span id="cb22-61"><a href="alternative-risk-measure.html#cb22-61"></a><span class="co">#&gt; Max-DD-c-021                 0.06885930</span></span>
+<span id="cb22-62"><a href="alternative-risk-measure.html#cb22-62"></a><span class="co">#&gt; Ave-DD-c-004                 0.09463311</span></span>
+<span id="cb22-63"><a href="alternative-risk-measure.html#cb22-63"></a><span class="co">#&gt; CDaR095-c-014                0.06892476</span></span>
+<span id="cb22-64"><a href="alternative-risk-measure.html#cb22-64"></a><span class="co">#&gt; CDaR095-c-016                0.07966771</span></span>
+<span id="cb22-65"><a href="alternative-risk-measure.html#cb22-65"></a><span class="co">#&gt; CDaR099-c-017                0.06613209</span></span>
+<span id="cb22-66"><a href="alternative-risk-measure.html#cb22-66"></a><span class="co">#&gt; CDaR099-c-019                0.06828860</span></span>
+<span id="cb22-67"><a href="alternative-risk-measure.html#cb22-67"></a><span class="kw">t</span>(<span class="kw">CDD</span>(ret_all_tst))</span>
+<span id="cb22-68"><a href="alternative-risk-measure.html#cb22-68"></a><span class="co">#&gt;                 Conditional Drawdown 5%</span></span>
+<span id="cb22-69"><a href="alternative-risk-measure.html#cb22-69"></a><span class="co">#&gt; GMVP                         0.06166899</span></span>
+<span id="cb22-70"><a href="alternative-risk-measure.html#cb22-70"></a><span class="co">#&gt; Markowitz                    0.09725709</span></span>
+<span id="cb22-71"><a href="alternative-risk-measure.html#cb22-71"></a><span class="co">#&gt; DR-alpha-3                   0.04296381</span></span>
+<span id="cb22-72"><a href="alternative-risk-measure.html#cb22-72"></a><span class="co">#&gt; CVaR-alpha-0.99              0.05167597</span></span>
+<span id="cb22-73"><a href="alternative-risk-measure.html#cb22-73"></a><span class="co">#&gt; Max-DD-c-021                 0.08649004</span></span>
+<span id="cb22-74"><a href="alternative-risk-measure.html#cb22-74"></a><span class="co">#&gt; Ave-DD-c-004                 0.12860938</span></span>
+<span id="cb22-75"><a href="alternative-risk-measure.html#cb22-75"></a><span class="co">#&gt; CDaR095-c-014                0.09780699</span></span>
+<span id="cb22-76"><a href="alternative-risk-measure.html#cb22-76"></a><span class="co">#&gt; CDaR095-c-016                0.11536860</span></span>
+<span id="cb22-77"><a href="alternative-risk-measure.html#cb22-77"></a><span class="co">#&gt; CDaR099-c-017                0.07797121</span></span>
+<span id="cb22-78"><a href="alternative-risk-measure.html#cb22-78"></a><span class="co">#&gt; CDaR099-c-019                0.09600039</span></span>
+<span id="cb22-79"><a href="alternative-risk-measure.html#cb22-79"></a>{ <span class="kw">chart.CumReturns</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios&quot;</span>, </span>
+<span id="cb22-80"><a href="alternative-risk-measure.html#cb22-80"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich10equal)</span>
+<span id="cb22-81"><a href="alternative-risk-measure.html#cb22-81"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-10-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="alternative-risk-measure.html#cb23-1"></a><span class="kw">chart.CumReturns</span>(ret_all_tst, <span class="dt">main =</span> <span class="st">&quot;Cumulative return of portfolios (out-of-sample)&quot;</span>, </span>
+<span id="cb23-2"><a href="alternative-risk-measure.html#cb23-2"></a>                   <span class="dt">wealth.index =</span> <span class="ot">TRUE</span>, <span class="dt">legend.loc =</span> <span class="st">&quot;topleft&quot;</span>, <span class="dt">colorset =</span> rich10equal)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-10-2.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="alternative-risk-measure.html#cb24-1"></a>{ <span class="kw">chart.Drawdown</span>(ret_all, <span class="dt">main =</span> <span class="st">&quot;Drawdown of portfolios&quot;</span>, </span>
+<span id="cb24-2"><a href="alternative-risk-measure.html#cb24-2"></a>                 <span class="dt">legend.loc =</span> <span class="st">&quot;bottomleft&quot;</span>, <span class="dt">colorset =</span> rich10equal)</span>
+<span id="cb24-3"><a href="alternative-risk-measure.html#cb24-3"></a>  <span class="kw">addEventLines</span>(<span class="kw">xts</span>(<span class="st">&quot;training&quot;</span>, <span class="kw">index</span>(X_lin[T_trn])), <span class="dt">srt=</span><span class="dv">90</span>, <span class="dt">pos=</span><span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;darkblue&quot;</span>) }</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-10-3.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="alternative-risk-measure.html#cb25-1"></a>w_all &lt;-<span class="st"> </span>w_all[, <span class="op">!</span><span class="st"> </span><span class="kw">colnames</span>(w_all) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CDaR095-c-016&quot;</span>, <span class="st">&quot;CDaR099-c-017&quot;</span>, <span class="st">&quot;CDaR099-c-019&quot;</span>)]</span></code></pre></div>
+</div>
+</div>
+<div id="comparison-of-dr-cvar-and-dd-portfolios" class="section level2">
+<h2><span class="header-section-number">7.4</span> Comparison of DR, CVaR, and DD portfolios</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="alternative-risk-measure.html#cb26-1"></a><span class="co"># recompute returns of all portfolios</span></span>
+<span id="cb26-2"><a href="alternative-risk-measure.html#cb26-2"></a>ret_all &lt;-<span class="st"> </span><span class="kw">xts</span>(X_lin <span class="op">%*%</span><span class="st"> </span>w_all, <span class="kw">index</span>(X_lin))</span>
+<span id="cb26-3"><a href="alternative-risk-measure.html#cb26-3"></a>ret_all_trn &lt;-<span class="st"> </span>ret_all[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb26-4"><a href="alternative-risk-measure.html#cb26-4"></a>ret_all_tst &lt;-<span class="st"> </span>ret_all[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>T_trn), ]</span>
+<span id="cb26-5"><a href="alternative-risk-measure.html#cb26-5"></a></span>
+<span id="cb26-6"><a href="alternative-risk-measure.html#cb26-6"></a><span class="kw">t</span>(<span class="kw">table.AnnualizedReturns</span>(ret_all_tst)[<span class="dv">3</span>, ])</span>
+<span id="cb26-7"><a href="alternative-risk-measure.html#cb26-7"></a><span class="co">#&gt;                 Annualized Sharpe (Rf=0%)</span></span>
+<span id="cb26-8"><a href="alternative-risk-measure.html#cb26-8"></a><span class="co">#&gt; GMVP                               0.8331</span></span>
+<span id="cb26-9"><a href="alternative-risk-measure.html#cb26-9"></a><span class="co">#&gt; Markowitz                          3.3546</span></span>
+<span id="cb26-10"><a href="alternative-risk-measure.html#cb26-10"></a><span class="co">#&gt; DR-alpha-3                         0.6611</span></span>
+<span id="cb26-11"><a href="alternative-risk-measure.html#cb26-11"></a><span class="co">#&gt; CVaR-alpha-0.99                    1.4844</span></span>
+<span id="cb26-12"><a href="alternative-risk-measure.html#cb26-12"></a><span class="co">#&gt; Max-DD-c-021                       0.9763</span></span>
+<span id="cb26-13"><a href="alternative-risk-measure.html#cb26-13"></a><span class="co">#&gt; Ave-DD-c-004                       0.7577</span></span>
+<span id="cb26-14"><a href="alternative-risk-measure.html#cb26-14"></a><span class="kw">t</span>(<span class="kw">maxDrawdown</span>(ret_all_tst))</span>
+<span id="cb26-15"><a href="alternative-risk-measure.html#cb26-15"></a><span class="co">#&gt;                 Worst Drawdown</span></span>
+<span id="cb26-16"><a href="alternative-risk-measure.html#cb26-16"></a><span class="co">#&gt; GMVP                 0.1618798</span></span>
+<span id="cb26-17"><a href="alternative-risk-measure.html#cb26-17"></a><span class="co">#&gt; Markowitz            0.2924094</span></span>
+<span id="cb26-18"><a href="alternative-risk-measure.html#cb26-18"></a><span class="co">#&gt; DR-alpha-3           0.1761356</span></span>
+<span id="cb26-19"><a href="alternative-risk-measure.html#cb26-19"></a><span class="co">#&gt; CVaR-alpha-0.99      0.1396687</span></span>
+<span id="cb26-20"><a href="alternative-risk-measure.html#cb26-20"></a><span class="co">#&gt; Max-DD-c-021         0.1580033</span></span>
+<span id="cb26-21"><a href="alternative-risk-measure.html#cb26-21"></a><span class="co">#&gt; Ave-DD-c-004         0.1774612</span></span>
+<span id="cb26-22"><a href="alternative-risk-measure.html#cb26-22"></a><span class="kw">t</span>(<span class="kw">AverageDrawdown</span>(ret_all_tst))</span>
+<span id="cb26-23"><a href="alternative-risk-measure.html#cb26-23"></a><span class="co">#&gt;                 Average Drawdown</span></span>
+<span id="cb26-24"><a href="alternative-risk-measure.html#cb26-24"></a><span class="co">#&gt; GMVP                  0.02412443</span></span>
+<span id="cb26-25"><a href="alternative-risk-measure.html#cb26-25"></a><span class="co">#&gt; Markowitz             0.05260494</span></span>
+<span id="cb26-26"><a href="alternative-risk-measure.html#cb26-26"></a><span class="co">#&gt; DR-alpha-3            0.02524018</span></span>
+<span id="cb26-27"><a href="alternative-risk-measure.html#cb26-27"></a><span class="co">#&gt; CVaR-alpha-0.99       0.01909016</span></span>
+<span id="cb26-28"><a href="alternative-risk-measure.html#cb26-28"></a><span class="co">#&gt; Max-DD-c-021          0.03006926</span></span>
+<span id="cb26-29"><a href="alternative-risk-measure.html#cb26-29"></a><span class="co">#&gt; Ave-DD-c-004          0.04892681</span></span>
+<span id="cb26-30"><a href="alternative-risk-measure.html#cb26-30"></a><span class="kw">t</span>(<span class="kw">CDD</span>(ret_all_tst))</span>
+<span id="cb26-31"><a href="alternative-risk-measure.html#cb26-31"></a><span class="co">#&gt;                 Conditional Drawdown 5%</span></span>
+<span id="cb26-32"><a href="alternative-risk-measure.html#cb26-32"></a><span class="co">#&gt; GMVP                         0.06166899</span></span>
+<span id="cb26-33"><a href="alternative-risk-measure.html#cb26-33"></a><span class="co">#&gt; Markowitz                    0.09725709</span></span>
+<span id="cb26-34"><a href="alternative-risk-measure.html#cb26-34"></a><span class="co">#&gt; DR-alpha-3                   0.04296381</span></span>
+<span id="cb26-35"><a href="alternative-risk-measure.html#cb26-35"></a><span class="co">#&gt; CVaR-alpha-0.99              0.05167597</span></span>
+<span id="cb26-36"><a href="alternative-risk-measure.html#cb26-36"></a><span class="co">#&gt; Max-DD-c-021                 0.08649004</span></span>
+<span id="cb26-37"><a href="alternative-risk-measure.html#cb26-37"></a><span class="co">#&gt; Ave-DD-c-004                 0.12860938</span></span>
+<span id="cb26-38"><a href="alternative-risk-measure.html#cb26-38"></a>{<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb26-39"><a href="alternative-risk-measure.html#cb26-39"></a><span class="kw">barplot</span>(w_all, <span class="dt">col =</span> rainbow10equal[<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>], <span class="dt">legend =</span> <span class="kw">rownames</span>(w_all), <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">x=</span><span class="st">&quot;topright&quot;</span>, <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">horiz=</span><span class="ot">FALSE</span>, <span class="dt">inset =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.1</span>,<span class="dv">0</span>)), <span class="dt">beside =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;Portfolio allocation&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;portfolio design&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;weights&quot;</span>, <span class="dt">las=</span><span class="dv">2</span>, <span class="dt">cex.names=</span>.<span class="dv">6</span>)}</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="alter_con" class="section level2">
+<h2><span class="header-section-number">7.5</span> Conclusion</h2>
+<p>The maximum drawdown is extremely sensitive to minute changes in the portfolio weights and to the specific time period examined.</p>
+<p>If the returns are close to normally distributed, the distribution of drawdowns is just a function of the variance, so there’s no need to include drawdowns explicitly in your portfolio construction objective. Minimizing variance is the same as minimizing expected drawdowns.</p>
+<p>On the other hand, if returns are very non-normal and you want to find a portfolio that minimizes the expected drawdowns, you still wouldn’t choose weights that minimize historical drawdown. Why?</p>
+<p>Because minimizing historical drawdown is effectively the same as taking all your returns that weren’t part of a drawdown, and hiding them from your optimizer, which will lead to portfolio weights that are a lot less accurately estimated than if you let your optimizer see all the data you have.</p>
+<p>Instead, you might just include terms in your optimization objective that penalize negative skew and penalize positive kurtosis</p>
+<p>As a note of caution, one has to be careful with CVaR and CDaR portfolios due to the sensitivity to the used data (if not enough data, they will not be reliable).</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="robust-portfolio-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="risk-parity-portfolio.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["portr.pdf", "portr.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

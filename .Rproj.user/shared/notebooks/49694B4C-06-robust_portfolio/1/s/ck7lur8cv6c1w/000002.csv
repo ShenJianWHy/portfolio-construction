@@ -1,0 +1,15 @@
+"0","library(rbokeh)"
+"2","package ‘rbokeh’ was built under R version 4.0.3"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","Registered S3 method overwritten by 'pryr':
+  method      from
+  print.bytes Rcpp
+"
+"0","figure(width = 800, title = ""Performance Markowitz"", "
+"0","       xlab = ""realization"", ylab = ""mean-variance"", legend_location = ""bottom_right"") %>%"
+"0","  ly_points(mean_variance_naive, color = ""blue"", legend = ""naive"") %>%"
+"0","  ly_points(mean_variance_robust, color = ""red"", legend = ""robust"") %>%"
+"0","  ly_abline(h = mean_variance_clairvoyant, legend = ""clairvoyant"")"

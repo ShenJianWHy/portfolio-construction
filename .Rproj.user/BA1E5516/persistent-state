@@ -1,0 +1,8 @@
+build-last-errors="[]"
+build-last-errors-base-dir=""
+build-last-outputs="[{\"type\":0,\"output\":\"==> rmarkdown::render_site(output_format = 'bookdown::gitbook', encoding = 'UTF-8')\\n\\n\"},{\"type\":2,\"output\":\"\\r\\n\\r\\nprocessing file: portr.Rmd\\r\\n\"},{\"type\":2,\"output\":\"Error in parse_block(g[-1], g[1], params.src, markdown_mode) : \\r\\n  Duplicate chunk label 'sp500price', which has been used for the chunk:\\r\\npar(mfrow=c(2,1))\\r\\nplot(SP500_index, main=NULL)\\r\\nplot(X_log_sp, main=NULL)\\r\\nCalls: <Anonymous> ... process_file -> split_file -> lapply -> FUN -> parse_block\\r\\nExecution halted\\r\\n\"},{\"type\":2,\"output\":\"\\nExited with status 1.\\n\\n\"}]"
+compile_pdf_state="{\"tab_visible\":false,\"running\":false,\"target_file\":\"\",\"output\":\"\",\"errors\":[]}"
+files.monitored-path=""
+find-in-files-state="{\"handle\":\"f32caf90edc24e9d9db6a002e88ab631\",\"input\":\"X_log\",\"path\":\"C:/Users/jshen/Desktop/EDHEC/portr\",\"regex\":false,\"ignoreCase\":true,\"results\":{\"file\":[],\"line\":[],\"lineValue\":[],\"matchOn\":[],\"matchOff\":[],\"replaceMatchOn\":[],\"replaceMatchOff\":[]},\"running\":false,\"replace\":false,\"preview\":false,\"gitFlag\":false,\"replacePattern\":\"\"}"
+imageDirtyState="1"
+saveActionState="-1"

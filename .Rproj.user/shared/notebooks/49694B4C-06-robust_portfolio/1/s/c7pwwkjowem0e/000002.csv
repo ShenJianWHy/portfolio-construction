@@ -1,0 +1,5 @@
+"0","figure(width = 800, title = ""Performance Markowitz"", "
+"0","       xlab = ""realization"", ylab = ""Sharpe-ratio"", legend_location = ""bottom_right"") %>%"
+"0","  ly_points(SR_naive, color = ""blue"", legend = ""naive"") %>%"
+"0","  ly_points(SR_robust, color = ""red"", legend = ""robust"") %>%"
+"0","  ly_abline(h = SR_clairvoyant, legend = ""clairvoyant"")"

@@ -1,0 +1,13 @@
+base
+zoo
+xts
+TTR
+quantmod
+PerformanceAnalytics
+dplyr
+CVXR
+rugarch
+corrplot
+mvtnorm
+rbokeh
+rootSolve

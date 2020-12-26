@@ -1,0 +1,2 @@
+"0","par(mfrow=c(2,1))"
+"0","plot(SP500_index, main=NULL)"

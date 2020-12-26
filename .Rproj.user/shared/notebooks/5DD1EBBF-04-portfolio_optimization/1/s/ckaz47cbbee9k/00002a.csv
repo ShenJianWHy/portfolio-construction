@@ -1,0 +1,7 @@
+"0","# compute returns of all portfolios"
+"0","ret_all <- xts(X_lin %*% w_all, index(X_lin))"
+"0","ret_all_trn <- ret_all[1:T_trn, ]"
+"0","ret_all_tst <- ret_all[-c(1:T_trn), ]"
+"0",""
+"0","# performance"
+"0","t(table.AnnualizedReturns(ret_all_trn)) %>% as.data.frame() %>% arrange(-`Annualized Sharpe (Rf=0%)`)"

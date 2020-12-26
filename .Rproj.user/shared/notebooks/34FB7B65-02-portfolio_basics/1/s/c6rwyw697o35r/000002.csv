@@ -1,0 +1,2 @@
+"0","{ chart.CumReturns(ret_heuristic, main = ""Cumulative return of heuristic portfolios"", wealth.index = TRUE, legend.loc = ""topleft"", colorset = rich8equal)"
+"0","  addEventLines(xts(""training"", index(X_lin[T_trn])), srt=90, pos=2, lwd = 2, col = ""darkblue"") }"

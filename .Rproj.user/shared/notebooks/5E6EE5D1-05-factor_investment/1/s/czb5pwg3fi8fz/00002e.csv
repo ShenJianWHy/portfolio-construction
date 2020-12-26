@@ -1,0 +1,5 @@
+"0","library(corrplot)  "
+"0","corrplot(cov2cor(Sigma),  "
+"0","         type=""upper"", "
+"0","         tl.col=""black"", tl.srt=45,     #Text label color and rotation"
+"0","         diag=FALSE)"

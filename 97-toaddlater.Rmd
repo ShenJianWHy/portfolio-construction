@@ -1,0 +1,58 @@
+# To Add Later
+
+## Asset management overview
+
+### Questions
+
+How do we define risk? What about more complex objectives and constraints?
+
+
+
+## Optimization
+
+### Portfolio Optimization Objectives
+
+- Minimize Risk   
+  - Volatility, Tail Loss (VaR, ES), Max Drawdown, etc.  
+- Maximize Risk Adjusted Return   
+  - Sharpe Ratio, Information Ratio, etc.  
+- Risk Budgets   
+  - Equal Component Contribution to Risk (i.e. Risk Parity)   
+  - Limits on Component Contribution   
+- Maximize a Utility Function   
+  - Quadratic, Constant Relative Risk Aversion (CRRA), etc.   
+- Minimize Tracking Error   
+  - Replicating portfolio to track an index or basket of assets   
+
+### Constraints
+
+- Sum of Weights     
+- Box, Group     
+- Factor Exposure
+- Position Limit     
+- and many more
+
+
+### Solver
+  
+- random portfolios search
+- 
+  
+### Workflow
+
+- Specify portfolio  
+- Add constraints
+  - Feasible Space Analysis: Data
+- Add objectives
+- Analyze results  
+  - visualization
+  - metrics   
+
+### Estimating
+
+Ledoit and Wolf (2003):
+
+"The central message of this paper is that nobody should be using the sample covariance matrix for the purpose of portfolio optimization."
+
+
+  

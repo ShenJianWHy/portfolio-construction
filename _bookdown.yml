@@ -1,0 +1,6 @@
+before_chapter_script: ["code/before_script.R", "code/port_design.R", "code/data_process.R"]
+book_filename: "portr"
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Chapter "

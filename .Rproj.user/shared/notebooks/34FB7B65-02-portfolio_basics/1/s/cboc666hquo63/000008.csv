@@ -1,0 +1,8 @@
+"0","w_EWP <- EWP(X_log_trn)"
+"0","w_QuintP <- quintileP(X_log_trn)"
+"0","mu_log <- colMeans(X_log_trn)"
+"0","# The global maximum return portfolio (GMRP) chooses the stock with the highest return during the in-sample period"
+"0","w_GMRP <- GMRP(mu_log)"
+"0","# put together all portfolios"
+"0","w_heuristic <- cbind(""EWP"" = w_EWP, w_QuintP, ""GMRP"" = w_GMRP)"
+"0","barplot(t(w_heuristic), col = rainbow8equal[1:5], legend = colnames(w_heuristic), beside = TRUE, main = ""Portfolio allocation of heuristic portfolios"", xlab = ""stocks"", ylab = ""dollars"")"

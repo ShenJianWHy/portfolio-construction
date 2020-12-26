@@ -1,0 +1,3 @@
+"0",""
+"0","chart.Drawdown(ret_MVP, main = ""Drawdown for static vs rolling window"", "
+"0","               legend.loc = ""bottomleft"", colorset = rich6equal)"

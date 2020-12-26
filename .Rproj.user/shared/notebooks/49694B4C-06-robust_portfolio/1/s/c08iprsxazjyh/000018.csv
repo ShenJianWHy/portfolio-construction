@@ -1,0 +1,4 @@
+"0","w_GMRP <- GMRP(mu)"
+"0","w_all_GMRP <- cbind(w_GMRP)"
+"0","barplot(t(w_all_GMRP), col = rainbow8equal[1], legend = colnames(w_all_GMRP), beside = TRUE,"
+"0","        main = ""Global maximum return portfolio allocation"", xlab = ""stocks"", ylab = ""dollars"")"

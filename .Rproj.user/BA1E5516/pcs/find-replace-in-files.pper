@@ -1,0 +1,13 @@
+{
+    "dialog-state": {
+        "query": "font",
+        "path": "C:/Users/jshen/Desktop/EDHEC/portr",
+        "regex": false,
+        "caseSensitive": true,
+        "filePatterns": [],
+        "excludeFilePatterns": [],
+        "resultsCount": 0,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

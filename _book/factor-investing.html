@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Factor investing | Portfolio Construction</title>
+  <meta name="description" content="Portfolio construction with R" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Factor investing | Portfolio Construction" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Portfolio construction with R" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Factor investing | Portfolio Construction" />
+  
+  <meta name="twitter:description" content="Portfolio construction with R" />
+  
+
+<meta name="author" content="Jian SHEN" />
+
+
+<meta name="date" content="2020-11-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="port-opt.html"/>
+<link rel="next" href="robust-portfolio-design.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Portfolio Construction</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#structure-of-the-book"><i class="fa fa-check"></i>Structure of the book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-information-and-conventions"><i class="fa fa-check"></i>Software information and conventions</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgments"><i class="fa fa-check"></i>Acknowledgments</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i>Prerequisites</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#get-started"><i class="fa fa-check"></i><b>1.2</b> Get started</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#some-tips"><i class="fa fa-check"></i><b>1.3</b> Some tips</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="portfolio-basics.html"><a href="portfolio-basics.html"><i class="fa fa-check"></i><b>2</b> Portfolio basics</a><ul>
+<li class="chapter" data-level="2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#return"><i class="fa fa-check"></i><b>2.1</b> Return</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#stylized-facts"><i class="fa fa-check"></i><b>2.1.1</b> Stylized facts</a></li>
+<li class="chapter" data-level="2.1.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#portfolio-return"><i class="fa fa-check"></i><b>2.1.2</b> Portfolio return</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#heuristic-portfolios"><i class="fa fa-check"></i><b>2.2</b> Heuristic portfolios</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#buy-hold-buy-rebalance"><i class="fa fa-check"></i><b>2.2.1</b> Buy &amp; Hold | Buy &amp; Rebalance</a></li>
+<li class="chapter" data-level="2.2.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#equally-weighted-portfolio-ewp"><i class="fa fa-check"></i><b>2.2.2</b> Equally weighted portfolio (EWP)</a></li>
+<li class="chapter" data-level="2.2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#quintile-portfolio"><i class="fa fa-check"></i><b>2.2.3</b> Quintile portfolio</a></li>
+<li class="chapter" data-level="2.2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>2.2.4</b> Global maximum return portfolio (GMRP)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comparison"><i class="fa fa-check"></i><b>2.3</b> Comparison</a></li>
+<li class="chapter" data-level="2.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#model"><i class="fa fa-check"></i><b>2.4</b> Model</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#markowitz-1952-model-i.i.d.-model"><i class="fa fa-check"></i><b>2.4.1</b> Markowitz 1952 model (i.i.d. model)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="portfolio-basics.html"><a href="portfolio-basics.html#factor-model"><i class="fa fa-check"></i><b>2.4.2</b> Factor model</a></li>
+<li class="chapter" data-level="2.4.3" data-path="portfolio-basics.html"><a href="portfolio-basics.html#time-series-models"><i class="fa fa-check"></i><b>2.4.3</b> Time-series models:</a></li>
+<li class="chapter" data-level="2.4.4" data-path="portfolio-basics.html"><a href="portfolio-basics.html#fitting-method"><i class="fa fa-check"></i><b>2.4.4</b> Fitting method</a></li>
+<li class="chapter" data-level="2.4.5" data-path="portfolio-basics.html"><a href="portfolio-basics.html#comment"><i class="fa fa-check"></i><b>2.4.5</b> Comment</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="machine-learning-basics.html"><a href="machine-learning-basics.html"><i class="fa fa-check"></i><b>3</b> Machine learning basics</a></li>
+<li class="chapter" data-level="4" data-path="port-opt.html"><a href="port-opt.html"><i class="fa fa-check"></i><b>4</b> Portfolio optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="port-opt.html"><a href="port-opt.html#mean-variance-portfolio"><i class="fa fa-check"></i><b>4.1</b> Mean-variance portfolio</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="port-opt.html"><a href="port-opt.html#practical-constraints"><i class="fa fa-check"></i><b>4.1.1</b> Practical constraints</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="port-opt.html"><a href="port-opt.html#maximum-sharpe-ratio-portfolio-msrp"><i class="fa fa-check"></i><b>4.2</b> Maximum Sharpe ratio portfolio (MSRP)</a></li>
+<li class="chapter" data-level="4.3" data-path="port-opt.html"><a href="port-opt.html#risk-based-portfolio"><i class="fa fa-check"></i><b>4.3</b> Risk based portfolio</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>4.3.1</b> Global minimum variance portfolio (GMVP)</a></li>
+<li class="chapter" data-level="4.3.2" data-path="port-opt.html"><a href="port-opt.html#inverse-volatility-portfolio-ivp"><i class="fa fa-check"></i><b>4.3.2</b> Inverse volatility portfolio (IVP)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="port-opt.html"><a href="port-opt.html#risk-parity-portfolio-rpp-or-equal-risk-portfolio-erp"><i class="fa fa-check"></i><b>4.3.3</b> Risk parity portfolio (RPP) or equal risk portfolio (ERP)</a></li>
+<li class="chapter" data-level="4.3.4" data-path="port-opt.html"><a href="port-opt.html#most-diversified-portfolio-mdp"><i class="fa fa-check"></i><b>4.3.4</b> Most diversified portfolio (MDP)</a></li>
+<li class="chapter" data-level="4.3.5" data-path="port-opt.html"><a href="port-opt.html#maximum-decorrelation-portfolio-mdcp"><i class="fa fa-check"></i><b>4.3.5</b> Maximum decorrelation portfolio (MDCP)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="port-opt.html"><a href="port-opt.html#comparison_chap4"><i class="fa fa-check"></i><b>4.4</b> Comparison</a></li>
+<li class="chapter" data-level="4.5" data-path="port-opt.html"><a href="port-opt.html#rebalancing-frequencies"><i class="fa fa-check"></i><b>4.5</b> Rebalancing frequencies</a></li>
+<li class="chapter" data-level="4.6" data-path="port-opt.html"><a href="port-opt.html#rolling-window-portfolios"><i class="fa fa-check"></i><b>4.6</b> Rolling window portfolios</a></li>
+<li class="chapter" data-level="4.7" data-path="port-opt.html"><a href="port-opt.html#todo"><i class="fa fa-check"></i><b>4.7</b> TODO</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="factor-investing.html"><a href="factor-investing.html"><i class="fa fa-check"></i><b>5</b> Factor investing</a><ul>
+<li class="chapter" data-level="5.1" data-path="factor-investing.html"><a href="factor-investing.html#factor-overview"><i class="fa fa-check"></i><b>5.1</b> Factor overview</a></li>
+<li class="chapter" data-level="5.2" data-path="factor-investing.html"><a href="factor-investing.html#macroeconomic-factor"><i class="fa fa-check"></i><b>5.2</b> Macroeconomic factor</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-simple-form"><i class="fa fa-check"></i><b>5.2.1</b> LS fitting – simple form</a></li>
+<li class="chapter" data-level="5.2.2" data-path="factor-investing.html"><a href="factor-investing.html#ls-fitting-matrix-form"><i class="fa fa-check"></i><b>5.2.2</b> LS fitting – matrix form</a></li>
+<li class="chapter" data-level="5.2.3" data-path="factor-investing.html"><a href="factor-investing.html#estimating-covriacne"><i class="fa fa-check"></i><b>5.2.3</b> Estimating covriacne</a></li>
+<li class="chapter" data-level="5.2.4" data-path="factor-investing.html"><a href="factor-investing.html#evaluating-etfs-performance"><i class="fa fa-check"></i><b>5.2.4</b> Evaluating ETFs performance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="factor-investing.html"><a href="factor-investing.html#fama-french"><i class="fa fa-check"></i><b>5.3</b> Fama-French</a></li>
+<li class="chapter" data-level="5.4" data-path="factor-investing.html"><a href="factor-investing.html#statisticalprincipal-factor-models"><i class="fa fa-check"></i><b>5.4</b> Statistical/principal factor models</a></li>
+<li class="chapter" data-level="5.5" data-path="factor-investing.html"><a href="factor-investing.html#comparison-of-covariance-matrix-estimations"><i class="fa fa-check"></i><b>5.5</b> Comparison of covariance matrix estimations</a></li>
+<li class="chapter" data-level="5.6" data-path="factor-investing.html"><a href="factor-investing.html#edhec-smart-beta"><i class="fa fa-check"></i><b>5.6</b> Edhec smart beta</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html"><i class="fa fa-check"></i><b>6</b> Robust portfolio design</a><ul>
+<li class="chapter" data-level="6.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#motivationChapt6"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#sensitivity-of-different-portfolio-design"><i class="fa fa-check"></i><b>6.2</b> Sensitivity of different portfolio design</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="portfolio-basics.html"><a href="portfolio-basics.html#global-maximum-return-portfolio-gmrp"><i class="fa fa-check"></i><b>6.2.1</b> Global Maximum Return Portfolio (GMRP)</a></li>
+<li class="chapter" data-level="6.2.2" data-path="port-opt.html"><a href="port-opt.html#global-minimum-variance-portfolio-gmvp"><i class="fa fa-check"></i><b>6.2.2</b> Global Minimum Variance Portfolio (GMVP)</a></li>
+<li class="chapter" data-level="6.2.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#markowitzs-mean-variance-portfolio"><i class="fa fa-check"></i><b>6.2.3</b> Markowitz’s mean-variance portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#robust-portfolio-optimization"><i class="fa fa-check"></i><b>6.3</b> Robust portfolio optimization</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmrp"><i class="fa fa-check"></i><b>6.3.1</b> Worst-case robust GMRP</a></li>
+<li class="chapter" data-level="6.3.2" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-robust-gmvp"><i class="fa fa-check"></i><b>6.3.2</b> Worst-case robust GMVP</a></li>
+<li class="chapter" data-level="6.3.3" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#worst-case-markowitzs-portfolio"><i class="fa fa-check"></i><b>6.3.3</b> Worst-case Markowitz’s portfolio</a></li>
+<li class="chapter" data-level="6.3.4" data-path="robust-portfolio-design.html"><a href="robust-portfolio-design.html#variance-uncertainty-based-on-factor-model"><i class="fa fa-check"></i><b>6.3.4</b> Variance uncertainty based on factor model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html"><i class="fa fa-check"></i><b>7</b> Alternative risk measure</a><ul>
+<li class="chapter" data-level="7.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#motivation_alter_risk_measure"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#risk-measure"><i class="fa fa-check"></i><b>7.2</b> Risk measure</a></li>
+<li class="chapter" data-level="7.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#alternative-risk-measure-beased-portfolio"><i class="fa fa-check"></i><b>7.3</b> Alternative risk measure beased portfolio</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-downside-risk-portfolio"><i class="fa fa-check"></i><b>7.3.1</b> Mean-downside risk portfolio</a></li>
+<li class="chapter" data-level="7.3.2" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cvar-portfolio"><i class="fa fa-check"></i><b>7.3.2</b> Mean-CVaR portfolio</a></li>
+<li class="chapter" data-level="7.3.3" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-dd-portfolio"><i class="fa fa-check"></i><b>7.3.3</b> Mean-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean---ave-dd-portfolio"><i class="fa fa-check"></i><b>7.3.4</b> Mean - Ave-DD portfolio</a></li>
+<li class="chapter" data-level="7.3.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#mean-cdar-portfolio"><i class="fa fa-check"></i><b>7.3.5</b> Mean-CDaR portfolio</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#comparison-of-dr-cvar-and-dd-portfolios"><i class="fa fa-check"></i><b>7.4</b> Comparison of DR, CVaR, and DD portfolios</a></li>
+<li class="chapter" data-level="7.5" data-path="alternative-risk-measure.html"><a href="alternative-risk-measure.html#conclusion"><i class="fa fa-check"></i><b>7.5</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html"><i class="fa fa-check"></i><b>8</b> Risk parity portfolio</a><ul>
+<li class="chapter" data-level="8.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#motiv_risk_parity"><i class="fa fa-check"></i><b>8.1</b> Motivation</a></li>
+<li class="chapter" data-level="8.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#formulation"><i class="fa fa-check"></i><b>8.2</b> Formulation</a></li>
+<li class="chapter" data-level="8.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#risk-budgeting-portfolio-rbp"><i class="fa fa-check"></i><b>8.3</b> Risk budgeting portfolio (RBP)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#naive-risk-budgeting-portfolio"><i class="fa fa-check"></i><b>8.3.1</b> Naive risk budgeting portfolio</a></li>
+<li class="chapter" data-level="8.3.2" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#inverse-volatility-portfolio"><i class="fa fa-check"></i><b>8.3.2</b> Inverse volatility portfolio</a></li>
+<li class="chapter" data-level="8.3.3" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#pnl-comparison"><i class="fa fa-check"></i><b>8.3.3</b> PnL comparison</a></li>
+<li class="chapter" data-level="8.3.4" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#vanilla-rpp"><i class="fa fa-check"></i><b>8.3.4</b> vanilla RPP</a></li>
+<li class="chapter" data-level="8.3.5" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rpp-general-formulation"><i class="fa fa-check"></i><b>8.3.5</b> RPP: General formulation</a></li>
+<li class="chapter" data-level="8.3.6" data-path="risk-parity-portfolio.html"><a href="risk-parity-portfolio.html#rbp-formulations"><i class="fa fa-check"></i><b>8.3.6</b> RBP formulations</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="appendix-a.html"><a href="appendix-a.html"><i class="fa fa-check"></i><b>A</b> Appendix A</a></li>
+<li class="chapter" data-level="B" data-path="appendix-b.html"><a href="appendix-b.html"><i class="fa fa-check"></i><b>B</b> Appendix B</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Portfolio Construction</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="factor-investing" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Factor investing</h1>
+<div id="factor-overview" class="section level2">
+<h2><span class="header-section-number">5.1</span> Factor overview</h2>
+<p><strong>Why factor models</strong>:</p>
+<ul>
+<li>decompose return into explainable and unexplainable components<br />
+</li>
+<li>estimate abnormal returns<br />
+</li>
+<li>simplify estimate of covariance structure<br />
+</li>
+<li>provide portfolio risk analysis for each factor</li>
+</ul>
+<p><strong>Types of factors</strong>:</p>
+<ul>
+<li>observable (Macroeconomic factor model, Fundamental factor models)</li>
+<li>unobservable (Statistical factor models)</li>
+</ul>
+</div>
+<div id="macroeconomic-factor" class="section level2">
+<h2><span class="header-section-number">5.2</span> Macroeconomic factor</h2>
+<p><span class="math display">\[\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \sum_{t=1}^T\|\mathbf{x}_t - \boldsymbol{\alpha} - \boldsymbol{\beta}f_t\|^2\]</span></p>
+<p><span class="math display">\[\begin{aligned}
+\hat{\boldsymbol{\beta}} &amp; = {\sf cov}(\mathbf{x}_t,f_t)/{\sf var}(f_t)\\
+\hat{\boldsymbol{\alpha}} &amp; = \bar{x} - \hat{\boldsymbol{\beta}}\bar{f}\\
+\hat{\boldsymbol{\epsilon}}_i &amp; = \mathbf{x}_i - \alpha_i\mathbf{1} - \beta_i\mathbf{f}, \quad i=1,\ldots,N\\
+\hat{\sigma}_i^2 &amp; = \frac{1}{T-2}\hat{\boldsymbol{\epsilon}}_i^T\hat{\boldsymbol{\epsilon}}_i, \quad \hat{\boldsymbol{\Psi}} = \sf{diag}(\hat{\sigma}_1^2, \ldots, \hat{\sigma}_N^2)\\
+\hat{\boldsymbol{\Sigma}} &amp; = {\sf var}(f_t)\hat{\boldsymbol{\beta}}\hat{\boldsymbol{\beta}}^T + \hat{\boldsymbol{\Psi}}
+\end{aligned}\]</span></p>
+<p><strong>Data preparation</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="factor-investing.html#cb1-1"></a>from &lt;-<span class="st"> &quot;2017-01-01&quot;</span> <span class="co"># do not change time period for this chapter</span></span>
+<span id="cb1-2"><a href="factor-investing.html#cb1-2"></a>to &lt;-<span class="st"> &quot;2020-09-30&quot;</span></span>
+<span id="cb1-3"><a href="factor-investing.html#cb1-3"></a>SP500_index &lt;-<span class="st"> </span><span class="kw">get_data</span>(<span class="st">&quot;^GSPC&quot;</span>, from, to)</span>
+<span id="cb1-4"><a href="factor-investing.html#cb1-4"></a></span>
+<span id="cb1-5"><a href="factor-investing.html#cb1-5"></a>tickers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AAPL&quot;</span>, <span class="st">&quot;AMD&quot;</span>, <span class="st">&quot;ADI&quot;</span>,  <span class="st">&quot;ABBV&quot;</span>, <span class="st">&quot;AEZS&quot;</span>, <span class="st">&quot;A&quot;</span>,  <span class="st">&quot;APD&quot;</span>, <span class="st">&quot;AA&quot;</span>,<span class="st">&quot;CF&quot;</span>)</span>
+<span id="cb1-6"><a href="factor-investing.html#cb1-6"></a>prices &lt;-<span class="st"> </span><span class="kw">get_data</span>(tickers, from, to)</span>
+<span id="cb1-7"><a href="factor-investing.html#cb1-7"></a></span>
+<span id="cb1-8"><a href="factor-investing.html#cb1-8"></a>X &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">log</span>(prices), <span class="dt">na.pad =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb1-9"><a href="factor-investing.html#cb1-9"></a>N &lt;-<span class="st"> </span><span class="kw">ncol</span>(X)  <span class="co"># number of stocks</span></span>
+<span id="cb1-10"><a href="factor-investing.html#cb1-10"></a>T &lt;-<span class="st"> </span><span class="kw">nrow</span>(X)  <span class="co"># number of days</span></span>
+<span id="cb1-11"><a href="factor-investing.html#cb1-11"></a>f &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">log</span>(SP500_index), <span class="dt">na.pad =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div id="ls-fitting-simple-form" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> LS fitting – simple form</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="factor-investing.html#cb2-1"></a>beta &lt;-<span class="st"> </span><span class="kw">cov</span>(X,f)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">var</span>(f))</span>
+<span id="cb2-2"><a href="factor-investing.html#cb2-2"></a>alpha &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X) <span class="op">-</span><span class="st"> </span>beta<span class="op">*</span><span class="kw">colMeans</span>(f)</span>
+<span id="cb2-3"><a href="factor-investing.html#cb2-3"></a><span class="kw">colnames</span>(alpha) &lt;-<span class="st"> &quot;alpha&quot;</span></span>
+<span id="cb2-4"><a href="factor-investing.html#cb2-4"></a><span class="kw">colnames</span>(beta) &lt;-<span class="st"> &quot;beta&quot;</span></span>
+<span id="cb2-5"><a href="factor-investing.html#cb2-5"></a>sigma2 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, N)</span>
+<span id="cb2-6"><a href="factor-investing.html#cb2-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N) {</span>
+<span id="cb2-7"><a href="factor-investing.html#cb2-7"></a>  eps_i &lt;-<span class="st"> </span>X[, i] <span class="op">-</span><span class="st"> </span>alpha[i] <span class="op">-</span><span class="st"> </span>beta[i]<span class="op">*</span>f</span>
+<span id="cb2-8"><a href="factor-investing.html#cb2-8"></a>  sigma2[i] &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T<span class="dv">-2</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(eps_i) <span class="op">%*%</span><span class="st"> </span>eps_i</span>
+<span id="cb2-9"><a href="factor-investing.html#cb2-9"></a>}</span>
+<span id="cb2-10"><a href="factor-investing.html#cb2-10"></a>Psi &lt;-<span class="st"> </span><span class="kw">diag</span>(sigma2)</span>
+<span id="cb2-11"><a href="factor-investing.html#cb2-11"></a>Sigma &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">var</span>(f)) <span class="op">*</span><span class="st"> </span>beta <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(beta) <span class="op">+</span><span class="st"> </span>Psi</span>
+<span id="cb2-12"><a href="factor-investing.html#cb2-12"></a><span class="kw">print</span>(<span class="kw">cbind</span>(alpha, beta))</span>
+<span id="cb2-13"><a href="factor-investing.html#cb2-13"></a><span class="co">#&gt;              alpha      beta</span></span>
+<span id="cb2-14"><a href="factor-investing.html#cb2-14"></a><span class="co">#&gt; AAPL  0.0008020602 1.1758548</span></span>
+<span id="cb2-15"><a href="factor-investing.html#cb2-15"></a><span class="co">#&gt; AMD   0.0021325642 1.5015398</span></span>
+<span id="cb2-16"><a href="factor-investing.html#cb2-16"></a><span class="co">#&gt; ADI   0.0002235181 1.2301376</span></span>
+<span id="cb2-17"><a href="factor-investing.html#cb2-17"></a><span class="co">#&gt; ABBV  0.0001306997 0.8308865</span></span>
+<span id="cb2-18"><a href="factor-investing.html#cb2-18"></a><span class="co">#&gt; AEZS -0.0025614940 1.0490908</span></span>
+<span id="cb2-19"><a href="factor-investing.html#cb2-19"></a><span class="co">#&gt; A     0.0003829361 1.0008615</span></span>
+<span id="cb2-20"><a href="factor-investing.html#cb2-20"></a><span class="co">#&gt; APD   0.0003891594 0.9972563</span></span>
+<span id="cb2-21"><a href="factor-investing.html#cb2-21"></a><span class="co">#&gt; AA   -0.0011118010 1.5286561</span></span>
+<span id="cb2-22"><a href="factor-investing.html#cb2-22"></a><span class="co">#&gt; CF   -0.0007052049 1.2459981</span></span></code></pre></div>
+</div>
+<div id="ls-fitting-matrix-form" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> LS fitting – matrix form</h3>
+<p><span class="math display">\[
+\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \|\mathbf{X}^T - \boldsymbol{\alpha}\mathbf{1}^T - \boldsymbol{\beta}\mathbf{f}^T\|^2_F. \\
+\boldsymbol{\Gamma} = [ \boldsymbol{\alpha}, \boldsymbol{\beta} ] = \mathbf{X}^T \tilde{\mathbf{F}} (\tilde{\mathbf{F}}^T \tilde{\mathbf{F}})^{-1}
+\]</span>
+where <span class="math inline">\(\tilde{\mathbf{F}} = [\mathbf{1}, \mathbf{f}]\)</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="factor-investing.html#cb3-1"></a>F_ &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">ones =</span> <span class="dv">1</span>, f)</span>
+<span id="cb3-2"><a href="factor-investing.html#cb3-2"></a>Gamma &lt;-<span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>F_ <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>F_)  <span class="co"># better: Gamma &lt;- t(solve(t(F_) %*% F_, t(F_) %*% X))</span></span>
+<span id="cb3-3"><a href="factor-investing.html#cb3-3"></a><span class="kw">colnames</span>(Gamma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;beta&quot;</span>)</span>
+<span id="cb3-4"><a href="factor-investing.html#cb3-4"></a>alpha &lt;-<span class="st"> </span>Gamma[, <span class="dv">1</span>]  <span class="co"># or alpha &lt;- Gamma[, &quot;alpha&quot;]</span></span>
+<span id="cb3-5"><a href="factor-investing.html#cb3-5"></a>beta &lt;-<span class="st"> </span>Gamma[, <span class="dv">2</span>]   <span class="co"># or beta &lt;- Gamma[, &quot;beta&quot;]</span></span>
+<span id="cb3-6"><a href="factor-investing.html#cb3-6"></a><span class="kw">print</span>(Gamma)</span>
+<span id="cb3-7"><a href="factor-investing.html#cb3-7"></a><span class="co">#&gt;              alpha      beta</span></span>
+<span id="cb3-8"><a href="factor-investing.html#cb3-8"></a><span class="co">#&gt; AAPL  1.027794e-03 1.1840884</span></span>
+<span id="cb3-9"><a href="factor-investing.html#cb3-9"></a><span class="co">#&gt; AMD   1.491217e-03 1.4464899</span></span>
+<span id="cb3-10"><a href="factor-investing.html#cb3-10"></a><span class="co">#&gt; ADI   7.909772e-05 1.2282732</span></span>
+<span id="cb3-11"><a href="factor-investing.html#cb3-11"></a><span class="co">#&gt; ABBV  2.062470e-04 0.8223764</span></span>
+<span id="cb3-12"><a href="factor-investing.html#cb3-12"></a><span class="co">#&gt; AEZS -2.820424e-03 0.9728238</span></span>
+<span id="cb3-13"><a href="factor-investing.html#cb3-13"></a><span class="co">#&gt; A     4.486762e-04 0.9668272</span></span>
+<span id="cb3-14"><a href="factor-investing.html#cb3-14"></a><span class="co">#&gt; APD   4.474286e-04 0.9977766</span></span>
+<span id="cb3-15"><a href="factor-investing.html#cb3-15"></a><span class="co">#&gt; AA   -1.587258e-03 1.5099957</span></span>
+<span id="cb3-16"><a href="factor-investing.html#cb3-16"></a><span class="co">#&gt; CF   -4.558246e-04 1.2391421</span></span>
+<span id="cb3-17"><a href="factor-investing.html#cb3-17"></a>E &lt;-<span class="st"> </span><span class="kw">xts</span>(<span class="kw">t</span>(<span class="kw">t</span>(X) <span class="op">-</span><span class="st"> </span>Gamma <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(F_)), <span class="kw">index</span>(X))  <span class="co"># residuals</span></span>
+<span id="cb3-18"><a href="factor-investing.html#cb3-18"></a>Psi &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T<span class="dv">-2</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(E) <span class="op">%*%</span><span class="st"> </span>E</span>
+<span id="cb3-19"><a href="factor-investing.html#cb3-19"></a>Sigma &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">var</span>(f)) <span class="op">*</span><span class="st"> </span>beta <span class="op">%o%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Psi))</span></code></pre></div>
+</div>
+<div id="estimating-covriacne" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Estimating covriacne</h3>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} = var(f_t)\boldsymbol{\beta}\boldsymbol{\beta}^T + {\sf Diag}(\boldsymbol{\Psi})
+\]</span>
+where <span class="math inline">\(\boldsymbol{\Psi}\)</span> is residual term</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="factor-investing.html#cb4-1"></a><span class="kw">library</span>(corrplot)  </span>
+<span id="cb4-2"><a href="factor-investing.html#cb4-2"></a><span class="kw">corrplot</span>(<span class="kw">cov2cor</span>(Sigma),  </span>
+<span id="cb4-3"><a href="factor-investing.html#cb4-3"></a>         <span class="dt">type=</span><span class="st">&quot;upper&quot;</span>, </span>
+<span id="cb4-4"><a href="factor-investing.html#cb4-4"></a>         <span class="dt">tl.col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">tl.srt=</span><span class="dv">45</span>,     <span class="co">#Text label color and rotation</span></span>
+<span id="cb4-5"><a href="factor-investing.html#cb4-5"></a>         <span class="dt">diag=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="factor-investing.html#cb5-1"></a><span class="kw">corrplot</span>(<span class="kw">cov2cor</span>(Psi), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">order =</span> <span class="st">&quot;hclust&quot;</span>, <span class="dt">addrect =</span> <span class="dv">3</span>, </span>
+<span id="cb5-2"><a href="factor-investing.html#cb5-2"></a>        <span class="dt">title =</span> <span class="st">&quot;Covariance matrix of residuals&quot;</span>, <span class="dt">diag =</span> <span class="ot">FALSE</span>, <span class="dt">tl.col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">tl.srt=</span><span class="dv">45</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Interestingly, we can observe that the automatic clustering performed on <span class="math inline">\(\boldsymbol{\Psi}\)</span> correctly identifies the sectors of the stocks (information tech, health care and materials).</p>
+</div>
+<div id="evaluating-etfs-performance" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> Evaluating ETFs performance</h3>
+<p>In this section, we will use the S&amp;P 500 as the explicit market factor and assume risk free rate equal to 0.</p>
+<p>Consider following six ETFs:</p>
+<ul>
+<li>SPY - SPDR S&amp;P 500 ETF (index tracking)<br />
+</li>
+<li>SPHB - PowerShares S&amp;P 500 High Beta Portfolio (high beta)<br />
+</li>
+<li>SPLV - PowerShares S&amp;P 500 Low Volatility Portfolio (low beta)<br />
+</li>
+<li>USMV - iShares Edge MSCI Min Vol USA ETF<br />
+</li>
+<li>JKD - iShares Morningstar Large-Cap ETF</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="factor-investing.html#cb6-1"></a>index &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SPY&quot;</span>,<span class="st">&quot;SPHB&quot;</span>, <span class="st">&quot;SPLV&quot;</span>, <span class="st">&quot;USMV&quot;</span>, <span class="st">&quot;JKD&quot;</span>)</span>
+<span id="cb6-2"><a href="factor-investing.html#cb6-2"></a>ETFs &lt;-<span class="st"> </span><span class="kw">get_data</span>(index, from, to)</span>
+<span id="cb6-3"><a href="factor-investing.html#cb6-3"></a>X_ETFs &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">log</span>(ETFs), <span class="dt">na.pad =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb6-4"><a href="factor-investing.html#cb6-4"></a></span>
+<span id="cb6-5"><a href="factor-investing.html#cb6-5"></a><span class="co"># compute the alpha and beta of all the ETFs:</span></span>
+<span id="cb6-6"><a href="factor-investing.html#cb6-6"></a>F_ &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">ones =</span> <span class="dv">1</span>, f)</span>
+<span id="cb6-7"><a href="factor-investing.html#cb6-7"></a>Gamma &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>F_, <span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>X_ETFs))</span>
+<span id="cb6-8"><a href="factor-investing.html#cb6-8"></a><span class="kw">colnames</span>(Gamma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;beta&quot;</span>)</span>
+<span id="cb6-9"><a href="factor-investing.html#cb6-9"></a>alpha &lt;-<span class="st"> </span>Gamma[, <span class="dv">1</span>]</span>
+<span id="cb6-10"><a href="factor-investing.html#cb6-10"></a>beta &lt;-<span class="st"> </span>Gamma[, <span class="dv">2</span>]</span>
+<span id="cb6-11"><a href="factor-investing.html#cb6-11"></a><span class="kw">print</span>(Gamma)</span>
+<span id="cb6-12"><a href="factor-investing.html#cb6-12"></a><span class="co">#&gt;              alpha      beta</span></span>
+<span id="cb6-13"><a href="factor-investing.html#cb6-13"></a><span class="co">#&gt; SPY   8.369995e-05 0.9774232</span></span>
+<span id="cb6-14"><a href="factor-investing.html#cb6-14"></a><span class="co">#&gt; SPHB -3.626276e-04 1.3149686</span></span>
+<span id="cb6-15"><a href="factor-investing.html#cb6-15"></a><span class="co">#&gt; SPLV -4.360138e-07 0.8489474</span></span>
+<span id="cb6-16"><a href="factor-investing.html#cb6-16"></a><span class="co">#&gt; USMV  9.751288e-05 0.8145470</span></span>
+<span id="cb6-17"><a href="factor-investing.html#cb6-17"></a><span class="co">#&gt; JKD   6.413791e-05 0.9912818</span></span>
+<span id="cb6-18"><a href="factor-investing.html#cb6-18"></a><span class="co"># visualization of Gamma</span></span>
+<span id="cb6-19"><a href="factor-investing.html#cb6-19"></a>{ <span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))    <span class="co"># two plots side by side</span></span>
+<span id="cb6-20"><a href="factor-investing.html#cb6-20"></a>  <span class="kw">barplot</span>(<span class="kw">rev</span>(alpha), <span class="dt">horiz =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;alpha&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>, <span class="dt">col =</span> <span class="st">&quot;coral&quot;</span>, <span class="dt">cex.names =</span> <span class="fl">0.75</span>, <span class="dt">las =</span> <span class="dv">1</span>)</span>
+<span id="cb6-21"><a href="factor-investing.html#cb6-21"></a>  <span class="kw">barplot</span>(<span class="kw">rev</span>(beta), <span class="dt">horiz =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;beta&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>, <span class="dt">col =</span> <span class="st">&quot;deepskyblue&quot;</span>, <span class="dt">cex.names =</span> <span class="fl">0.75</span>, <span class="dt">las =</span> <span class="dv">1</span>)}  <span class="co"># reset to normal single plot</span></span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" />
+<code>TODO Explanation for the above Gamma graph for all 6 etfs</code></p>
+<p>Sharpe ratio follows:</p>
+<p><span class="math display">\[SR = \frac{E[x_t]}{\sqrt{{\sf var}[x_t]}} = \frac{\alpha + \beta E[f_t]}{\sqrt{\beta^2 {\sf var}[f_t] + \sigma^2}} = \frac{\alpha/\beta + E[f_t]}{\sqrt{{\sf var}[f_t] + \sigma^2/\beta^2}} \approx \frac{\alpha/\beta + E[f_t]}{\sqrt{{\sf var}[f_t]}}\]</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="factor-investing.html#cb7-1"></a>idx_sorted &lt;-<span class="st"> </span><span class="kw">sort</span>(alpha<span class="op">/</span>beta, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>, <span class="dt">index.return =</span> <span class="ot">TRUE</span>)<span class="op">$</span>ix</span>
+<span id="cb7-2"><a href="factor-investing.html#cb7-2"></a>SR &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">diag</span>(<span class="kw">var</span>(X)))</span>
+<span id="cb7-3"><a href="factor-investing.html#cb7-3"></a>ranking &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="st">&quot;alpha/beta&quot;</span> =<span class="st"> </span>(alpha<span class="op">/</span>beta)[idx_sorted], </span>
+<span id="cb7-4"><a href="factor-investing.html#cb7-4"></a>                 <span class="dt">SR =</span> SR[idx_sorted], </span>
+<span id="cb7-5"><a href="factor-investing.html#cb7-5"></a>                 <span class="dt">alpha =</span> alpha[idx_sorted], </span>
+<span id="cb7-6"><a href="factor-investing.html#cb7-6"></a>                 <span class="dt">beta =</span> beta[idx_sorted])</span>
+<span id="cb7-7"><a href="factor-investing.html#cb7-7"></a><span class="kw">print</span>(ranking)</span>
+<span id="cb7-8"><a href="factor-investing.html#cb7-8"></a><span class="co">#&gt;         alpha/beta          SR         alpha      beta</span></span>
+<span id="cb7-9"><a href="factor-investing.html#cb7-9"></a><span class="co">#&gt; USMV  1.043183e-04  0.02551718  8.379048e-05 0.8032196</span></span>
+<span id="cb7-10"><a href="factor-investing.html#cb7-10"></a><span class="co">#&gt; SPY   8.468943e-05  0.06748293  8.293078e-05 0.9792342</span></span>
+<span id="cb7-11"><a href="factor-investing.html#cb7-11"></a><span class="co">#&gt; JKD   7.614433e-05 -0.03192726  7.503134e-05 0.9853831</span></span>
+<span id="cb7-12"><a href="factor-investing.html#cb7-12"></a><span class="co">#&gt; SPLV  1.161154e-05  0.03593687  9.657503e-06 0.8317158</span></span>
+<span id="cb7-13"><a href="factor-investing.html#cb7-13"></a><span class="co">#&gt; SPHB -1.338772e-04  0.06790832 -1.800427e-04 1.3448349</span></span></code></pre></div>
+<p><code>TODO Explain the resul</code></p>
+</div>
+</div>
+<div id="fama-french" class="section level2">
+<h2><span class="header-section-number">5.3</span> Fama-French</h2>
+<p>Data preparation: select a wider time period</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="factor-investing.html#cb8-1"></a><span class="co"># download Fama-French factors from website</span></span>
+<span id="cb8-2"><a href="factor-investing.html#cb8-2"></a><span class="co"># url &lt;- &quot;http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip&quot;</span></span>
+<span id="cb8-3"><a href="factor-investing.html#cb8-3"></a><span class="co"># temp &lt;- tempfile()</span></span>
+<span id="cb8-4"><a href="factor-investing.html#cb8-4"></a><span class="co"># download.file(url, temp, method = &quot;libcurl&quot;, mode = &quot;wb&quot;)</span></span>
+<span id="cb8-5"><a href="factor-investing.html#cb8-5"></a><span class="co"># unzip(temp, &quot;F-F_Research_Data_Factors_daily.CSV&quot;)</span></span>
+<span id="cb8-6"><a href="factor-investing.html#cb8-6"></a><span class="co"># unlink(temp)</span></span>
+<span id="cb8-7"><a href="factor-investing.html#cb8-7"></a></span>
+<span id="cb8-8"><a href="factor-investing.html#cb8-8"></a>mydata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;F-F_Research_Data_Factors_daily.CSV&quot;</span>, <span class="dt">skip =</span> <span class="dv">4</span>)</span>
+<span id="cb8-9"><a href="factor-investing.html#cb8-9"></a>mydata &lt;-<span class="st"> </span>mydata[<span class="op">-</span><span class="kw">nrow</span>(mydata), ]  <span class="co"># remove last row</span></span>
+<span id="cb8-10"><a href="factor-investing.html#cb8-10"></a>fama_lib &lt;-<span class="st"> </span><span class="kw">xts</span>(<span class="dt">x =</span> mydata[, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)], <span class="dt">order.by =</span> <span class="kw">as.Date</span>(<span class="kw">paste</span>(mydata[, <span class="dv">1</span>]), <span class="st">&quot;%Y%m%d&quot;</span>))</span>
+<span id="cb8-11"><a href="factor-investing.html#cb8-11"></a></span>
+<span id="cb8-12"><a href="factor-investing.html#cb8-12"></a><span class="co"># compute the log-returns of the stocks and the Fama-French factors</span></span>
+<span id="cb8-13"><a href="factor-investing.html#cb8-13"></a>F &lt;-<span class="st"> </span>fama_lib[<span class="kw">index</span>(X)]<span class="op">/</span><span class="dv">100</span></span></code></pre></div>
+<p><span class="math display">\[\underset{\boldsymbol{\alpha},\boldsymbol{\beta}}{\text{minimize}}\quad \|\mathbf{X}^T - \boldsymbol{\Gamma}\tilde{\mathbf{F}}^T\|^2_F\]</span>
+<span class="math display">\[\boldsymbol{\Gamma} = \mathbf{X}^T \tilde{\mathbf{F}} (\tilde{\mathbf{F}}^T \tilde{\mathbf{F}})^{-1}\]</span></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="factor-investing.html#cb9-1"></a>F_ &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">ones =</span> <span class="dv">1</span>, F)</span>
+<span id="cb9-2"><a href="factor-investing.html#cb9-2"></a>Gamma &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>F_, <span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>X))</span>
+<span id="cb9-3"><a href="factor-investing.html#cb9-3"></a><span class="kw">colnames</span>(Gamma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;b1&quot;</span>, <span class="st">&quot;b2&quot;</span>, <span class="st">&quot;b3&quot;</span>)</span>
+<span id="cb9-4"><a href="factor-investing.html#cb9-4"></a>alpha &lt;-<span class="st"> </span>Gamma[, <span class="dv">1</span>]</span>
+<span id="cb9-5"><a href="factor-investing.html#cb9-5"></a>B &lt;-<span class="st"> </span>Gamma[, <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>]</span>
+<span id="cb9-6"><a href="factor-investing.html#cb9-6"></a><span class="kw">print</span>(Gamma)</span>
+<span id="cb9-7"><a href="factor-investing.html#cb9-7"></a><span class="co">#&gt;              alpha        b1         b2          b3</span></span>
+<span id="cb9-8"><a href="factor-investing.html#cb9-8"></a><span class="co">#&gt; AAPL  4.529985e-04 1.2487004 -0.2968196 -0.48086724</span></span>
+<span id="cb9-9"><a href="factor-investing.html#cb9-9"></a><span class="co">#&gt; AMD   5.563015e-04 1.5721623  0.4135192 -1.01094408</span></span>
+<span id="cb9-10"><a href="factor-investing.html#cb9-10"></a><span class="co">#&gt; ADI  -8.001184e-05 1.2270888  0.4161068 -0.08642737</span></span>
+<span id="cb9-11"><a href="factor-investing.html#cb9-11"></a><span class="co">#&gt; ABBV -8.212337e-05 0.8426005 -0.1908989 -0.20413363</span></span>
+<span id="cb9-12"><a href="factor-investing.html#cb9-12"></a><span class="co">#&gt; AEZS -2.750911e-03 0.9389405  1.3673192 -0.01580922</span></span>
+<span id="cb9-13"><a href="factor-investing.html#cb9-13"></a><span class="co">#&gt; A     1.393237e-04 0.9947335 -0.0606518 -0.22647058</span></span>
+<span id="cb9-14"><a href="factor-investing.html#cb9-14"></a><span class="co">#&gt; APD   3.359118e-04 0.9894165 -0.3798878  0.07924767</span></span>
+<span id="cb9-15"><a href="factor-investing.html#cb9-15"></a><span class="co">#&gt; AA   -8.503783e-04 1.3720189  0.8666502  0.99663332</span></span>
+<span id="cb9-16"><a href="factor-investing.html#cb9-16"></a><span class="co">#&gt; CF   -4.388933e-05 1.1492337  0.5454800  0.60309541</span></span></code></pre></div>
+</div>
+<div id="statisticalprincipal-factor-models" class="section level2">
+<h2><span class="header-section-number">5.4</span> Statistical/principal factor models</h2>
+<p>Recall the principal factor method for the model <span class="math inline">\(\mathbf{X}^T = \boldsymbol{\alpha}\mathbf{1}^T + \mathbf{B}\mathbf{F}^T + \mathbf{E}^T\)</span> with K factors:</p>
+<ol style="list-style-type: decimal">
+<li>PCA:</li>
+</ol>
+<ul>
+<li>sample mean: <span class="math inline">\(\hat{\boldsymbol{\alpha}} = \bar{\mathbf{x}} = \frac{1}{T}\mathbf{X}^T\mathbf{1}_T\)</span></li>
+<li>demeaned matrix: <span class="math inline">\(\bar{\mathbf{X}} = \mathbf{X} - \mathbf{1}_T\bar{\mathbf{x}}^T\)</span></li>
+<li>eigen-decomposition: <span class="math inline">\(\hat{\boldsymbol{\Sigma}} = \hat{\boldsymbol{\Gamma}} \hat{\boldsymbol{\Lambda}} \hat{\boldsymbol{\Gamma}}^T\)</span></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Estimates:</li>
+</ol>
+<ul>
+<li><span class="math inline">\(\hat{\mathbf{B}} = \hat{\boldsymbol{\Gamma}_1} \hat{\boldsymbol{\Lambda}}_1^{1/2}\)</span></li>
+<li><span class="math inline">\(\hat{\boldsymbol{\Psi}} = {\sf Diag}\left(\hat{\boldsymbol{\Sigma}} - \hat{\mathbf{B}} \hat{\mathbf{B}}^T\right)\)</span></li>
+<li><span class="math inline">\(\hat{\boldsymbol{\Sigma}} = \hat{\mathbf{B}} \hat{\mathbf{B}}^T + \hat{\boldsymbol{\Psi}}\)</span></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Update the eigen-decomposition: <span class="math inline">\(\hat{\boldsymbol{\Sigma}} - \hat{\boldsymbol{\Psi}} = \hat{\boldsymbol{\Gamma}} \hat{\boldsymbol{\Lambda}} \hat{\boldsymbol{\Gamma}}^T\)</span></p></li>
+<li><p>Repeat Steps 2-3 until convergence.</p></li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="factor-investing.html#cb10-1"></a>K &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb10-2"><a href="factor-investing.html#cb10-2"></a>alpha &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X)</span>
+<span id="cb10-3"><a href="factor-investing.html#cb10-3"></a>X_ &lt;-<span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(alpha, T, N, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-4"><a href="factor-investing.html#cb10-4"></a>Sigma_prev &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, N, N)</span>
+<span id="cb10-5"><a href="factor-investing.html#cb10-5"></a>Sigma &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T<span class="dv">-1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(X_) <span class="op">%*%</span><span class="st"> </span>X_</span>
+<span id="cb10-6"><a href="factor-investing.html#cb10-6"></a>eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</span>
+<span id="cb10-7"><a href="factor-investing.html#cb10-7"></a><span class="cf">while</span> (<span class="kw">norm</span>(Sigma <span class="op">-</span><span class="st"> </span>Sigma_prev, <span class="st">&quot;F&quot;</span>)<span class="op">/</span><span class="kw">norm</span>(Sigma, <span class="st">&quot;F&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1e-3</span>) {</span>
+<span id="cb10-8"><a href="factor-investing.html#cb10-8"></a>  B &lt;-<span class="st"> </span>eigSigma<span class="op">$</span>vectors[, <span class="dv">1</span><span class="op">:</span>K, drop =<span class="st"> </span><span class="ot">FALSE</span>] <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">sqrt</span>(eigSigma<span class="op">$</span>values[<span class="dv">1</span><span class="op">:</span>K]), K, K)</span>
+<span id="cb10-9"><a href="factor-investing.html#cb10-9"></a>  Psi &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Sigma <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B)))</span>
+<span id="cb10-10"><a href="factor-investing.html#cb10-10"></a>  Sigma_prev &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb10-11"><a href="factor-investing.html#cb10-11"></a>  Sigma &lt;-<span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B) <span class="op">+</span><span class="st"> </span>Psi</span>
+<span id="cb10-12"><a href="factor-investing.html#cb10-12"></a>  eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma <span class="op">-</span><span class="st"> </span>Psi)</span>
+<span id="cb10-13"><a href="factor-investing.html#cb10-13"></a>}</span>
+<span id="cb10-14"><a href="factor-investing.html#cb10-14"></a><span class="kw">cbind</span>(alpha, B)</span>
+<span id="cb10-15"><a href="factor-investing.html#cb10-15"></a><span class="co">#&gt;              alpha                                       </span></span>
+<span id="cb10-16"><a href="factor-investing.html#cb10-16"></a><span class="co">#&gt; AAPL  1.518806e-03 0.004423866 -0.013661448 -1.788346e-05</span></span>
+<span id="cb10-17"><a href="factor-investing.html#cb10-17"></a><span class="co">#&gt; AMD   2.091040e-03 0.009061167 -0.027857022  2.320626e-02</span></span>
+<span id="cb10-18"><a href="factor-investing.html#cb10-18"></a><span class="co">#&gt; ADI   5.884322e-04 0.005641178 -0.015542966 -1.490695e-03</span></span>
+<span id="cb10-19"><a href="factor-investing.html#cb10-19"></a><span class="co">#&gt; ABBV  5.472661e-04 0.003349058 -0.008726896 -6.934982e-04</span></span>
+<span id="cb10-20"><a href="factor-investing.html#cb10-20"></a><span class="co">#&gt; AEZS -2.417018e-03 0.071585588  0.011675066  6.196286e-04</span></span>
+<span id="cb10-21"><a href="factor-investing.html#cb10-21"></a><span class="co">#&gt; A     8.495955e-04 0.003759136 -0.010820120 -1.278586e-03</span></span>
+<span id="cb10-22"><a href="factor-investing.html#cb10-22"></a><span class="co">#&gt; APD   8.611818e-04 0.003264547 -0.010724091 -2.846693e-03</span></span>
+<span id="cb10-23"><a href="factor-investing.html#cb10-23"></a><span class="co">#&gt; AA   -9.611000e-04 0.009394316 -0.023328796 -1.770902e-02</span></span>
+<span id="cb10-24"><a href="factor-investing.html#cb10-24"></a><span class="co">#&gt; CF    5.801694e-05 0.006801149 -0.016344844 -9.315729e-03</span></span></code></pre></div>
+</div>
+<div id="comparison-of-covariance-matrix-estimations" class="section level2">
+<h2><span class="header-section-number">5.5</span> Comparison of covariance matrix estimations</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="factor-investing.html#cb11-1"></a><span class="co"># prepare Fama-French factors</span></span>
+<span id="cb11-2"><a href="factor-investing.html#cb11-2"></a>F_FamaFrench &lt;-<span class="st"> </span>F <span class="co"># rename for easily knowing the meaning of variable</span></span>
+<span id="cb11-3"><a href="factor-investing.html#cb11-3"></a><span class="co"># prepare index</span></span>
+<span id="cb11-4"><a href="factor-investing.html#cb11-4"></a>f_SP500 &lt;-<span class="st"> </span>f <span class="co"># rename for easily knowing the meaning of variable</span></span>
+<span id="cb11-5"><a href="factor-investing.html#cb11-5"></a></span>
+<span id="cb11-6"><a href="factor-investing.html#cb11-6"></a><span class="co"># split data into training and set data</span></span>
+<span id="cb11-7"><a href="factor-investing.html#cb11-7"></a>T_trn &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="fl">0.45</span><span class="op">*</span>T)</span>
+<span id="cb11-8"><a href="factor-investing.html#cb11-8"></a>X_trn &lt;-<span class="st"> </span>X[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb11-9"><a href="factor-investing.html#cb11-9"></a>X_tst &lt;-<span class="st"> </span>X[(T_trn<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>T, ]</span>
+<span id="cb11-10"><a href="factor-investing.html#cb11-10"></a>F_FamaFrench_trn &lt;-<span class="st"> </span>F_FamaFrench[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb11-11"><a href="factor-investing.html#cb11-11"></a>F_FamaFrench_tst &lt;-<span class="st"> </span>F_FamaFrench[(T_trn<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>T, ]</span>
+<span id="cb11-12"><a href="factor-investing.html#cb11-12"></a>f_SP500_trn &lt;-<span class="st"> </span>f_SP500[<span class="dv">1</span><span class="op">:</span>T_trn, ]</span>
+<span id="cb11-13"><a href="factor-investing.html#cb11-13"></a>f_SP500_tst &lt;-<span class="st"> </span>f_SP500[(T_trn<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>T, ]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="factor-investing.html#cb12-1"></a><span class="co"># sample covariance matrix</span></span>
+<span id="cb12-2"><a href="factor-investing.html#cb12-2"></a>Sigma_SCM &lt;-<span class="st"> </span><span class="kw">cov</span>(X_trn)</span>
+<span id="cb12-3"><a href="factor-investing.html#cb12-3"></a></span>
+<span id="cb12-4"><a href="factor-investing.html#cb12-4"></a><span class="co"># 1-factor model</span></span>
+<span id="cb12-5"><a href="factor-investing.html#cb12-5"></a>F_ &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">ones =</span> <span class="dv">1</span>, f_SP500_trn)</span>
+<span id="cb12-6"><a href="factor-investing.html#cb12-6"></a>Gamma &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>F_, <span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>X_trn))</span>
+<span id="cb12-7"><a href="factor-investing.html#cb12-7"></a><span class="kw">colnames</span>(Gamma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;beta&quot;</span>)</span>
+<span id="cb12-8"><a href="factor-investing.html#cb12-8"></a>alpha &lt;-<span class="st"> </span>Gamma[, <span class="dv">1</span>]</span>
+<span id="cb12-9"><a href="factor-investing.html#cb12-9"></a>beta &lt;-<span class="st"> </span>Gamma[, <span class="dv">2</span>]</span>
+<span id="cb12-10"><a href="factor-investing.html#cb12-10"></a>E &lt;-<span class="st"> </span><span class="kw">xts</span>(<span class="kw">t</span>(<span class="kw">t</span>(X_trn) <span class="op">-</span><span class="st"> </span>Gamma <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(F_)), <span class="kw">index</span>(X_trn))</span>
+<span id="cb12-11"><a href="factor-investing.html#cb12-11"></a>Psi &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T_trn<span class="dv">-2</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(E) <span class="op">%*%</span><span class="st"> </span>E</span>
+<span id="cb12-12"><a href="factor-investing.html#cb12-12"></a>Sigma_SP500 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">var</span>(f_SP500_trn)) <span class="op">*</span><span class="st"> </span>beta <span class="op">%o%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Psi))</span>
+<span id="cb12-13"><a href="factor-investing.html#cb12-13"></a></span>
+<span id="cb12-14"><a href="factor-investing.html#cb12-14"></a><span class="co"># Fama-French 3-factor model</span></span>
+<span id="cb12-15"><a href="factor-investing.html#cb12-15"></a>F_ &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">ones =</span> <span class="dv">1</span>, F_FamaFrench_trn)</span>
+<span id="cb12-16"><a href="factor-investing.html#cb12-16"></a>Gamma &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>F_, <span class="kw">t</span>(F_) <span class="op">%*%</span><span class="st"> </span>X_trn))</span>
+<span id="cb12-17"><a href="factor-investing.html#cb12-17"></a><span class="kw">colnames</span>(Gamma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>, <span class="st">&quot;beta1&quot;</span>, <span class="st">&quot;beta2&quot;</span>, <span class="st">&quot;beta3&quot;</span>)</span>
+<span id="cb12-18"><a href="factor-investing.html#cb12-18"></a>alpha &lt;-<span class="st"> </span>Gamma[, <span class="dv">1</span>]</span>
+<span id="cb12-19"><a href="factor-investing.html#cb12-19"></a>B &lt;-<span class="st"> </span>Gamma[, <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>]</span>
+<span id="cb12-20"><a href="factor-investing.html#cb12-20"></a>E &lt;-<span class="st"> </span><span class="kw">xts</span>(<span class="kw">t</span>(<span class="kw">t</span>(X_trn) <span class="op">-</span><span class="st"> </span>Gamma <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(F_)), <span class="kw">index</span>(X_trn))</span>
+<span id="cb12-21"><a href="factor-investing.html#cb12-21"></a>Psi &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T_trn<span class="dv">-4</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(E) <span class="op">%*%</span><span class="st"> </span>E</span>
+<span id="cb12-22"><a href="factor-investing.html#cb12-22"></a>Sigma_FamaFrench &lt;-<span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">cov</span>(F_FamaFrench_trn) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B) <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Psi))</span>
+<span id="cb12-23"><a href="factor-investing.html#cb12-23"></a></span>
+<span id="cb12-24"><a href="factor-investing.html#cb12-24"></a><span class="co"># Statistical 1-factor model</span></span>
+<span id="cb12-25"><a href="factor-investing.html#cb12-25"></a>K &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb12-26"><a href="factor-investing.html#cb12-26"></a>alpha &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_trn)</span>
+<span id="cb12-27"><a href="factor-investing.html#cb12-27"></a>X_trn_ &lt;-<span class="st"> </span>X_trn <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(alpha, T_trn, N, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb12-28"><a href="factor-investing.html#cb12-28"></a>Sigma_prev &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, N, N)</span>
+<span id="cb12-29"><a href="factor-investing.html#cb12-29"></a>Sigma &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T_trn<span class="dv">-1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(X_trn_) <span class="op">%*%</span><span class="st"> </span>X_trn_</span>
+<span id="cb12-30"><a href="factor-investing.html#cb12-30"></a>eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</span>
+<span id="cb12-31"><a href="factor-investing.html#cb12-31"></a><span class="cf">while</span> (<span class="kw">norm</span>(Sigma <span class="op">-</span><span class="st"> </span>Sigma_prev, <span class="st">&quot;F&quot;</span>)<span class="op">/</span><span class="kw">norm</span>(Sigma, <span class="st">&quot;F&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1e-3</span>) {</span>
+<span id="cb12-32"><a href="factor-investing.html#cb12-32"></a>  B &lt;-<span class="st"> </span>eigSigma<span class="op">$</span>vectors[, <span class="dv">1</span><span class="op">:</span>K, drop =<span class="st"> </span><span class="ot">FALSE</span>] <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">sqrt</span>(eigSigma<span class="op">$</span>values[<span class="dv">1</span><span class="op">:</span>K]), K, K)</span>
+<span id="cb12-33"><a href="factor-investing.html#cb12-33"></a>  Psi &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Sigma <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B)))</span>
+<span id="cb12-34"><a href="factor-investing.html#cb12-34"></a>  Sigma_prev &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb12-35"><a href="factor-investing.html#cb12-35"></a>  Sigma &lt;-<span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B) <span class="op">+</span><span class="st"> </span>Psi</span>
+<span id="cb12-36"><a href="factor-investing.html#cb12-36"></a>  eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma <span class="op">-</span><span class="st"> </span>Psi)</span>
+<span id="cb12-37"><a href="factor-investing.html#cb12-37"></a>}</span>
+<span id="cb12-38"><a href="factor-investing.html#cb12-38"></a>Sigma_PCA1 &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb12-39"><a href="factor-investing.html#cb12-39"></a></span>
+<span id="cb12-40"><a href="factor-investing.html#cb12-40"></a><span class="co"># Statistical 3-factor model</span></span>
+<span id="cb12-41"><a href="factor-investing.html#cb12-41"></a>K &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb12-42"><a href="factor-investing.html#cb12-42"></a>alpha &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_trn)</span>
+<span id="cb12-43"><a href="factor-investing.html#cb12-43"></a>X_trn_ &lt;-<span class="st"> </span>X_trn <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(alpha, T_trn, N, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb12-44"><a href="factor-investing.html#cb12-44"></a>Sigma_prev &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, N, N)</span>
+<span id="cb12-45"><a href="factor-investing.html#cb12-45"></a>Sigma &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T_trn<span class="dv">-1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(X_trn_) <span class="op">%*%</span><span class="st"> </span>X_trn_</span>
+<span id="cb12-46"><a href="factor-investing.html#cb12-46"></a>eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</span>
+<span id="cb12-47"><a href="factor-investing.html#cb12-47"></a><span class="cf">while</span> (<span class="kw">norm</span>(Sigma <span class="op">-</span><span class="st"> </span>Sigma_prev, <span class="st">&quot;F&quot;</span>)<span class="op">/</span><span class="kw">norm</span>(Sigma, <span class="st">&quot;F&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1e-3</span>) {</span>
+<span id="cb12-48"><a href="factor-investing.html#cb12-48"></a>  B &lt;-<span class="st"> </span>eigSigma<span class="op">$</span>vectors[, <span class="dv">1</span><span class="op">:</span>K] <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">sqrt</span>(eigSigma<span class="op">$</span>values[<span class="dv">1</span><span class="op">:</span>K]), K, K)</span>
+<span id="cb12-49"><a href="factor-investing.html#cb12-49"></a>  Psi &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Sigma <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B)))</span>
+<span id="cb12-50"><a href="factor-investing.html#cb12-50"></a>  Sigma_prev &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb12-51"><a href="factor-investing.html#cb12-51"></a>  Sigma &lt;-<span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B) <span class="op">+</span><span class="st"> </span>Psi</span>
+<span id="cb12-52"><a href="factor-investing.html#cb12-52"></a>  eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma <span class="op">-</span><span class="st"> </span>Psi)</span>
+<span id="cb12-53"><a href="factor-investing.html#cb12-53"></a>}</span>
+<span id="cb12-54"><a href="factor-investing.html#cb12-54"></a>Sigma_PCA3 &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb12-55"><a href="factor-investing.html#cb12-55"></a></span>
+<span id="cb12-56"><a href="factor-investing.html#cb12-56"></a><span class="co"># Statistical 5-factor model</span></span>
+<span id="cb12-57"><a href="factor-investing.html#cb12-57"></a>K &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb12-58"><a href="factor-investing.html#cb12-58"></a>alpha &lt;-<span class="st"> </span><span class="kw">colMeans</span>(X_trn)</span>
+<span id="cb12-59"><a href="factor-investing.html#cb12-59"></a>X_trn_ &lt;-<span class="st"> </span>X_trn <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(alpha, T_trn, N, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb12-60"><a href="factor-investing.html#cb12-60"></a>Sigma_prev &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, N, N)</span>
+<span id="cb12-61"><a href="factor-investing.html#cb12-61"></a>Sigma &lt;-<span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>(T_trn<span class="dv">-1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">t</span>(X_trn_) <span class="op">%*%</span><span class="st"> </span>X_trn_</span>
+<span id="cb12-62"><a href="factor-investing.html#cb12-62"></a>eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</span>
+<span id="cb12-63"><a href="factor-investing.html#cb12-63"></a><span class="cf">while</span> (<span class="kw">norm</span>(Sigma <span class="op">-</span><span class="st"> </span>Sigma_prev, <span class="st">&quot;F&quot;</span>)<span class="op">/</span><span class="kw">norm</span>(Sigma, <span class="st">&quot;F&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1e-3</span>) {</span>
+<span id="cb12-64"><a href="factor-investing.html#cb12-64"></a>  B &lt;-<span class="st"> </span>eigSigma<span class="op">$</span>vectors[, <span class="dv">1</span><span class="op">:</span>K] <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="kw">sqrt</span>(eigSigma<span class="op">$</span>values[<span class="dv">1</span><span class="op">:</span>K]), K, K)</span>
+<span id="cb12-65"><a href="factor-investing.html#cb12-65"></a>  Psi &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">diag</span>(Sigma <span class="op">-</span><span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B)))</span>
+<span id="cb12-66"><a href="factor-investing.html#cb12-66"></a>  Sigma_prev &lt;-<span class="st"> </span>Sigma</span>
+<span id="cb12-67"><a href="factor-investing.html#cb12-67"></a>  Sigma &lt;-<span class="st"> </span>B <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(B) <span class="op">+</span><span class="st"> </span>Psi</span>
+<span id="cb12-68"><a href="factor-investing.html#cb12-68"></a>  eigSigma &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma <span class="op">-</span><span class="st"> </span>Psi)</span>
+<span id="cb12-69"><a href="factor-investing.html#cb12-69"></a>}</span>
+<span id="cb12-70"><a href="factor-investing.html#cb12-70"></a>Sigma_PCA5 &lt;-<span class="st"> </span>Sigma</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="factor-investing.html#cb13-1"></a>Sigma_true &lt;-<span class="st"> </span><span class="kw">cov</span>(X_tst)</span>
+<span id="cb13-2"><a href="factor-investing.html#cb13-2"></a>error &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">SCM =</span> <span class="kw">norm</span>(Sigma_SCM <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb13-3"><a href="factor-investing.html#cb13-3"></a>           <span class="dt">SP500 =</span> <span class="kw">norm</span>(Sigma_SP500 <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb13-4"><a href="factor-investing.html#cb13-4"></a>           <span class="dt">FamaFrench =</span> <span class="kw">norm</span>(Sigma_FamaFrench <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb13-5"><a href="factor-investing.html#cb13-5"></a>           <span class="dt">PCA1 =</span> <span class="kw">norm</span>(Sigma_PCA1 <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb13-6"><a href="factor-investing.html#cb13-6"></a>           <span class="dt">PCA3 =</span> <span class="kw">norm</span>(Sigma_PCA3 <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb13-7"><a href="factor-investing.html#cb13-7"></a>           <span class="dt">PCA5 =</span> <span class="kw">norm</span>(Sigma_PCA5 <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>))</span>
+<span id="cb13-8"><a href="factor-investing.html#cb13-8"></a><span class="kw">print</span>(error)</span>
+<span id="cb13-9"><a href="factor-investing.html#cb13-9"></a><span class="co">#&gt;         SCM       SP500  FamaFrench        PCA1        PCA3        PCA5 </span></span>
+<span id="cb13-10"><a href="factor-investing.html#cb13-10"></a><span class="co">#&gt; 0.003366215 0.003444389 0.003417521 0.003804895 0.003288151 0.003343664</span></span>
+<span id="cb13-11"><a href="factor-investing.html#cb13-11"></a><span class="kw">barplot</span>(error, <span class="dt">main =</span> <span class="st">&quot;Error in estimation of covariance matrix (Frobenius norm)&quot;</span>, </span>
+<span id="cb13-12"><a href="factor-investing.html#cb13-12"></a>        <span class="dt">col =</span> <span class="st">&quot;aquamarine3&quot;</span>, <span class="dt">cex.names =</span> <span class="fl">0.75</span>, <span class="dt">las =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><span class="math display">\[{\sf PRIAL} = 100\times \frac{\|\boldsymbol{\Sigma}_{\sf scm} - \boldsymbol{\Sigma}_{\sf true}\|_F^2 - \|\hat{\boldsymbol{\Sigma}} - \boldsymbol{\Sigma}_{\sf true}\|_F^2}{\|\boldsymbol{\Sigma}_{\sf scm} - \boldsymbol{\Sigma}_{\sf true}\|_F^2}\]</span></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="factor-investing.html#cb14-1"></a>ref &lt;-<span class="st"> </span><span class="kw">norm</span>(Sigma_SCM <span class="op">-</span><span class="st"> </span>Sigma_true, <span class="st">&quot;F&quot;</span>)<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb14-2"><a href="factor-investing.html#cb14-2"></a>PRIAL &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">*</span>(ref <span class="op">-</span><span class="st"> </span>error<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>ref</span>
+<span id="cb14-3"><a href="factor-investing.html#cb14-3"></a><span class="kw">print</span>(PRIAL)</span>
+<span id="cb14-4"><a href="factor-investing.html#cb14-4"></a><span class="co">#&gt;        SCM      SP500 FamaFrench       PCA1       PCA3       PCA5 </span></span>
+<span id="cb14-5"><a href="factor-investing.html#cb14-5"></a><span class="co">#&gt;   0.000000  -4.698549  -3.071516 -27.761956   4.584330   1.335386</span></span>
+<span id="cb14-6"><a href="factor-investing.html#cb14-6"></a><span class="kw">barplot</span>(PRIAL, <span class="dt">main =</span> <span class="st">&quot;PRIAL for estimation of covariance matrix&quot;</span>, </span>
+<span id="cb14-7"><a href="factor-investing.html#cb14-7"></a>        <span class="dt">col =</span> <span class="st">&quot;bisque3&quot;</span>, <span class="dt">cex.names =</span> <span class="fl">0.75</span>, <span class="dt">las =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="portr_files/figure-html/unnamed-chunk-17-1.png" width="80%" style="display: block; margin: auto;" />
+The final conclusion is that using factor models for covariance matrix estimation may help. In addition, it is not clear that using explicit factors helps as compared to the statistical factor modeling.</p>
+</div>
+<div id="edhec-smart-beta" class="section level2">
+<h2><span class="header-section-number">5.6</span> Edhec smart beta</h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="port-opt.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="robust-portfolio-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["portr.pdf", "portr.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
